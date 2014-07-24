@@ -1,9 +1,0 @@
-<BranchVCSpec>
-	<PkgGUID>{20FE0086-EFD5-460c-822F-13A00D641083}</PkgGUID>
-	<XMLPath>ea1\13A00D641083.xml</XMLPath>
-	<Config>
-		<GUID>hihouse</GUID>
-		<LocalPath>%hihouse%</LocalPath>
-		<Type>2</Type>
-	</Config>
-</BranchVCSpec>
