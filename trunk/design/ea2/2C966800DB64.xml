@@ -331,7 +331,7 @@
 		<UML:Diagram name="Deployment Model" xmi.id="EAID_DBC27C4D_539E_4d6a_ADB5_C54C2EF24FB2" diagramType="DeploymentDiagram" owner="EAPK_DC9FCB07_497D_4b27_AE5E_2C966800DB64" toolName="Enterprise Architect 2.5">
 			<UML:ModelElement.taggedValue>
 				<UML:TaggedValue tag="version" value="1.0"/>
-				<UML:TaggedValue tag="author" value="Administrador"/>
+				<UML:TaggedValue tag="author" value="Ivan"/>
 				<UML:TaggedValue tag="created_date" value="2005-11-19 00:00:00"/>
 				<UML:TaggedValue tag="modified_date" value="2006-01-10 00:00:00"/>
 				<UML:TaggedValue tag="package" value="EAPK_DC9FCB07_497D_4b27_AE5E_2C966800DB64"/>
