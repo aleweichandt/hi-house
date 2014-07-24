@@ -185,7 +185,7 @@
 		<UML:Diagram name="Nodes" xmi.id="EAID_116CFF00_1D14_43e0_A9FB_BD9FE720A8F9" diagramType="DeploymentDiagram" owner="EAPK_0AFEF26E_9306_48fb_B7BF_55DDC301D4F4" toolName="Enterprise Architect 2.5">
 			<UML:ModelElement.taggedValue>
 				<UML:TaggedValue tag="version" value="1.0"/>
-				<UML:TaggedValue tag="author" value="Administrador"/>
+				<UML:TaggedValue tag="author" value="Ivan"/>
 				<UML:TaggedValue tag="created_date" value="2006-01-11 00:00:00"/>
 				<UML:TaggedValue tag="modified_date" value="2006-01-11 00:00:00"/>
 				<UML:TaggedValue tag="package" value="EAPK_0AFEF26E_9306_48fb_B7BF_55DDC301D4F4"/>
