@@ -88,7 +88,7 @@
 		<UML:Diagram name="Internal Structures" xmi.id="EAID_7A767803_C1C5_4041_8B91_91758EEBB3F9" diagramType="CompositeStructureDiagram" owner="EAPK_7B7182AF_FFBD_4a6e_B377_71AB49CB1BB2" toolName="Enterprise Architect 2.5">
 			<UML:ModelElement.taggedValue>
 				<UML:TaggedValue tag="version" value="1.0"/>
-				<UML:TaggedValue tag="author" value="Administrador"/>
+				<UML:TaggedValue tag="author" value="Ivan"/>
 				<UML:TaggedValue tag="created_date" value="2006-01-05 00:00:00"/>
 				<UML:TaggedValue tag="modified_date" value="2006-01-11 00:00:00"/>
 				<UML:TaggedValue tag="package" value="EAPK_7B7182AF_FFBD_4a6e_B377_71AB49CB1BB2"/>
