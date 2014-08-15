@@ -9,6 +9,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import server.model.SessionHandler;
+import server.model.UserSession;
+
 @Path("/users")
 public class UserService {
 	@GET
@@ -16,7 +19,13 @@ public class UserService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response listUsers(@QueryParam("token") String tkn) {
-		return Response.status(200).entity("users").build();
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession != null) {
+			return Response.status(200).entity("users").build();
+		}
+		else {
+			return Response.status(300).entity("invalid token").build();
+		}
 	}
 	
 	@GET
@@ -24,7 +33,13 @@ public class UserService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("id") String userid, @QueryParam("token") String tkn) {
-		return Response.status(200).entity("user:"+ userid).build();
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession != null) {
+			return Response.status(200).entity("user:"+ userid).build();
+		}
+		else {
+			return Response.status(300).entity("invalid token").build();
+		}
 	}
 	
 	@GET
@@ -32,15 +47,27 @@ public class UserService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserProfiles(@PathParam("id") String userid, @QueryParam("token") String tkn) {
-		return Response.status(200).entity("user:"+ userid + "profiles").build();
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession != null) {
+			return Response.status(200).entity("user:"+ userid + "profiles").build();
+		}
+		else {
+			return Response.status(300).entity("invalid token").build();
+		}
 	}
 	
 	@GET
 	@Path("{id}/login")
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
-	public Response loginUser(@PathParam("id") String userid, @QueryParam("pwd") String password, @QueryParam("token") String tkn) {
-		return Response.status(200).entity("user:"+ userid + " logged in").build();
+	public Response loginUser(@PathParam("id") String userid, @QueryParam("pwd") String password) {
+		UserSession newSession = SessionHandler.getInstance().createSessionForUser(userid, password);
+		if(newSession != null) {
+			return Response.status(200).entity("user:" + userid + " logged in. token=" + newSession.getToken()).build();
+		}
+		else {
+			return Response.status(404).entity("user:" + userid + " was not found").build();
+		}
 	}
 	
 	@POST
@@ -48,7 +75,13 @@ public class UserService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response addUser(@PathParam("id") String userid, @QueryParam("token") String tkn) {
-		return Response.status(200).entity("user:"+ userid).build();
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession != null) {
+			return Response.status(200).entity("user:"+ userid).build();
+		}
+		else {
+			return Response.status(300).entity("invalid token").build();
+		}
 	}
 	
 	@POST
@@ -56,7 +89,13 @@ public class UserService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response updateUser(@PathParam("id") String userid, @QueryParam("token") String tkn) {
-		return Response.status(200).entity("user:"+ userid).build();
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession != null) {
+			return Response.status(200).entity("user:"+ userid).build();
+		}
+		else {
+			return Response.status(300).entity("invalid token").build();
+		}
 	}
 	
 	@POST
@@ -64,6 +103,12 @@ public class UserService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteUser(@PathParam("id") String userid, @QueryParam("token") String tkn) {
-		return Response.status(200).entity("user:"+ userid).build();
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession != null) {
+			return Response.status(200).entity("user:"+ userid).build();
+		}
+		else {
+			return Response.status(300).entity("invalid token").build();
+		}
 	}
 }
