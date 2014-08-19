@@ -22,12 +22,16 @@ public class SessionHandler {
 	}
 	
 	public UserSession createSessionForUser(String userid, String password) {
-		//TODO chequear existencia de usuario
-		//TODO chequear validez de password
-		UserSession session = new UserSession(userid);
-		String tkn = session.getToken();
-		mTknSessionMap.put(tkn, session);
-		return session;
+		User user = User.getFromDB(userid);
+		if(user != null) {
+			if(user.isValidPassword(password)) {
+				UserSession session = new UserSession(user);
+				String tkn = session.getToken();
+				mTknSessionMap.put(tkn, session);
+				return session;
+			}
+		}
+		return null;
 	}
 	
 	public UserSession getSession(String tkn) {
