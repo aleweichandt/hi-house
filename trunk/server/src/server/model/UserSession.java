@@ -1,10 +1,12 @@
 package server.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserSession {
 	
-	private User mUser;
+	private User mUser = null;
+	private AdminRights mAdmin = null;
 	private String mToken;
 	private Date mExpirationTime;
 	
@@ -13,6 +15,9 @@ public class UserSession {
 	
 	public UserSession(User user) {
 		mUser = user;
+		if(user.isAdmin()) {
+			mAdmin = new AdminRights();
+		}
 		renewSessionTime();
 		mToken = String.valueOf(counter++);//for testing purpose
 	}
@@ -32,7 +37,29 @@ public class UserSession {
 		mExpirationTime = new Date(System.currentTimeMillis() + (15*60*1000));//15 mins from now
 	}
 	
+	public boolean isMyUser(String userid){
+		return (userid.compareTo("me") == 0 || 
+				userid.compareTo(mUser.getId()) == 0);
+	}
+	
 	public User getUser() {
 		return mUser;
+	}
+	
+	public User getUser(String userid) {
+		if(isMyUser(userid)) {
+			return getUser();
+		}
+		else if(mAdmin != null) {
+			return mAdmin.getUser(userid);
+		}
+		return null;
+	}
+	
+	public List<String> listAllUsers() {
+		if(mAdmin != null) {
+			return mAdmin.listAllUsers();
+		}
+		return null;
 	}
 }
