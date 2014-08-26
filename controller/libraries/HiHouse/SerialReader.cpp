@@ -10,16 +10,11 @@ SerialReader::SerialReader(int bufferSize, int headerLen) {
 unsigned int SerialReader::getPacketLength() {
 	unsigned int len = 0;
 	int chr, i;
+	while(!Serial.available() > 1); //wait until len comes
 	for( i = 0 ; i < 2 ; i++ ) {
 		chr = Serial.read();
-		if( chr == -1 ) {
-			i--;
-			continue;
-		}
-		
 		len += ( chr << (8 * i) );
 	}
-	
 	return len;
 }
 
@@ -42,33 +37,23 @@ void SerialReader::write(char *message, int len) {
 void SerialReader::read() {
 	int i=0, input=0;
 	int bufferSize = _bufferSize - 1; // leave space for 0x00
-#ifdef SERIAL_DEBUG
-	DLOG("len=");
-#endif
 	_messageLength=getPacketLength();
 #ifdef SERIAL_DEBUG
-	DLOG(_messageLength);
-	DLOG("\n");
+	DLOG(char(_messageLength));
 #endif
 	memset( _buffer, 0, _bufferSize );
+	while(!Serial.available() > (_bufferSize-1)); //wait until len comes
 	while( i < _messageLength ) {
 		input = Serial.read();
-		if( input == -1 ) {
-			continue;
-		}
-		
 		if( i < bufferSize ) {
 			_buffer[ i ] = input;
 		}
-		
 		i++;
 	}
-	
+#ifdef SERIAL_DEBUG
+	DLOG("complete\n");
+#endif
 	if( _messageLength > _bufferSize ) {
 		_messageLength = _bufferSize;
 	}
-}
-
-bool SerialReader::isAvailable() {
-	return ( Serial.available() > 0 );
 }
