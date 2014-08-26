@@ -3,7 +3,7 @@
 
 ProtocolMessage::ProtocolMessage(char* buffer, int len) {
 #ifdef SERIAL_DEBUG
-	DLOG("creating message");
+	DLOG("creating message\n");
 	DLOG_BUFF( (uint8_t *) buffer, len );
 #endif
 	int read = 0;

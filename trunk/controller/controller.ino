@@ -1,8 +1,5 @@
 #include <Servo.h>
 #include <HiHouseOperator.h>
-#include <includes.h>
-#include <ProtocolMessage.h>
-#include <SerialReader.h>
 
 HiHouseOperator hihouse;
 

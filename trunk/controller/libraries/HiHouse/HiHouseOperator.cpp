@@ -12,17 +12,14 @@ HiHouseOperator::~HiHouseOperator(){
 
 void HiHouseOperator::update() {
 //read message
-	if( _serial->isAvailable() ) {
-	//if(Serial.available() > 0) {
 #ifdef SERIAL_DEBUG
-		DLOG("recibiendo..\n");
+	DLOG("recibiendo..\n");
 #endif
-		_serial->read();
-		ProtocolMessage* received = new ProtocolMessage(_serial->getMessage(), _serial->getMessageLength());
-		if(received->isRequest()) {
-		//operate message
-			execOperationMessage(received);
-		}
+	_serial->read();
+	ProtocolMessage* received = new ProtocolMessage(_serial->getMessage(), _serial->getMessageLength());
+	if(received->isRequest()) {
+	//operate message
+		execOperationMessage(received);
 	}
 }
 
