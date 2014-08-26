@@ -29,7 +29,7 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 		int value = message->getPinValue(i);
 		switch (message->getValueType()) {
 			case ProtocolMessage::MSG_VAL_TYPE_DIG: {
-				pinMode(pin, isReadOperation?OUTPUT:INPUT));
+				pinMode( pin, ( isReadOperation ? OUTPUT : INPUT ) );
 				if(isReadOperation) {
 					value = digitalRead(pin);
 				} else {
@@ -38,7 +38,7 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 				break;
 			}
 			case ProtocolMessage::MSG_VAL_TYPE_ANALOG: {
-				pinMode(pin, isReadOperation?OUTPUT:INPUT));
+				pinMode( pin, ( isReadOperation ? OUTPUT : INPUT ) );
 				if(isReadOperation) {
 					value = analogRead(pin);
 				} else {
