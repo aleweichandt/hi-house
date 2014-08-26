@@ -4,7 +4,7 @@
 #include <ProtocolMessage.h>
 #include <SerialReader.h>
 
-HiHouseOperator hihouse();
+HiHouseOperator hihouse;
 
 void setup() {
   Serial.begin(9600);

@@ -25,7 +25,7 @@ ProtocolMessage::ProtocolMessage(char* buffer, int len) {
 //hihouse header (read inverted)
 	_ms_future = ( header & 0x3 );
 	header >> 2;
-	_ms_pins_amount = ( header & 0x3 );
+	_ms_pins_amount = ( header & 0x3 ) + 1;
 	header >> 2;
 	_ms_value_type = ( header & 0x3 );
 	header >> 2;
