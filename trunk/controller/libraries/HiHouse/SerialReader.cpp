@@ -42,7 +42,14 @@ void SerialReader::write(char *message, int len) {
 void SerialReader::read() {
 	int i=0, input=0;
 	int bufferSize = _bufferSize - 1; // leave space for 0x00
+#ifdef SERIAL_DEBUG
+	DLOG("len=");
+#endif
 	_messageLength=getPacketLength();
+#ifdef SERIAL_DEBUG
+	DLOG(_messageLength);
+	DLOG("\n");
+#endif
 	memset( _buffer, 0, _bufferSize );
 	while( i < _messageLength ) {
 		input = Serial.read();

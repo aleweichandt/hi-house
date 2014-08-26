@@ -1,6 +1,7 @@
 #ifndef __PROTOCOL_MESSAGE_H__
 #define __PROTOCOL_MESSAGE_H__
 
+#include "HiHouse.h"
 #include <inttypes.h>
 
 #define ARRAY_MAX_ACK 32

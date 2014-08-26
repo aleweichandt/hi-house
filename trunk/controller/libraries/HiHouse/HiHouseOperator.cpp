@@ -3,7 +3,7 @@
 
 HiHouseOperator::HiHouseOperator(){
 	_servo = new Servo();
-	_serial = new SerialReader(18,0);
+	_serial = new SerialReader(128,0);
 }
 
 HiHouseOperator::~HiHouseOperator(){
@@ -13,6 +13,10 @@ HiHouseOperator::~HiHouseOperator(){
 void HiHouseOperator::update() {
 //read message
 	if( _serial->isAvailable() ) {
+	//if(Serial.available() > 0) {
+#ifdef SERIAL_DEBUG
+		DLOG("recibiendo..\n");
+#endif
 		_serial->read();
 		ProtocolMessage* received = new ProtocolMessage(_serial->getMessage(), _serial->getMessageLength());
 		if(received->isRequest()) {

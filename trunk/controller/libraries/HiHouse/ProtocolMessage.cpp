@@ -2,6 +2,10 @@
 #include <arduino.h>
 
 ProtocolMessage::ProtocolMessage(char* buffer, int len) {
+#ifdef SERIAL_DEBUG
+	DLOG("creating message");
+	DLOG_BUFF( (uint8_t *) buffer, len );
+#endif
 	int read = 0;
 #ifdef FLOW_CONTROL_PROTOCOL_1
 //protocolo header
