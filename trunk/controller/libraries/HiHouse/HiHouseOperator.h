@@ -1,9 +1,14 @@
 #ifndef __HIHOUSE_OPERATOR_H__
 #define __HIHOUSE_OPERATOR_H__
 
-class Servo;
-class SerialReader;
-class ProtocolMessage;
+#include "ProtocolMessage.h"
+#include "SerialReader.h"
+#include <servo.h>
+
+//enable this to user sequence and acknowledge numbers to control single message flow
+#define FLOW_CONTROL_PROTOCOL_1 0
+//enable this to user sequence and acknowledge numbers to control multiple message flow
+#define FLOW_CONTROL_PROTOCOL_2 0
 
 class HiHouseOperator {
 	public:
@@ -11,7 +16,7 @@ class HiHouseOperator {
 		~HiHouseOperator();
 		void update();
 	private:
-		void execOperationMessage(const ProtocolMessage message);
+		void execOperationMessage(ProtocolMessage* message);
 		ProtocolMessage* makeResponse(const ProtocolMessage message);
 		
 		Servo* _servo;

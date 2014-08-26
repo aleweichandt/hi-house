@@ -1,12 +1,14 @@
-#include <HHSystem.h>
+#include <HiHouseOperator.h>
+#include <includes.h>
+#include <ProtocolMessage.h>
+#include <SerialReader.h>
 
-HHSystem hihouse();
+HiHouseOperator hihouse();
 
 void setup() {
   Serial.begin(9600);
-  hihouse.init();
 }
 
 void loop() {
-  hihouse.update();
+  //hihouse.update();
 }

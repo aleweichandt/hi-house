@@ -1,6 +1,8 @@
 #ifndef __PROTOCOL_MESSAGE_H__
 #define __PROTOCOL_MESSAGE_H__
 
+#include <inttypes.h>
+
 #define ARRAY_MAX_ACK 32
 #define ARRAY_MAX_PINS 4
 
@@ -30,13 +32,12 @@ class ProtocolMessage {
 		uint8_t getPinValue( uint8_t index ) { return _ms_pin_values[ index ]; };
 		
 	private:
-		char readBit(uint32_t
 #ifdef FLOW_CONTROL_PROTOCOL_1
 	//protocolo header
 		uint16_t _seq;
 		uint16_t _ack;
 #ifdef FLOW_CONTROL_PROTOCOL_2
-		uint8_t[ARRAY_MAX_ACK] _ack_bits;
+		uint8_t _ack_bits[ARRAY_MAX_ACK];
 #endif
 #endif
 	//hihouse message header

@@ -1,4 +1,5 @@
-#include "includes.h"
+#include "Serialreader.h"
+#include <arduino.h>
 
 SerialReader::SerialReader(int bufferSize, int headerLen) {
 	_buffer = (char *) malloc(bufferSize * sizeof(char));
