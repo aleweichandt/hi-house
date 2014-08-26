@@ -1,4 +1,5 @@
-#include "includes.h"
+#include "ProtocolMessage.h"
+#include <arduino.h>
 
 ProtocolMessage::ProtocolMessage(char* buffer, int len) {
 	int read = 0;

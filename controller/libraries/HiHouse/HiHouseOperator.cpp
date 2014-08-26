@@ -1,4 +1,5 @@
-#include "includes.h"
+#include "HiHouseOperator.h"
+#include <arduino.h>
 
 HiHouseOperator::HiHouseOperator(){
 	_servo = new Servo();
