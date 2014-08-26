@@ -3,7 +3,7 @@
 
 #include "ProtocolMessage.h"
 #include "SerialReader.h"
-#include <servo.h>
+#include <Servo.h>
 
 //enable this to user sequence and acknowledge numbers to control single message flow
 #define FLOW_CONTROL_PROTOCOL_1 0

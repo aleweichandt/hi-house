@@ -7,16 +7,15 @@ HiHouseOperator::HiHouseOperator(){
 }
 
 HiHouseOperator::~HiHouseOperator(){
-	delete _servo;
-	delete _serial;
+
 }
 
 void HiHouseOperator::update() {
 //read message
-	if( _serial.isAvailable() ) {
-		_serial.read();
-		ProtocolMessage* received = new ProtocolMessage(_serial.getMessage());
-		if(received.isRequest()) {
+	if( _serial->isAvailable() ) {
+		_serial->read();
+		ProtocolMessage* received = new ProtocolMessage(_serial->getMessage(), _serial->getMessageLength());
+		if(received->isRequest()) {
 		//operate message
 			execOperationMessage(received);
 		}
@@ -24,12 +23,12 @@ void HiHouseOperator::update() {
 }
 
 void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
-	bool isReadOperation = message.getAction() == ProtocolMessage::MSG_ACTION_READ;
-	for(int i = 0; i < message.getPinsAmount(); i++) {
-		int pin = message.getPin(i);
-		int value = message.getPinValue(i);
-		switch (message.getValueType()) {
-			case ProtocolMessage::MSG_VAL_TYPE_DIG:
+	bool isReadOperation = (message->getAction() == ProtocolMessage::MSG_ACTION_READ);
+	for(int i = 0; i < message->getPinsAmount(); i++) {
+		int pin = message->getPin(i);
+		int value = message->getPinValue(i);
+		switch (message->getValueType()) {
+			case ProtocolMessage::MSG_VAL_TYPE_DIG: {
 				pinMode(pin, isReadOperation?OUTPUT:INPUT));
 				if(isReadOperation) {
 					value = digitalRead(pin);
@@ -37,7 +36,8 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 					digitalWrite(pin, value);
 				}
 				break;
-			case ProtocolMessage::MSG_VAL_TYPE_ANALOG:
+			}
+			case ProtocolMessage::MSG_VAL_TYPE_ANALOG: {
 				pinMode(pin, isReadOperation?OUTPUT:INPUT));
 				if(isReadOperation) {
 					value = analogRead(pin);
@@ -45,17 +45,20 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 					analogWrite(pin, value);
 				}
 				break;
-			case ProtocolMessage::MSG_VAL_TYPE_SERVO:
-				_servo.attach(pin);
+			}
+			case ProtocolMessage::MSG_VAL_TYPE_SERVO: {
+				_servo->attach(pin);
 				if(isReadOperation) {
-					value = _servo.read();
+					value = _servo->read();
 				} else {
-					_servo.write(value);
+					_servo->write(value);
 				}
-				_servo.detach();
+				_servo->detach();
 				break;
-			default:
+			}
+			default: {
 				break;
+			}
 		}
 	}
 }
