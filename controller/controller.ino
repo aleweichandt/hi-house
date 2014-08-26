@@ -1,3 +1,4 @@
+#include <Servo.h>
 #include <HiHouseOperator.h>
 #include <includes.h>
 #include <ProtocolMessage.h>
@@ -10,5 +11,5 @@ void setup() {
 }
 
 void loop() {
-  //hihouse.update();
+  hihouse.update();
 }

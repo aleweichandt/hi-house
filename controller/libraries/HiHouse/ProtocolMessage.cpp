@@ -21,7 +21,7 @@ ProtocolMessage::ProtocolMessage(char* buffer, int len) {
 	}
 #endif
 #endif
-	uint8_t header =  buffer[read++] & 0xFF );
+	uint8_t header =  ( buffer[read++] & 0xFF );
 //hihouse header (read inverted)
 	_ms_future = ( header & 0x3 );
 	header >> 2;
