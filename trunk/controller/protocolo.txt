@@ -1,0 +1,20 @@
+Buffer -> 18 bytes
+	len -> 2 bytes (largo que ocupa realmente)
+	message -> 15 bytes
+	end -> 1byte (0x00)
+
+Protocol Header ( 8 bytes )
+	seq_number	-> 2 bytes (sequence number, up to 65535)
+	ack_number	-> 2 bytes (acknowledge number, up to 65535)
+	ack_bits	-> 4 bytes (acknowledge bits for last 32 message before ack. 1=ack, 2=nack)
+
+Hihouse Header (1 byte)
+	req/resp 				-> 1 bit (req = 0, resp = 1)
+	read/write				-> 1 bit (read = 0, write = 1)
+	digital/analog/servo 	-> 2 bit (digital = 00, analog = 01, servo = 10)
+	pins_sent				-> 2 bit (amount of pins, max = 11 (3)
+	(for future use) 		-> 2 bit
+
+Pin (2 bytes)
+	id 		-> 1 byte (max=255)
+	value	-> 1 byte (max=255)
