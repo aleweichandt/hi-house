@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.os.Build;
 
 public class HiHouse extends Activity {
@@ -40,5 +41,10 @@ public class HiHouse extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/** Called when the user clicks the Login button */
+    public void login(View view) {
+    	//TODO: Validar datos y loguear usuario.
+
+    }
 
 }
