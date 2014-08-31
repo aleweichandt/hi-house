@@ -8,5 +8,16 @@
     <string name="password">Password</string>
     <string name="login">Ingresar</string>
     <string name="ic_voice_desc">Voice input</string>
-
+    <string name="title_activity_users">Edicion de Usuario</string>
+	<string name="userinfo_name">Nombre</string>
+	<string name="userinfo_mail">E-Mail</string>
+	<string name="userinfo_admin">Administrador</string>
+	<string name="userinfo_pwd">Password</string>
+	<string name="userinfo_pwd_confirm">Confirmacion</string>
+	<string name="userinfo_profiles">Perfiles</string>
+	<string name="edit">Editar</string>
+	<string name="delete">Eliminar</string>
+	<string name="cancel">Cancelar</string>
+	<string name="confirm">Confirmar</string>
+    
 </resources>
