@@ -19,5 +19,6 @@
 	<string name="delete">Eliminar</string>
 	<string name="cancel">Cancelar</string>
 	<string name="confirm">Confirmar</string>
+	<string name="select">Seleccionar</string>
     
 </resources>
