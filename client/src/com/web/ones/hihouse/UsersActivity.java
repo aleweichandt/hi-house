@@ -24,6 +24,7 @@ public class UsersActivity extends ListActivity implements
 	private UserInfoFragment mUserFragment = null;
 	private ListView mList = null;
 	private ArrayAdapter<String> mAdapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -97,4 +98,14 @@ public class UsersActivity extends ListActivity implements
 	public void onEndEdition() {
 		removeUserView();
 	}
+	
+	public UserInfoFragment getUserInfoFragment() { return mUserFragment;}
+	
+//handled by fragment
+	public void onEditPressed(View v) {mUserFragment.onEditPressed(v);}
+	public void onConfirmEdition(View v) {mUserFragment.onConfirmEdition(v);}
+	public void onCancelEdition(View v) {mUserFragment.onCancelEdition(v);}
+	public void onDeletePressed(View v) {mUserFragment.onDeletePressed(v);}
+
+	public void onProfilesPressed(View v) {mUserFragment.onProfilesPressed(v);}
 }
