@@ -22,7 +22,8 @@ import android.widget.TextView;
 import android.os.Build;
 
 public class HiHouse extends Activity {
-
+	public static final String ARG_NUMBER = "arg_number";
+	
 	private String[] menuItems;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -120,21 +121,22 @@ public class HiHouse extends Activity {
 
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
-    	//TODO Switch para los distintos fragments segun el menu seleccionado
-    	
-        // Create a new fragment and specify position
-        Fragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putInt(LoginFragment.ARG_NUMBER, position);
-        fragment.setArguments(args);
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                       .replace(R.id.content_frame, fragment)
-                       .commit();
-
-        // Highlight the selected item, update the title, and close the drawer
+    	Fragment fragment = null;
+    	Bundle args = new Bundle();
+    	if(menuItems[position].compareToIgnoreCase("login") == 0) {
+    		fragment = new LoginFragment();
+    	}
+    	else if(menuItems[position].compareToIgnoreCase("Editar Usuario") == 0) {
+    		fragment = new UsersAdminFragment();
+    	}
+    	if(fragment != null) {
+        	args.putInt(ARG_NUMBER, position);
+	    	fragment.setArguments(args);
+	        FragmentManager fragmentManager = getFragmentManager();
+	        fragmentManager.beginTransaction()
+	                       .replace(R.id.content_frame, fragment)
+	                       .commit();
+    	}
         mDrawerList.setItemChecked(position, true);
         setTitle(menuItems[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
