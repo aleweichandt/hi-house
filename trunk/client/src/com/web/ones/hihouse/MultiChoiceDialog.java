@@ -26,16 +26,19 @@ public class MultiChoiceDialog extends DialogFragment {
 	}
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstance) {
+		mAllItems = new CharSequence[0];
 		mSelectedItems = new ArrayList<CharSequence>();
 		if(savedInstance == null) {
 			savedInstance = mBundle;
 		}
-		//load bundle
-		if(savedInstance.containsKey(MULTICHOICHE_ALL)) {
-			mAllItems = savedInstance.getCharSequenceArray(MULTICHOICHE_ALL);
-		}
-		if(savedInstance.containsKey(MULTICHOICHE_ALL)) {
-			mSelectedItems = savedInstance.getCharSequenceArrayList(MULTICHOICHE_SELECTED);
+		if(savedInstance != null) {
+			//load bundle
+			if(savedInstance.containsKey(MULTICHOICHE_ALL)) {
+				mAllItems = savedInstance.getCharSequenceArray(MULTICHOICHE_ALL);
+			}
+			if(savedInstance.containsKey(MULTICHOICHE_ALL)) {
+				mSelectedItems = savedInstance.getCharSequenceArrayList(MULTICHOICHE_SELECTED);
+			}
 		}
 		
 		boolean[] selected = new boolean[mAllItems.length];

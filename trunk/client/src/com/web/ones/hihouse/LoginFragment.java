@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class LoginFragment extends Fragment {
-
-	public static final String ARG_NUMBER = "arg_number";
 	
 	public LoginFragment() {
         // Empty constructor required for fragment subclasses
@@ -20,7 +18,7 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
-        int i = getArguments().getInt(ARG_NUMBER);
+        int i = getArguments().getInt(HiHouse.ARG_NUMBER);
         String title = getResources().getStringArray(R.array.nav_drawer_items)[i];
 
         getActivity().setTitle(title);

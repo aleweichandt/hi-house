@@ -3,33 +3,36 @@ package com.web.ones.hihouse;
 import java.util.ArrayList;
 
 import com.web.ones.hihouse.UserInfoFragment.OnUserInfoListener;
-import com.web.ones.hihouse.VoiceInputButton.OnVoiceCommand;
 
 import android.app.FragmentTransaction;
-import android.app.ListActivity;
+import android.app.ListFragment;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class UsersActivity extends ListActivity implements 
+public class UsersAdminFragment extends ListFragment implements 
 	OnItemClickListener,
-	OnUserInfoListener,
-	OnVoiceCommand{
+	OnUserInfoListener{
 	
 	private UserInfoFragment mUserFragment = null;
+	private View mRootView;
 	private ListView mList = null;
 	private ArrayAdapter<String> mAdapter;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_users);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		mRootView = inflater.inflate(R.layout.fragment_users, container, false);
+        int i = getArguments().getInt(HiHouse.ARG_NUMBER);
+        String title = getResources().getStringArray(R.array.nav_drawer_items)[i];
+
+        getActivity().setTitle(title);
 		loadUsers();
+		return mRootView;
 	}
 	
 	private void loadUsers() {
@@ -41,27 +44,11 @@ public class UsersActivity extends ListActivity implements
 	    for (int i = 0; i < values.length; ++i) {
 	      list.add(values[i]);
 	    }
-	    mAdapter = new ArrayAdapter<String>(this, R.layout.user_row, list);
+	    mAdapter = new ArrayAdapter<String>(getActivity(), R.layout.user_row, list);
 	    
-	    mList = (ListView) this.findViewById(android.R.id.list);
+	    mList = (ListView) mRootView.findViewById(android.R.id.list);
 	    mList.setAdapter(mAdapter);
 	    mList.setOnItemClickListener(this);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.users, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -74,7 +61,6 @@ public class UsersActivity extends ListActivity implements
 		mList.setVisibility(View.GONE);
 	}
 	
-	@Override
 	public void onBackPressed() {
 		removeUserView();
 	}
@@ -86,12 +72,6 @@ public class UsersActivity extends ListActivity implements
 	    	ft.commit();
 	    	mList.setVisibility(View.VISIBLE);
 	    }
-	}
-
-	@Override
-	public void onVoiceInputInteraction() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
