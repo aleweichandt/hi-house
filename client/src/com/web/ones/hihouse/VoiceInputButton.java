@@ -82,7 +82,7 @@ public class VoiceInputButton extends Fragment implements OnClickListener{
 		}	
 	}
 
-	@Override
+	/*@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
@@ -91,7 +91,7 @@ public class VoiceInputButton extends Fragment implements OnClickListener{
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnFragmentInteractionListener");
 		}
-	}
+	}*/
 
 	@Override
 	public void onDetach() {

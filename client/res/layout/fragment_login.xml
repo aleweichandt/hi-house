@@ -3,8 +3,7 @@
     android:orientation="vertical" 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff"
-     android:gravity="center_horizontal" >
+    android:gravity="center_horizontal" >
     
     <TextView
         android:id="@+id/title"
@@ -61,4 +60,5 @@
 		    android:textColor="#008A12"
 		    android:gravity="center"
 		    android:layout_margin="0dp" />
+    
 </LinearLayout>
