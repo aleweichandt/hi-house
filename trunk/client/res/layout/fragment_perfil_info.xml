@@ -1,0 +1,175 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.web.ones.hihouse.UserInfoFragment"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:gravity="center_horizontal" >"
+	
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/userinfo_name" />
+    	<EditText
+	       android:id="@+id/userinfo_name"
+	       android:gravity="center"
+	       android:inputType="text"
+	       android:lines="1"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"
+	       android:layout_marginBottom="20dp" />
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/userinfo_mail" />
+    	<EditText
+	       android:id="@+id/userinfo_mail"
+	       android:gravity="center"
+	       android:inputType="text"
+	       android:lines="1"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"
+	       android:layout_marginBottom="20dp" />
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/userinfo_admin" />
+    	<CheckBox
+    	    android:id="@+id/userinfo_admin"
+    	    android:layout_width="fill_parent"
+    	    android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/userinfo_pwd" />
+    	<EditText
+	       android:id="@+id/userinfo_pwd"
+	       android:gravity="center"
+	       android:inputType="numberPassword"
+	       android:lines="1"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"
+	       android:layout_marginBottom="20dp" />
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/userinfo_pwd_confirm" />
+    	<EditText
+	       android:id="@+id/userinfo_pwd_confirm"
+	       android:gravity="center"
+	       android:inputType="numberPassword"
+	       android:lines="1"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"
+	       android:layout_marginBottom="20dp" />
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/userinfo_profiles" />
+    	<Button
+    	    android:id="@+id/userinfo_profiles"
+    	    android:text="@string/select"
+    	    android:onClick="onProfilesPressed"
+    	    android:layout_width="fill_parent"
+	       	android:layout_height="wrap_content"
+	       	android:textSize="20sp"
+		    android:textColor="#008A12"
+		    android:gravity="center"
+		    android:layout_margin="0dp" />
+    </LinearLayout>
+    
+    <Button
+	    android:id="@+id/userinfo_edit"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/edit"
+	    android:onClick="onEditPressed"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp" />
+    <Button
+	    android:id="@+id/userinfo_delete"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/delete"
+	    android:onClick="onDeletePressed"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp" />
+    <Button
+	    android:id="@+id/userinfo_confirm"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/confirm"
+	    android:onClick="onConfirmEdition"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp"
+	    android:visibility="gone" />"
+    <Button
+	    android:id="@+id/userinfo_cancel"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/cancel"
+	    android:onClick="onCancelEdition"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp"
+	    android:visibility="gone" />
+</LinearLayout>
