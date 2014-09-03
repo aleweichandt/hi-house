@@ -129,6 +129,9 @@ public class HiHouse extends Activity {
     	else if(menuItems[position].compareToIgnoreCase("Editar Usuario") == 0) {
     		fragment = new UsersAdminFragment();
     	}
+    	else if(menuItems[position].compareToIgnoreCase("Editar Perfil") == 0) {
+    		fragment = new PerfilInfoFragment();
+    	}
     	if(fragment != null) {
         	args.putInt(ARG_NUMBER, position);
 	    	fragment.setArguments(args);
