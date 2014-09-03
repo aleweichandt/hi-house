@@ -74,6 +74,12 @@ public class HiHouse extends Activity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
+        
+        Fragment fragment = new VoiceInputButton();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+        				.replace(R.id.voiceButton_frame, fragment)
+        				.commit();
 	}
 
 	@Override
@@ -118,7 +124,7 @@ public class HiHouse extends Activity {
             selectItem(position);
         }
     }
-
+    
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
     	Fragment fragment = null;

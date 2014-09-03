@@ -32,6 +32,7 @@ public class UsersAdminFragment extends ListFragment implements
 
         getActivity().setTitle(title);
 		loadUsers();
+		
 		return mRootView;
 	}
 	
