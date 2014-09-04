@@ -100,11 +100,11 @@ OnMultiChoiceDialogListener{
 		
 	}
 
-	public void onEditPressed() {
+	private void onEditPressed() {
 		setEditMode(true);
 	}
 	
-	public void onConfirmPressed() {
+	private void onConfirmPressed() {
 		//TODO save changes
 		if(mIsAddOperation) {
 			getActivity().getFragmentManager().popBackStack();
@@ -113,7 +113,7 @@ OnMultiChoiceDialogListener{
 		setEditMode(false);
 	}
 	
-	public void onCancelPressed() {
+	private void onCancelPressed() {
 		//TODO rollback changes
 		if(mIsAddOperation) {
 			getActivity().getFragmentManager().popBackStack();
@@ -122,13 +122,13 @@ OnMultiChoiceDialogListener{
 		setEditMode(false);
 	}
 	
-	public void onDeletePressed() {
+	private void onDeletePressed() {
 		//TODO ask before
 		//TODO remove user
 		getActivity().getFragmentManager().popBackStack();
 	}
 	
-	public void onProfilesPressed() {
+	private void onProfilesPressed() {
 		Bundle b = new Bundle();
 		b.putCharSequenceArray(MultiChoiceDialog.MULTICHOICHE_ALL, values);
 		b.putCharSequenceArrayList(MultiChoiceDialog.MULTICHOICHE_SELECTED, 

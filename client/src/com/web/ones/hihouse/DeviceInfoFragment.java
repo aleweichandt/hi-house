@@ -1,5 +1,9 @@
 package com.web.ones.hihouse;
 
+import java.util.ArrayList;
+
+import com.web.ones.hihouse.PickerDialog.OnPickerDialogListener;
+
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,12 +13,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class DeviceInfoFragment extends Fragment implements
 OnClickListener,
-OnItemSelectedListener{
+OnItemSelectedListener,
+OnPickerDialogListener{
+	private static final int DEVICE_PIN_MIN_VALUE = 1;
+	private static final int DEVICE_PIN_MAX_VALUE = 64;
 	private static final int DEVICE_TYPE_TERMAL_ACTUATOR = 2;
 	
 	private boolean mIsAddOperation = false;
@@ -22,6 +31,7 @@ OnItemSelectedListener{
 	private boolean mState = false;
 	private String mName;
 	private View mMainView;
+	private TextView mPinView;
 
 	public DeviceInfoFragment(String name, boolean isAddOperation) {
 		mName = name;
@@ -73,6 +83,9 @@ OnItemSelectedListener{
 		mMainView.findViewById(R.id.deviceinfo_cancel).setOnClickListener(listener);
 		mMainView.findViewById(R.id.deviceinfo_edit).setOnClickListener(listener);
 		mMainView.findViewById(R.id.deviceinfo_delete).setOnClickListener(listener);
+		mMainView.findViewById(R.id.deviceinfo_pin1_enable).setOnClickListener(listener);
+		mMainView.findViewById(R.id.deviceinfo_pin2_enable).setOnClickListener(listener);
+		mMainView.findViewById(R.id.deviceinfo_pin3_enable).setOnClickListener(listener);
 	}
 
 	@Override
@@ -90,17 +103,22 @@ OnItemSelectedListener{
 		case (R.id.deviceinfo_delete):
 			onDeletePressed();
 			break;
+		case (R.id.deviceinfo_pin1_enable):
+		case (R.id.deviceinfo_pin2_enable):
+		case (R.id.deviceinfo_pin3_enable):
+			CheckBox cb = (CheckBox)v;
+			onPinPressed(v.getId(), cb.isChecked());
 		default:
 			break;
 		}
 		
 	}
 
-	public void onEditPressed() {
+	private void onEditPressed() {
 		setEditMode(true);
 	}
 	
-	public void onConfirmPressed() {
+	private void onConfirmPressed() {
 		//TODO save changes
 		if(mIsAddOperation) {
 			getActivity().getFragmentManager().popBackStack();
@@ -109,7 +127,7 @@ OnItemSelectedListener{
 		setEditMode(false);
 	}
 	
-	public void onCancelPressed() {
+	private void onCancelPressed() {
 		//TODO rollback changes
 		if(mIsAddOperation) {
 			getActivity().getFragmentManager().popBackStack();
@@ -118,10 +136,32 @@ OnItemSelectedListener{
 		setEditMode(false);
 	}
 	
-	public void onDeletePressed() {
+	private void onDeletePressed() {
 		//TODO ask before
 		//TODO remove user
 		getActivity().getFragmentManager().popBackStack();
+	}
+	
+	private void onPinPressed(int viewid, boolean enabled) {
+		int pinValueId = R.id.deviceinfo_pin1_value;
+		if(viewid == R.id.deviceinfo_pin2_enable) pinValueId = R.id.deviceinfo_pin2_value;
+		if(viewid == R.id.deviceinfo_pin3_enable) pinValueId = R.id.deviceinfo_pin3_value;
+		mPinView = (TextView)mMainView.findViewById(pinValueId);
+		
+		if(enabled) {
+			Bundle b = new Bundle();
+			b.putInt(PickerDialog.PICKER_MIN_VALUE, DEVICE_PIN_MIN_VALUE);
+			b.putInt(PickerDialog.PICKER_MAX_VALUE, DEVICE_PIN_MAX_VALUE);
+			
+			if(mPinView.getText().length() > 0) {
+				int value = Integer.parseInt(mPinView.getText().toString());
+				b.putInt(PickerDialog.PICKER_CURRENT_VALUE, value);
+			}
+			PickerDialog md = new PickerDialog(this, b);
+			md.show(getActivity().getFragmentManager(), "pin");
+		} else {
+			mPinView.setVisibility(View.GONE);
+		}
 	}
 	
 	private void setEditMode(boolean on) {
@@ -155,6 +195,18 @@ OnItemSelectedListener{
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
+		
+	}
+
+	@Override
+	public void OnPickerConfirm(int value) {
+		mPinView.setText(Integer.toString(value));
+		mPinView.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void OnPickerCancel(int value) {
+		// TODO uncheck checkbox
 		
 	}
 
