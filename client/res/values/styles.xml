@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -17,4 +17,14 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="SwitchTextAppearance" parent="@android:style/TextAppearance.Holo.Small">
+    	<item name="android:textSize">20sp</item>
+	</style>
+	
+    <style name="border">
+	    <item name="android:layout_width">match_parent</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:orientation">vertical</item>
+	    <item name="android:background">@drawable/shapes</item>
+	</style>
 </resources>
