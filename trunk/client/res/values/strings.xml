@@ -35,8 +35,8 @@
         <item>Editar Usuario</item>
         <item>Agregar Perfil</item>
         <item>Editar Perfil</item>
-        <item>Agregar Controlador</item>
-        <item>Editar Controlador</item>
+        <item>Agregar Dispositivo</item>
+        <item>Editar Dispositivo</item>
         <item>Simulador</item>
     </string-array>
 
