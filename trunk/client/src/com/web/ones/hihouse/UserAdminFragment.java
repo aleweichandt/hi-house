@@ -59,7 +59,7 @@ public class UserAdminFragment extends ListFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 		String name = mAdapter.getItem(pos);
-		mUserFragment = UserInfoFragment.newInstance(name);
+		mUserFragment = new UserInfoFragment(name, false);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		ft.add(R.id.userinfo_container, mUserFragment);
 		ft.addToBackStack(UserInfoFragment.class.toString());

@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Hi House</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="user">Usuario</string>
     <string name="password">Password</string>
@@ -14,6 +13,12 @@
     <string name="userinfo_pwd">Password</string>
     <string name="userinfo_pwd_confirm">Confirmacion</string>
     <string name="userinfo_profiles">Perfiles</string>
+    <string name="deviceinfo_name">Nombre</string>
+    <string name="deviceinfo_type">Tipo</string>
+    <string name="deviceinfo_subtype">subtipo</string>
+    <string name="deviceinfo_pin1">pin 1</string>
+    <string name="deviceinfo_pin2">pin 2</string>
+    <string name="deviceinfo_pin3">pin 3</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
     <string name="cancel">Cancelar</string>
@@ -39,7 +44,19 @@
         <item>Editar Dispositivo</item>
         <item>Simulador</item>
     </string-array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Device type Items -->
+    <string-array name="device_type_items">
+        <item>Luz</item>
+        <item>Puerta</item>
+        <item>A/C</item>
+        <item>Sensor Termico</item>
+        <item>Sensor Luminico</item>
+    </string-array> 
+    <!-- Device Subtypes Items -->
+    <string-array name="device_term_subtype_items">
+        <item>Frio</item>
+        <item>Calor</item>
+        <item>Ambas</item>
+    </string-array>
 
 </resources>

@@ -8,10 +8,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -19,9 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-public class MyDevicesFragment extends Fragment {
+public class MyDevicesFragment extends Fragment{
 
 	private View mRootView;
 	private ListView mList = null;
