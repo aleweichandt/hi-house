@@ -5,7 +5,7 @@
     tools:context="com.web.ones.hihouse.UserInfoFragment"
     android:orientation="vertical"
     android:background="#ffffff"
-    android:gravity="center_horizontal" >"
+    android:gravity="center_horizontal" >
 	
     <LinearLayout 
         android:layout_width="match_parent"
@@ -160,7 +160,7 @@
 	    android:textColor="#008A12"
 	    android:gravity="center"
 	    android:layout_margin="0dp"
-	    android:visibility="gone" />"
+	    android:visibility="gone" />
     <Button
 	    android:id="@+id/userinfo_cancel"
 	    android:layout_width="match_parent"
