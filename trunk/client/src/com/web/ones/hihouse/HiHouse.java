@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.os.Build;
 
 public class HiHouse extends Activity {
@@ -138,6 +139,12 @@ public class HiHouse extends Activity {
     	else if(menuItems[position].compareToIgnoreCase("Editar Perfil") == 0) {
     		fragment = new PerfilInfoFragment();
     	}
+    	else if(menuItems[position].compareToIgnoreCase("Mis Controladores") == 0) {
+    		fragment = new MyDevicesFragment();
+    	}
+    	else{
+    		Toast.makeText(this, "Menu no desarrollado", Toast.LENGTH_SHORT).show();
+    	}
     	if(fragment != null) {
         	args.putInt(ARG_NUMBER, position);
 	    	fragment.setArguments(args);
@@ -145,10 +152,10 @@ public class HiHouse extends Activity {
 	        fragmentManager.beginTransaction()
 	                       .replace(R.id.content_frame, fragment)
 	                       .commit();
+	        mDrawerList.setItemChecked(position, true);
+	        setTitle(menuItems[position]);
+	        mDrawerLayout.closeDrawer(mDrawerList);
     	}
-        mDrawerList.setItemChecked(position, true);
-        setTitle(menuItems[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
