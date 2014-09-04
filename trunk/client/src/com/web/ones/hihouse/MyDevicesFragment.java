@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -31,15 +32,16 @@ public class MyDevicesFragment extends Fragment {
 		mRootView = inflater.inflate(R.layout.fragment_my_devices, container, false);
         
 		onOffSwitch = (Switch) mRootView.findViewById(R.id.on_off_switch);
-		/*onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		        if (isChecked) {
 		            // The toggle is enabled
 		        } else {
 		            // The toggle is disabled
 		        }
+		        Toast.makeText(getActivity(), "Monitored switch is " + (isChecked ? "on" : "off"),Toast.LENGTH_SHORT).show();
 		    }
-		});*/
+		});
 		
         loadDevices();
         

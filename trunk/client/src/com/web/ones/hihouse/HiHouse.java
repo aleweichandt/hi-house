@@ -73,7 +73,7 @@ public class HiHouse extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(1);
         }
         
         Fragment fragment = new VoiceInputButton();
