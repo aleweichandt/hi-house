@@ -2,8 +2,6 @@ package com.web.ones.hihouse;
 
 import java.util.ArrayList;
 
-import com.web.ones.hihouse.UserInfoFragment.OnUserInfoListener;
-
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.Bundle;
@@ -16,8 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class UsersAdminFragment extends ListFragment implements 
-	OnItemClickListener,
-	OnUserInfoListener{
+	OnItemClickListener{
 	
 	private UserInfoFragment mUserFragment = null;
 	private View mRootView;
@@ -31,12 +28,12 @@ public class UsersAdminFragment extends ListFragment implements
         String title = getResources().getStringArray(R.array.nav_drawer_items)[i];
 
         getActivity().setTitle(title);
-		loadUsers();
+		loadUsersList();
 		
 		return mRootView;
 	}
 	
-	private void loadUsers() {
+	private void loadUsersList() {
 		//TODO load real users
 		String[] values = new String[] { "Jose", "Ines", "Juancito",
 		        "Pedro", "Betina" };
@@ -49,17 +46,28 @@ public class UsersAdminFragment extends ListFragment implements
 	    
 	    mList = (ListView) mRootView.findViewById(android.R.id.list);
 	    mList.setAdapter(mAdapter);
-	    mList.setOnItemClickListener(this);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		mList.setOnItemClickListener(null);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		mList.setOnItemClickListener(this);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 		String name = mAdapter.getItem(pos);
 		mUserFragment = UserInfoFragment.newInstance(name);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		ft.add(R.id.userinfo_container, mUserFragment);
+		ft.addToBackStack(UserInfoFragment.class.toString());
 		ft.commit();
-		mList.setVisibility(View.GONE);
 	}
 	
 	public void onBackPressed() {
@@ -68,25 +76,10 @@ public class UsersAdminFragment extends ListFragment implements
 	
 	private void removeUserView() {
 		if(mUserFragment != null) {
-	    	FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    	FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 	    	ft.remove(mUserFragment);
 	    	ft.commit();
 	    	mList.setVisibility(View.VISIBLE);
 	    }
 	}
-
-	@Override
-	public void onEndEdition() {
-		removeUserView();
-	}
-	
-	public UserInfoFragment getUserInfoFragment() { return mUserFragment;}
-	
-//handled by fragment
-	public void onEditPressed(View v) {mUserFragment.onEditPressed(v);}
-	public void onConfirmEdition(View v) {mUserFragment.onConfirmEdition(v);}
-	public void onCancelEdition(View v) {mUserFragment.onCancelEdition(v);}
-	public void onDeletePressed(View v) {mUserFragment.onDeletePressed(v);}
-
-	public void onProfilesPressed(View v) {mUserFragment.onProfilesPressed(v);}
 }

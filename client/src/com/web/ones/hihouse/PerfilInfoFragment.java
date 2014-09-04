@@ -2,8 +2,6 @@ package com.web.ones.hihouse;
 
 import java.util.List;
 
-import com.web.ones.hihouse.UserInfoFragment.OnUserInfoListener;
-
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
