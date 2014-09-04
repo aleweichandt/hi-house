@@ -2,7 +2,6 @@ package com.web.ones.hihouse;
 
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -10,20 +9,24 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Build;
 
 public class HiHouse extends Activity {
-	public static final String ARG_NUMBER = "arg_number";
+	private static final int DRAWER_MENU_INDEX_LOGIN = 0;
+	private static final int DRAWER_MENU_INDEX_MY_DEVICES = 1;
+	private static final int DRAWER_MENU_INDEX_ADD_USER = 2;
+	private static final int DRAWER_MENU_INDEX_USERS = 3;
+	private static final int DRAWER_MENU_INDEX_ADD_PROFILE = 4;
+	private static final int DRAWER_MENU_INDEX_PROFILES = 5;
+	private static final int DRAWER_MENU_INDEX_ADD_DEVICE = 6;
+	private static final int DRAWER_MENU_INDEX_DEVICES = 7;
+	private static final int DRAWER_MENU_INDEX_SIMULATOR = 8;
 	
 	private String[] menuItems;
     private DrawerLayout mDrawerLayout;
@@ -73,7 +76,7 @@ public class HiHouse extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(DRAWER_MENU_INDEX_LOGIN);
         }
         
         Fragment fragment = new VoiceInputButton();
@@ -95,7 +98,7 @@ public class HiHouse extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         //menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -130,23 +133,41 @@ public class HiHouse extends Activity {
     private void selectItem(int position) {
     	Fragment fragment = null;
     	Bundle args = new Bundle();
-    	if(menuItems[position].compareToIgnoreCase("login") == 0) {
+    	switch(position) {
+    	case DRAWER_MENU_INDEX_LOGIN:
     		fragment = new LoginFragment();
-    	}
-    	else if(menuItems[position].compareToIgnoreCase("Editar Usuario") == 0) {
-    		fragment = new UsersAdminFragment();
-    	}
-    	else if(menuItems[position].compareToIgnoreCase("Editar Perfil") == 0) {
-    		fragment = new PerfilInfoFragment();
-    	}
-    	else if(menuItems[position].compareToIgnoreCase("Mis Controladores") == 0) {
+    		break;
+    	case DRAWER_MENU_INDEX_MY_DEVICES:
     		fragment = new MyDevicesFragment();
-    	}
-    	else{
+    		break;
+    	case DRAWER_MENU_INDEX_ADD_USER:
+    		fragment = UserInfoFragment.newInstance("Nuevo");
+    		break;
+    	case DRAWER_MENU_INDEX_USERS:
+    		fragment = new UserAdminFragment();
+    		break;
+    	case DRAWER_MENU_INDEX_ADD_PROFILE: 
+    		fragment = new PerfilInfoFragment();
+    		break;
+    	case DRAWER_MENU_INDEX_PROFILES: 
+    		//TODO add fragment
     		Toast.makeText(this, "Menu no desarrollado", Toast.LENGTH_SHORT).show();
+    		break;
+    	case DRAWER_MENU_INDEX_ADD_DEVICE:
+    		fragment = DeviceInfoFragment.newInstance("Nuevo");
+    		break;
+    	case DRAWER_MENU_INDEX_DEVICES:
+    		fragment = new DeviceAdminFragment();
+    		break;
+    	case DRAWER_MENU_INDEX_SIMULATOR:
+    		//TODO add fragment
+    		Toast.makeText(this, "Menu no desarrollado", Toast.LENGTH_SHORT).show();
+    		break;
+    	default:
+    		Toast.makeText(this, "Error de indice", Toast.LENGTH_SHORT).show();
+    		break;
     	}
     	if(fragment != null) {
-        	args.putInt(ARG_NUMBER, position);
 	    	fragment.setArguments(args);
 	        FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction()

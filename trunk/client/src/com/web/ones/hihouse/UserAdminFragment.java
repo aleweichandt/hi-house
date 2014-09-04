@@ -13,7 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class UsersAdminFragment extends ListFragment implements 
+public class UserAdminFragment extends ListFragment implements 
 	OnItemClickListener{
 	
 	private UserInfoFragment mUserFragment = null;
@@ -24,10 +24,6 @@ public class UsersAdminFragment extends ListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_users, container, false);
-        int i = getArguments().getInt(HiHouse.ARG_NUMBER);
-        String title = getResources().getStringArray(R.array.nav_drawer_items)[i];
-
-        getActivity().setTitle(title);
 		loadUsersList();
 		
 		return mRootView;
@@ -68,18 +64,5 @@ public class UsersAdminFragment extends ListFragment implements
 		ft.add(R.id.userinfo_container, mUserFragment);
 		ft.addToBackStack(UserInfoFragment.class.toString());
 		ft.commit();
-	}
-	
-	public void onBackPressed() {
-		removeUserView();
-	}
-	
-	private void removeUserView() {
-		if(mUserFragment != null) {
-	    	FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-	    	ft.remove(mUserFragment);
-	    	ft.commit();
-	    	mList.setVisibility(View.VISIBLE);
-	    }
 	}
 }
