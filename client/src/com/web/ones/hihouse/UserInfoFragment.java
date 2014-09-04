@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.web.ones.hihouse.MultiChoiceDialog.OnMultiChoiceDialogListener;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,7 +16,7 @@ import android.widget.EditText;
 public class UserInfoFragment extends Fragment implements
 OnClickListener,
 OnMultiChoiceDialogListener{
-	private static final String ARG_NAME = "user.name";
+	private static final String ARG_USER_NAME = "user.name";
 	
 	private static final String PROFILE_TAG = "userinfo_profiles";
 
@@ -31,7 +30,7 @@ OnMultiChoiceDialogListener{
 	public static UserInfoFragment newInstance(String name) {
 		UserInfoFragment fragment = new UserInfoFragment();
 		Bundle args = new Bundle();
-		args.putString(ARG_NAME, name);
+		args.putString(ARG_USER_NAME, name);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -44,7 +43,7 @@ OnMultiChoiceDialogListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			mName = getArguments().getString(ARG_NAME);
+			mName = getArguments().getString(ARG_USER_NAME);
 		}
 		mSelectedProfiles = new ArrayList<CharSequence>();
 	}

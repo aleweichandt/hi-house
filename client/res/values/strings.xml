@@ -8,7 +8,6 @@
     <string name="password">Password</string>
     <string name="login">Ingresar</string>
     <string name="ic_voice_desc">Voice input</string>
-    <string name="title_activity_users">Edicion de Usuario</string>
     <string name="userinfo_name">Nombre</string>
     <string name="userinfo_mail">E-Mail</string>
     <string name="userinfo_admin">Administrador</string>
