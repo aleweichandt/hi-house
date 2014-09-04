@@ -16,10 +16,10 @@ import android.widget.EditText;
 public class UserInfoFragment extends Fragment implements
 OnClickListener,
 OnMultiChoiceDialogListener{
-	private static final String ARG_USER_NAME = "user.name";
-	
 	private static final String PROFILE_TAG = "userinfo_profiles";
 
+	private boolean mIsAddOperation = false;
+	private boolean mState = false;
 	private String mName;
 	private List<CharSequence> mSelectedProfiles;
 	private View mMainView;
@@ -27,24 +27,15 @@ OnMultiChoiceDialogListener{
 	String[] values = new String[] { "Cocina", "Living", "Baño",
 	        						 "Habitacion 1", "Habitacion 2", "Garage" };
 
-	public static UserInfoFragment newInstance(String name) {
-		UserInfoFragment fragment = new UserInfoFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_USER_NAME, name);
-		fragment.setArguments(args);
-		return fragment;
-	}
-
-	public UserInfoFragment() {
-		// Required empty public constructor
+	public UserInfoFragment(String name, boolean isAddOperation) {
+		mName = name;
+		mIsAddOperation = isAddOperation;
+		mState = mIsAddOperation;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getArguments() != null) {
-			mName = getArguments().getString(ARG_USER_NAME);
-		}
 		mSelectedProfiles = new ArrayList<CharSequence>();
 	}
 
@@ -54,7 +45,7 @@ OnMultiChoiceDialogListener{
 		// Inflate the layout for this fragment
 		mMainView = inflater.inflate(R.layout.fragment_user_info, container, false);
 		loadUserInfo();
-		setEditMode(false);
+		setEditMode(mIsAddOperation || mState);
 		return mMainView;
 	}
 	
@@ -115,11 +106,19 @@ OnMultiChoiceDialogListener{
 	
 	public void onConfirmPressed() {
 		//TODO save changes
+		if(mIsAddOperation) {
+			getActivity().getFragmentManager().popBackStack();
+			return;
+		}
 		setEditMode(false);
 	}
 	
 	public void onCancelPressed() {
 		//TODO rollback changes
+		if(mIsAddOperation) {
+			getActivity().getFragmentManager().popBackStack();
+			return;
+		}
 		setEditMode(false);
 	}
 	
@@ -150,6 +149,7 @@ OnMultiChoiceDialogListener{
 		mMainView.findViewById(R.id.userinfo_delete).setVisibility(on?View.GONE:View.VISIBLE);
 		mMainView.findViewById(R.id.userinfo_confirm).setVisibility(on?View.VISIBLE:View.GONE);
 		mMainView.findViewById(R.id.userinfo_cancel).setVisibility(on?View.VISIBLE:View.GONE);
+		mState = on;
 	}
 
 	@Override

@@ -133,6 +133,8 @@ public class HiHouse extends Activity {
     private void selectItem(int position) {
     	Fragment fragment = null;
     	Bundle args = new Bundle();
+    	boolean addToBackStack = false;
+    	String backStackTag = "";
     	switch(position) {
     	case DRAWER_MENU_INDEX_LOGIN:
     		fragment = new LoginFragment();
@@ -141,7 +143,9 @@ public class HiHouse extends Activity {
     		fragment = new MyDevicesFragment();
     		break;
     	case DRAWER_MENU_INDEX_ADD_USER:
-    		fragment = UserInfoFragment.newInstance("Nuevo");
+    		fragment = new UserInfoFragment("Nuevo", true);
+    		addToBackStack = true;
+    		backStackTag = UserInfoFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_USERS:
     		fragment = new UserAdminFragment();
@@ -154,7 +158,9 @@ public class HiHouse extends Activity {
     		Toast.makeText(this, "Menu no desarrollado", Toast.LENGTH_SHORT).show();
     		break;
     	case DRAWER_MENU_INDEX_ADD_DEVICE:
-    		fragment = DeviceInfoFragment.newInstance("Nuevo");
+    		fragment = new DeviceInfoFragment("Nuevo", true);
+    		addToBackStack = true;
+    		backStackTag = DeviceInfoFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_DEVICES:
     		fragment = new DeviceAdminFragment();
@@ -170,9 +176,16 @@ public class HiHouse extends Activity {
     	if(fragment != null) {
 	    	fragment.setArguments(args);
 	        FragmentManager fragmentManager = getFragmentManager();
-	        fragmentManager.beginTransaction()
-	                       .replace(R.id.content_frame, fragment)
-	                       .commit();
+	        if(addToBackStack) {
+		        fragmentManager.beginTransaction()
+		        			   .add(R.id.content_frame, fragment)
+		        			   .addToBackStack(backStackTag)
+		                       .commit();
+	        } else {
+	        	fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+	        }
 	        mDrawerList.setItemChecked(position, true);
 	        setTitle(menuItems[position]);
 	        mDrawerLayout.closeDrawer(mDrawerList);
