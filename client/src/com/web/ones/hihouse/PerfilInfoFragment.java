@@ -9,7 +9,10 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -30,6 +33,7 @@ public class PerfilInfoFragment extends Fragment {
 	private List<CharSequence> mSelectedProfiles;
 	private View mMainView;
 	private OnFragmentInteractionListener mListener;
+	private Button btn_select, btn_edit, btn_delete, btn_confirm, btn_cancel;
 	
 	// TODO: Rename and change types of parameters
 	private String mParam1;
@@ -72,9 +76,54 @@ public class PerfilInfoFragment extends Fragment {
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		mMainView = inflater.inflate(R.layout.fragment_perfil_info, container, false);
+		
+		btn_select = (Button) mMainView.findViewById(R.id.userinfo_profiles);
+		btn_edit = (Button) mMainView.findViewById(R.id.userinfo_edit);
+		btn_delete = (Button) mMainView.findViewById(R.id.userinfo_delete);
+		btn_confirm = (Button) mMainView.findViewById(R.id.userinfo_confirm);
+		btn_cancel = (Button) mMainView.findViewById(R.id.userinfo_cancel);
+		setButtonsOnClickListeners();
+		
 		loadPerfilInfo();
 		setEditMode(false);
 		return mMainView;
+	}
+
+	private void setButtonsOnClickListeners() {
+		btn_select.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				//TODO Comportamiento del boton
+			}
+		});
+		
+		btn_edit.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				//TODO Comportamiento del boton
+			}
+		});
+		
+		btn_delete.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				//TODO Comportamiento del boton
+			}
+		});
+		
+		btn_confirm.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				//TODO Comportamiento del boton
+			}
+		});
+		
+		btn_cancel.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				//TODO Comportamiento del boton
+			}
+		});
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event
@@ -84,6 +133,7 @@ public class PerfilInfoFragment extends Fragment {
 		}
 	}
 
+	/*
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -93,7 +143,7 @@ public class PerfilInfoFragment extends Fragment {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnFragmentInteractionListener");
 		}
-	}
+	}*/
 	
 	private void loadPerfilInfo() {
 		((EditText)mMainView.findViewById(R.id.userinfo_name)).setText(mName);
