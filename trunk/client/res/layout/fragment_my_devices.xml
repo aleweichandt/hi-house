@@ -4,18 +4,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal" >
-    
-	<ListView
-        android:id="@+id/my_devices_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+	
+	
     
 	<RelativeLayout 
 	    android:orientation="horizontal"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    style="@style/border"
-	    android:layout_alignParentBottom="true" >
+	    android:layout_alignParentBottom="true"
+	    android:id="@+id/button_bar" >
 	    
 	    <Switch 
 		    android:id="@+id/on_off_switch"
@@ -32,18 +30,24 @@
 	        android:id="@+id/open_close_button"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:src="@drawable/ic_action_not_secure"
+		    android:src="@drawable/ic_action_secure"
 		    android:contentDescription="@string/open_close_btn_desc"
 		    android:layout_centerHorizontal="true" />
 	    
 	    <ImageButton
-	        android:id="@+id/start_button"
+	        android:id="@+id/start_stop_button"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:src="@drawable/ic_action_play_over_video"
-		    android:contentDescription="@string/start_btn_desc"
+		    android:contentDescription="@string/start_stop_btn_desc"
 		    android:layout_alignParentRight="true"
 		    android:layout_marginRight="20dp" />
 	    
 	</RelativeLayout>
+	
+	<ExpandableListView
+		android:id="@+id/profiles_explist"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:layout_above="@id/button_bar"/>
 </RelativeLayout>
