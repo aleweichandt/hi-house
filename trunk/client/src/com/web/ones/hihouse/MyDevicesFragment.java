@@ -12,10 +12,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -27,10 +30,12 @@ public class MyDevicesFragment extends Fragment{
 	private Switch onOffSwitch;
 	private ImageButton btn_open_close, btn_start_stop;
 	private Boolean toggle_open_close=false, toggle_start_stop=false;
-	List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
-    ExpandableListView expListView;
-    ExpandableListAdapter listAdapter;
+	private List<String> listDataHeader;
+	private HashMap<String, List<String>> listDataChild;
+	private ExpandableListView expListView;
+	private ExpandableListAdapter listAdapter;
+	private EditText temp_input;
+	private SeekBar temp_seekBar;
 	
 	public MyDevicesFragment() {
         // Empty constructor required for fragment subclasses
@@ -45,9 +50,11 @@ public class MyDevicesFragment extends Fragment{
 		onOffSwitch = (Switch) mRootView.findViewById(R.id.on_off_switch);
 		btn_open_close = (ImageButton) mRootView.findViewById(R.id.open_close_button);
 		btn_start_stop = (ImageButton) mRootView.findViewById(R.id.start_stop_button);
-		setButtonsOnClickListeners();
 		
+		temp_input = (EditText) mRootView.findViewById(R.id.temp_input);
+		temp_seekBar = (SeekBar) mRootView.findViewById(R.id.seekBar);
 		
+		setEventsListeners();
 		
         loadProfilesDevicesList();
         
@@ -58,7 +65,7 @@ public class MyDevicesFragment extends Fragment{
         return mRootView;
     }
 	
-	private void setButtonsOnClickListeners() {
+	private void setEventsListeners() {
 		btn_open_close.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
@@ -86,6 +93,26 @@ public class MyDevicesFragment extends Fragment{
 		    }
 		});
 		
+		temp_seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+	
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+					//suponemos una temp entre 15 y 30 grados.
+					temp_input.setText(""+(progresValue+15));
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// Do something here, 
+					//if you want to do anything at the start of
+					// touching the seekbar
+				}
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// Display the value in textview
+					//temp_input.setText(progress + "/" + seekBar.getMax());
+				}
+		});
 	}
 
 	private void loadProfilesDevicesList() {
