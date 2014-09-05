@@ -1,7 +1,5 @@
 package com.web.ones.hihouse;
 
-import java.util.ArrayList;
-
 import com.web.ones.hihouse.PickerDialog.OnPickerDialogListener;
 
 import android.os.Bundle;
@@ -51,7 +49,7 @@ OnPickerDialogListener{
 		// Inflate the layout for this fragment
 		mMainView = inflater.inflate(R.layout.fragment_device_info, container, false);
 		loadDeviceInfo();
-		setEditMode(false);
+		setEditMode(mIsAddOperation || mState);
 		return mMainView;
 	}
 	
