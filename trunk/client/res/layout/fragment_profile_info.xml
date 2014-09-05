@@ -39,7 +39,7 @@
     <ListView
         android:id="@+id/profileinfo_devices"
          android:layout_width="wrap_content"
-	     android:layout_height="wrap_content"/>
+	     android:layout_height="fill_parent"/>
     
     <Button
 	    android:id="@+id/profileinfo_edit"
