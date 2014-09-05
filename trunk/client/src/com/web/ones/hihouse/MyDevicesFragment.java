@@ -113,6 +113,19 @@ public class MyDevicesFragment extends Fragment{
 					//temp_input.setText(progress + "/" + seekBar.getMax());
 				}
 		});
+
+		expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener(){
+            @Override
+            public boolean onChildClick(ExpandableListView expList, View v, int groupPos, int childPos, long id)
+            {
+            	String header = listDataHeader.get(groupPos);
+            	String item = listDataChild.get(header).get(childPos);
+            	if(item.contains("Alarma")){
+            		//TODO mostrar popup destinatario alarma
+            	}
+                return false;
+            }
+        });
 	}
 
 	private void loadProfilesDevicesList() {

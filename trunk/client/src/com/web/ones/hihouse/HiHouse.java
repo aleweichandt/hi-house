@@ -77,7 +77,6 @@ public class HiHouse extends Activity {
 
         if (savedInstanceState == null) {
             selectItem(DRAWER_MENU_INDEX_LOGIN);
-        	//selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
         }
         
         Fragment fragment = new VoiceInputButton();
