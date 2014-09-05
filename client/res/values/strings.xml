@@ -19,6 +19,8 @@
     <string name="deviceinfo_pin1">pin 1</string>
     <string name="deviceinfo_pin2">pin 2</string>
     <string name="deviceinfo_pin3">pin 3</string>
+    <string name="profileinfo_name">Nombre</string>
+    <string name="profileinfo_devices">Dispositivos</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
     <string name="cancel">Cancelar</string>
