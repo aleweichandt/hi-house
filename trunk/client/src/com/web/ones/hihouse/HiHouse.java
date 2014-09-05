@@ -1,6 +1,8 @@
 package com.web.ones.hihouse;
 
 
+import com.web.ones.hihouse.VoiceInputButton.OnVoiceCommand;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -17,7 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class HiHouse extends Activity {
+public class HiHouse extends Activity implements OnVoiceCommand{
 	private static final int DRAWER_MENU_INDEX_LOGIN = 0;
 	private static final int DRAWER_MENU_INDEX_MY_DEVICES = 1;
 	private static final int DRAWER_MENU_INDEX_ADD_USER = 2;
@@ -231,5 +233,12 @@ public class HiHouse extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+	@Override
+	public void onVoiceInputInteraction() {
+		//TODO remove this (testing now)
+		UserAlarmDestDialog ud = new UserAlarmDestDialog(null);
+		ud.show(getFragmentManager(), "userdest");
+	}
 
 }
