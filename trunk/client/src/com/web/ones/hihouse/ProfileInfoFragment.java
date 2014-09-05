@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+@SuppressLint("ValidFragment") /* Este supress es para que no haya que hacer clean a cada rato por el constructor con args */
 public class ProfileInfoFragment extends Fragment implements
 OnClickListener,
 OnItemClickListener{
@@ -27,6 +30,8 @@ OnItemClickListener{
 	private View mMainView;
 
 	public ProfileInfoFragment(String name, boolean isAddOperation) {
+	//TODO: tira error a veces y hay que hacer clean del proj porque no recomienda usar constructores con parametros, sino usar los ARG
+	// "Avoid non-default constructors in fragments: use a default constructor plus Fragment#setArguments(Bundle) instead"
 		mName = name;
 		mIsAddOperation = isAddOperation;
 		mState = mIsAddOperation;
@@ -59,7 +64,7 @@ OnItemClickListener{
 	private ArrayList<String> getDevices() {
 		//TODO get device list
 		String[] values = new String[] { "Luz cocina 1", "Luz cocina 2", "Puerta Cochera",
-				"A/C Habitacion 1", "Luz Living" };
+				"A/C Habitacion 1", "Luz Living", "Luz Jardin Trasero", "A/C Living" };
 
 		final ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < values.length; ++i) {
@@ -149,7 +154,7 @@ OnItemClickListener{
 
 	@Override
 	public void onItemClick(AdapterView<?> ad, View v, int pos, long id) {
-		RadioButton r = (RadioButton)v.findViewById(R.id.dev_row_check);
+		CheckBox r = (CheckBox)v.findViewById(R.id.dev_row_check);
 		r.setChecked(!r.isChecked());
 	}
 //adapter for list

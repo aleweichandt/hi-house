@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
    	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:orientation="horizontal"
-    	android:gravity="start" >
+    	android:gravity="start"
+    	android:layout_alignParentTop="true"
+    	android:id="@+id/top_layout" >
     	<TextView
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -30,58 +32,72 @@
     </LinearLayout>
     
     <TextView
-	        android:layout_width="wrap_content"
+	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:textSize="20sp"
+	        android:gravity="center"
+	        android:textSize="25sp"
 	        android:textColor="#008A12"
-	        android:text="@string/profileinfo_devices" />
+	        android:textStyle="bold"
+	        android:text="@string/profileinfo_devices"
+	        android:id="@+id/devices_title"
+	        android:layout_below="@id/top_layout" />
     
     <ListView
-        android:id="@+id/profileinfo_devices"
+		 android:id="@+id/profileinfo_devices"
          android:layout_width="wrap_content"
-	     android:layout_height="fill_parent"/>
+	     android:layout_height="fill_parent"
+	     android:layout_below="@id/devices_title"
+	     android:layout_above="@+id/bot_layout" />
     
-    <Button
-	    android:id="@+id/profileinfo_edit"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/edit"
-	    android:onClick="onEditPressed"
-	    android:textSize="20sp"
-	    android:textColor="#008A12"
-	    android:gravity="center"
-	    android:layout_margin="0dp" />
-    <Button
-	    android:id="@+id/profileinfo_delete"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/delete"
-	    android:onClick="onDeletePressed"
-	    android:textSize="20sp"
-	    android:textColor="#008A12"
-	    android:gravity="center"
-	    android:layout_margin="0dp" />
-    <Button
-	    android:id="@+id/profileinfo_confirm"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/confirm"
-	    android:onClick="onConfirmEdition"
-	    android:textSize="20sp"
-	    android:textColor="#008A12"
-	    android:gravity="center"
-	    android:layout_margin="0dp"
-	    android:visibility="gone" />
-    <Button
-	    android:id="@+id/profileinfo_cancel"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="bottom"
-	    android:text="@string/cancel"
-	    android:onClick="onCancelEdition"
-	    android:textSize="20sp"
-	    android:textColor="#008A12"
-	    android:gravity="center"
-	    android:layout_margin="0dp"
-	    android:visibility="gone" />
-</LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical"
+    	android:gravity="center_horizontal"
+    	android:layout_alignParentBottom="true"
+    	android:id="@id/bot_layout" >
+	    <Button
+		    android:id="@+id/profileinfo_edit"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/edit"
+		    android:onClick="onEditPressed"
+		    android:textSize="20sp"
+		    android:textColor="#008A12"
+		    android:gravity="center"
+		    android:layout_margin="0dp" />
+	    <Button
+		    android:id="@+id/profileinfo_delete"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/delete"
+		    android:onClick="onDeletePressed"
+		    android:textSize="20sp"
+		    android:textColor="#008A12"
+		    android:gravity="center"
+		    android:layout_margin="0dp" />
+	    <Button
+		    android:id="@+id/profileinfo_confirm"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/confirm"
+		    android:onClick="onConfirmEdition"
+		    android:textSize="20sp"
+		    android:textColor="#008A12"
+		    android:gravity="center"
+		    android:layout_margin="0dp"
+		    android:visibility="gone" />
+	    <Button
+		    android:id="@+id/profileinfo_cancel"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="bottom"
+		    android:text="@string/cancel"
+		    android:onClick="onCancelEdition"
+		    android:textSize="20sp"
+		    android:textColor="#008A12"
+		    android:gravity="center"
+		    android:layout_margin="0dp"
+		    android:visibility="gone" />
+    </LinearLayout>
+</RelativeLayout>
