@@ -1,19 +1,22 @@
 package com.web.ones.hihouse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 public class ProfileInfoFragment extends Fragment implements
 OnClickListener,
@@ -49,8 +52,7 @@ OnItemClickListener{
 		((EditText)mMainView.findViewById(R.id.profileinfo_name)).setText(mName);
 		ListView lv = (ListView) mMainView.findViewById(R.id.profileinfo_devices);
 		final ArrayList<String> list = getDevices();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-		        R.layout.simple_row, list);
+		ProfileInfoAdapter adapter = new ProfileInfoAdapter(getActivity(), list);
 		lv.setAdapter(adapter);
 	}
 	
@@ -147,8 +149,28 @@ OnItemClickListener{
 
 	@Override
 	public void onItemClick(AdapterView<?> ad, View v, int pos, long id) {
-		// TODO Auto-generated method stub
-		
+		RadioButton r = (RadioButton)v.findViewById(R.id.dev_row_check);
+		r.setChecked(!r.isChecked());
 	}
-
+//adapter for list
+	private class ProfileInfoAdapter extends ArrayAdapter<String> {
+		private ArrayList<String> mData;
+		private Context mContext;
+		
+		public ProfileInfoAdapter(Context context, List<String> objects) {
+			super(context, R.layout.profileinfo_device_row, objects);
+			mData = (ArrayList<String>) objects;
+			mContext = context;
+		}
+			
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) mContext
+										.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View rowView = inflater.inflate(R.layout.profileinfo_device_row, parent, false);
+			TextView tv = (TextView)rowView.findViewById(R.id.dev_row_name);
+			tv.setText(mData.get(position));
+			return rowView;
+		}
+	}
 }
