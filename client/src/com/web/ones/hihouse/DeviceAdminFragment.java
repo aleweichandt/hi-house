@@ -38,7 +38,7 @@ public class DeviceAdminFragment extends ListFragment implements
 	    for (int i = 0; i < values.length; ++i) {
 	      list.add(values[i]);
 	    }
-	    mAdapter = new ArrayAdapter<String>(getActivity(), R.layout.user_row, list);
+	    mAdapter = new ArrayAdapter<String>(getActivity(), R.layout.simple_row, list);
 	    
 	    mList = (ListView) mRootView.findViewById(android.R.id.list);
 	    mList.setAdapter(mAdapter);

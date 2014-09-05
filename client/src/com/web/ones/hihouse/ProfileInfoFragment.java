@@ -50,7 +50,7 @@ OnItemClickListener{
 		ListView lv = (ListView) mMainView.findViewById(R.id.profileinfo_devices);
 		final ArrayList<String> list = getDevices();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-		        R.layout.user_row, list);
+		        R.layout.simple_row, list);
 		lv.setAdapter(adapter);
 	}
 	
