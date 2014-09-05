@@ -122,6 +122,8 @@ public class MyDevicesFragment extends Fragment{
             	String item = listDataChild.get(header).get(childPos);
             	if(item.contains("Alarma")){
             		//TODO mostrar popup destinatario alarma
+            		UserAlarmDestDialog ud = new UserAlarmDestDialog(null);
+            		ud.show(getFragmentManager(), "userdest");
             	}
                 return false;
             }

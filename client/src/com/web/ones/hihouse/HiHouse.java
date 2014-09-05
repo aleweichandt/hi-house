@@ -237,8 +237,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	@Override
 	public void onVoiceInputInteraction() {
 		//TODO remove this (testing now)
-		UserAlarmDestDialog ud = new UserAlarmDestDialog(null);
-		ud.show(getFragmentManager(), "userdest");
+		
 	}
 
 }
