@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical" >
+	
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+		android:text="@string/simulator_select"/>
+	
+	<Spinner
+	    android:id="@+id/profile_spinner"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" />
+	
+	<ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	<LinearLayout 
+	    android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:id="@+id/simulator_container" />
+	</ScrollView>
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+		
+	    <Button
+		    android:id="@+id/accept_btn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/accept"
+		    android:textSize="30sp"
+		    android:textColor="#008A12" />
+	    <Button
+		    android:id="@+id/cancel_btn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/cancel"
+		    android:textSize="30sp"
+		    android:textColor="#008A12" />
+	    
+	</LinearLayout>
+	
+</LinearLayout>

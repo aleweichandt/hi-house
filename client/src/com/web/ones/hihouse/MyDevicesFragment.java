@@ -90,17 +90,6 @@ public class MyDevicesFragment extends Fragment{
 
 	private void loadProfilesDevicesList() {
 		//TODO load real devices
-		String[] values = new String[] { "Alarma Central", "Climatizador Living", "Luz Cocina", "Luz Puerta Principal", "Porton Garage" };
-
-	    final ArrayList<String> list = new ArrayList<String>();
-	    for (int i = 0; i < values.length; ++i) {
-	      list.add(values[i]);
-	    }
-	    mAdapter = new ArrayAdapter<String>(getActivity(), R.layout.device_item, list);
-	    
-	    //mList = (ListView) mRootView.findViewById(R.id.my_devices_list);
-	    //mList.setAdapter(mAdapter);
-	    //mList.setOnItemClickListener(this);
 	    
 	    listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
