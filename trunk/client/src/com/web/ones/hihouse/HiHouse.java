@@ -168,7 +168,7 @@ public class HiHouse extends Activity {
     		break;
     	case DRAWER_MENU_INDEX_SIMULATOR:
     		//TODO add fragment
-    		Toast.makeText(this, "Menu no desarrollado", Toast.LENGTH_SHORT).show();
+    		fragment = new SimulatorFragment();
     		break;
     	default:
     		Toast.makeText(this, "Error de indice", Toast.LENGTH_SHORT).show();
