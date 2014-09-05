@@ -151,11 +151,12 @@ public class HiHouse extends Activity {
     		fragment = new UserAdminFragment();
     		break;
     	case DRAWER_MENU_INDEX_ADD_PROFILE: 
-    		fragment = new PerfilInfoFragment();
+    		fragment = new ProfileInfoFragment("Nuevo", true);
+    		addToBackStack = true;
+    		backStackTag = ProfileInfoFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_PROFILES: 
-    		//TODO add fragment
-    		Toast.makeText(this, "Menu no desarrollado", Toast.LENGTH_SHORT).show();
+    		fragment = new ProfileAdminFragment();
     		break;
     	case DRAWER_MENU_INDEX_ADD_DEVICE:
     		fragment = new DeviceInfoFragment("Nuevo", true);

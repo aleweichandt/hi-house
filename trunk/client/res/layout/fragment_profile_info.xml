@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.web.ones.hihouse.ProfileInfoFragment"
+   	android:background="#ffffff"
+    android:orientation="vertical"
+    android:gravity="center_horizontal" >
+	
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/profileinfo_name" />
+    	<EditText
+	       android:id="@+id/profileinfo_name"
+	       android:gravity="center"
+	       android:inputType="text"
+	       android:lines="1"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"
+	       android:layout_marginBottom="20dp" />
+    </LinearLayout>
+    
+    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/profileinfo_devices" />
+    
+    <ListView
+        android:id="@+id/profileinfo_devices"
+         android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"/>
+    
+    <Button
+	    android:id="@+id/profileinfo_edit"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/edit"
+	    android:onClick="onEditPressed"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp" />
+    <Button
+	    android:id="@+id/profileinfo_delete"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/delete"
+	    android:onClick="onDeletePressed"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp" />
+    <Button
+	    android:id="@+id/profileinfo_confirm"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/confirm"
+	    android:onClick="onConfirmEdition"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp"
+	    android:visibility="gone" />
+    <Button
+	    android:id="@+id/profileinfo_cancel"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="bottom"
+	    android:text="@string/cancel"
+	    android:onClick="onCancelEdition"
+	    android:textSize="20sp"
+	    android:textColor="#008A12"
+	    android:gravity="center"
+	    android:layout_margin="0dp"
+	    android:visibility="gone" />
+</LinearLayout>
