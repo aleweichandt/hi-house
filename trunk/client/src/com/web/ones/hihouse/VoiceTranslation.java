@@ -28,7 +28,7 @@ import android.widget.Toast;
  * Adjuntar usando attachToActivity
  */
 
-public class VoiceInputButton extends Fragment implements OnClickListener, RecognitionListener {
+public class VoiceTranslation extends Fragment implements OnClickListener, RecognitionListener {
 
 	private ImageButton button;
 	private OnVoiceCommand mListener;
@@ -38,19 +38,19 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
 	private ProgressBar loadingBar;
 	private TextView speak_box;
 
-	public static VoiceInputButton newInstance() {
-		VoiceInputButton fragment = new VoiceInputButton();
+	public static VoiceTranslation newInstance() {
+		VoiceTranslation fragment = new VoiceTranslation();
 		//crear bundle y adjuntar con setArguments si hace falta
 		return fragment;
 	}
 	
 	public static void attachToActivity(Activity activity, int resId) {
 		FragmentTransaction ft =activity.getFragmentManager().beginTransaction();
-		ft.add(resId, VoiceInputButton.newInstance());
+		ft.add(resId, VoiceTranslation.newInstance());
 		ft.commit();
 	}
 
-	public VoiceInputButton() {
+	public VoiceTranslation() {
 	}
 
 	@Override
@@ -64,15 +64,13 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
 		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
-		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hable ahora");
-		
-		
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);	
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_voice_input_button, container, false);
+		button = (ImageButton) v.findViewById(R.id.voice_button);
 		loadingBar = (ProgressBar) v.findViewById(R.id.loading_bar);
 		speak_box = (TextView) v.findViewById(R.id.speak_box);
 		return v;
@@ -81,34 +79,26 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(mListener != null) {
-			Activity act = (Activity)mListener;
-			button = (ImageButton) act.findViewById(R.id.voice_button);
-			if(button != null) {
-				button.setOnClickListener(this);
-			}
+		if(button != null) {
+			button.setOnClickListener(this);
 		}
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		if(mListener != null) {
-			Activity act = (Activity)mListener;
-			ImageButton button = (ImageButton) act.findViewById(R.id.voice_button);
-			if(button != null) {
-				button.setOnClickListener(null);
-				//remover listener
-			}
+		if(button != null) {
+			button.setOnClickListener(null);
+			//remover listener
 		}
 	}
 
 	@Override
 	public void onClick(View arg0) {
-		/*if (mListener != null) {
-			mListener.onVoiceInputInteraction();
-		}*/
 		speech.startListening(recognizerIntent);
+		if (mListener != null) {
+			mListener.onVoiceInputInteraction();//llama al Callback de la Activity
+		}
 	}
 
 	@Override
@@ -117,8 +107,7 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
 		try {
 			mListener = (OnVoiceCommand) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnFragmentInteractionListener");
+			throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
 		}
 	}
 
