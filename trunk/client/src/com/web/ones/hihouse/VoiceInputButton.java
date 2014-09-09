@@ -1,14 +1,24 @@
 package com.web.ones.hihouse;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 
@@ -18,9 +28,14 @@ import android.widget.ImageButton;
  * Adjuntar usando attachToActivity
  */
 
-public class VoiceInputButton extends Fragment implements OnClickListener{
+public class VoiceInputButton extends Fragment implements OnClickListener, RecognitionListener {
 
+	private ImageButton button;
 	private OnVoiceCommand mListener;
+	private SpeechRecognizer speech = null;
+	private Intent recognizerIntent;
+	private String LOG_TAG = "VoiceRecognitionActivity";
+	private ProgressBar loadingBar;
 
 	public static VoiceInputButton newInstance() {
 		VoiceInputButton fragment = new VoiceInputButton();
@@ -41,13 +56,24 @@ public class VoiceInputButton extends Fragment implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//si hay argumentos, procesarlos con getArguments
+		
+		speech = SpeechRecognizer.createSpeechRecognizer(getActivity());
+		speech.setRecognitionListener(this);
+		recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hable ahora");
+		
+		
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_voice_input_button,
-				container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_voice_input_button, container, false);
+		loadingBar = (ProgressBar) v.findViewById(R.id.loading_bar);
+		return v;
 	}
 	
 	@Override
@@ -55,7 +81,7 @@ public class VoiceInputButton extends Fragment implements OnClickListener{
 		super.onResume();
 		if(mListener != null) {
 			Activity act = (Activity)mListener;
-			ImageButton button = (ImageButton) act.findViewById(R.id.voice_button);
+			button = (ImageButton) act.findViewById(R.id.voice_button);
 			if(button != null) {
 				button.setOnClickListener(this);
 			}
@@ -77,9 +103,13 @@ public class VoiceInputButton extends Fragment implements OnClickListener{
 
 	@Override
 	public void onClick(View arg0) {
-		if (mListener != null) {
+		/*if (mListener != null) {
 			mListener.onVoiceInputInteraction();
-		}	
+		}*/
+		button.setVisibility(View.GONE);
+		loadingBar.setVisibility(View.VISIBLE);
+        //loadingBar.setIndeterminate(true);
+		speech.startListening(recognizerIntent);
 	}
 
 	@Override
@@ -102,5 +132,104 @@ public class VoiceInputButton extends Fragment implements OnClickListener{
 	public interface OnVoiceCommand {
 		public void onVoiceInputInteraction();
 	}
+	
+	@Override
+    public void onBeginningOfSpeech() {
+        Log.i(LOG_TAG, "onBeginningOfSpeech");
+        //loadingBar.setIndeterminate(false);
+        //loadingBar.setMax(10);
+    }
+ 
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+        Log.i(LOG_TAG, "onBufferReceived: " + buffer);
+    }
+ 
+    @Override
+    public void onEndOfSpeech() {
+        Log.i(LOG_TAG, "onEndOfSpeech");
+        //loadingBar.setIndeterminate(true);
+    }
+ 
+    @Override
+    public void onError(int errorCode) {
+        String errorMessage = getErrorText(errorCode);
+        Log.d(LOG_TAG, "FAILED " + errorMessage);
+        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+    }
+ 
+    @Override
+    public void onEvent(int arg0, Bundle arg1) {
+        Log.i(LOG_TAG, "onEvent");
+    }
+ 
+    @Override
+    public void onPartialResults(Bundle arg0) {
+        Log.i(LOG_TAG, "onPartialResults");
+    }
+ 
+    @Override
+    public void onReadyForSpeech(Bundle arg0) {
+        Log.i(LOG_TAG, "onReadyForSpeech");
+    }
+ 
+    @Override
+    public void onResults(Bundle results) {
+        Log.i(LOG_TAG, "onResults");
+        ArrayList<String> matches = results
+                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String text = "";
+        for (String result : matches)
+            text += result + "\n";
+ 
+        //Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        TextView t = (TextView) getActivity().findViewById(R.id.text);
+        t.setText(text);
+        button.setVisibility(View.VISIBLE);
+		loadingBar.setVisibility(View.GONE);
+    }
+ 
+    @Override
+    public void onRmsChanged(float rmsdB) {
+        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+        //loadingBar.setProgress((int) rmsdB);
+    }
+ 
+    public static String getErrorText(int errorCode) {
+        String message;
+        switch (errorCode) {
+        case SpeechRecognizer.ERROR_AUDIO:
+            message = "Audio recording error";
+            break;
+        case SpeechRecognizer.ERROR_CLIENT:
+            message = "Client side error";
+            break;
+        case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+            message = "Insufficient permissions";
+            break;
+        case SpeechRecognizer.ERROR_NETWORK:
+            message = "Network error";
+            break;
+        case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+            message = "Network timeout";
+            break;
+        case SpeechRecognizer.ERROR_NO_MATCH:
+            message = "No match";
+            break;
+        case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+            message = "RecognitionService busy";
+            break;
+        case SpeechRecognizer.ERROR_SERVER:
+            message = "error from server";
+            break;
+        case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+            message = "No speech input";
+            break;
+        default:
+            message = "Didn't understand, please try again.";
+            break;
+        }
+        return message;
+    }
 
 }

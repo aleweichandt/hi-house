@@ -6,6 +6,7 @@ import com.web.ones.hihouse.VoiceInputButton.OnVoiceCommand;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -83,9 +84,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         
         Fragment fragment = new VoiceInputButton();
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-        				.replace(R.id.voiceButton_frame, fragment)
-        				.commit();
+        fragmentManager.beginTransaction().replace(R.id.voiceButton_frame, fragment).commit();
 	}
 
 	@Override
@@ -237,7 +236,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	@Override
 	public void onVoiceInputInteraction() {
 		//TODO remove this (testing now)
-		
+		//voiceTranslation.speak();
+		//speak();
 	}
-
 }
