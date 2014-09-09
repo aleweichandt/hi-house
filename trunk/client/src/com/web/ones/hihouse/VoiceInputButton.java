@@ -36,6 +36,7 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
 	private Intent recognizerIntent;
 	private String LOG_TAG = "VoiceRecognitionActivity";
 	private ProgressBar loadingBar;
+	private TextView speak_box;
 
 	public static VoiceInputButton newInstance() {
 		VoiceInputButton fragment = new VoiceInputButton();
@@ -73,6 +74,7 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_voice_input_button, container, false);
 		loadingBar = (ProgressBar) v.findViewById(R.id.loading_bar);
+		speak_box = (TextView) v.findViewById(R.id.speak_box);
 		return v;
 	}
 	
@@ -106,9 +108,6 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
 		/*if (mListener != null) {
 			mListener.onVoiceInputInteraction();
 		}*/
-		button.setVisibility(View.GONE);
-		loadingBar.setVisibility(View.VISIBLE);
-        //loadingBar.setIndeterminate(true);
 		speech.startListening(recognizerIntent);
 	}
 
@@ -149,28 +148,35 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
     public void onEndOfSpeech() {
         Log.i(LOG_TAG, "onEndOfSpeech");
         //loadingBar.setIndeterminate(true);
+        speak_box.setVisibility(View.GONE);
+		loadingBar.setVisibility(View.VISIBLE);
     }
  
     @Override
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
-        Log.d(LOG_TAG, "FAILED " + errorMessage);
+        //Log.d(LOG_TAG, "FAILED " + errorMessage);
+		loadingBar.setVisibility(View.GONE);
+		speak_box.setVisibility(View.GONE);
+		button.setVisibility(View.VISIBLE);
         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
     }
  
     @Override
     public void onEvent(int arg0, Bundle arg1) {
-        Log.i(LOG_TAG, "onEvent");
+        //Log.i(LOG_TAG, "onEvent");
     }
  
     @Override
     public void onPartialResults(Bundle arg0) {
-        Log.i(LOG_TAG, "onPartialResults");
+        //Log.i(LOG_TAG, "onPartialResults");
     }
  
     @Override
     public void onReadyForSpeech(Bundle arg0) {
-        Log.i(LOG_TAG, "onReadyForSpeech");
+        //Log.i(LOG_TAG, "onReadyForSpeech");
+    	button.setVisibility(View.INVISIBLE);
+		speak_box.setVisibility(View.VISIBLE);
     }
  
     @Override
@@ -186,12 +192,13 @@ public class VoiceInputButton extends Fragment implements OnClickListener, Recog
         TextView t = (TextView) getActivity().findViewById(R.id.text);
         t.setText(text);
         button.setVisibility(View.VISIBLE);
-		loadingBar.setVisibility(View.GONE);
+        loadingBar.setVisibility(View.GONE);
+		speak_box.setVisibility(View.GONE);
     }
  
     @Override
     public void onRmsChanged(float rmsdB) {
-        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+        //Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
         //loadingBar.setProgress((int) rmsdB);
     }
  
