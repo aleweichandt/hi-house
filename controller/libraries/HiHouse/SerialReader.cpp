@@ -10,7 +10,7 @@ SerialReader::SerialReader(int bufferSize, int headerLen) {
 unsigned int SerialReader::getPacketLength() {
 	unsigned int len = 0;
 	int chr, i;
-	while(!Serial.available() > 1); //wait until len comes
+	while(!(Serial.available() > 1)); //wait until len comes
 	for( i = 0 ; i < 2 ; i++ ) {
 		chr = Serial.read();
 		len += ( chr << (8 * i) );
@@ -42,7 +42,7 @@ void SerialReader::read() {
 	DLOG(char(_messageLength));
 #endif
 	memset( _buffer, 0, _bufferSize );
-	while(!Serial.available() > (_bufferSize-1)); //wait until len comes
+	while(!(Serial.available() > (_messageLength-1))); //wait until len comes
 	while( i < _messageLength ) {
 		input = Serial.read();
 		if( i < bufferSize ) {
