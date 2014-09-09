@@ -33,14 +33,14 @@ class ProtocolMessage {
 		uint8_t getPinValue( uint8_t index ) { return _ms_pin_values[ index ]; };
 		
 	private:
-#ifdef FLOW_CONTROL_PROTOCOL_1
+/*#ifdef FLOW_CONTROL_PROTOCOL_1
 	//protocolo header
 		uint16_t _seq;
 		uint16_t _ack;
 #ifdef FLOW_CONTROL_PROTOCOL_2
 		uint8_t _ack_bits[ARRAY_MAX_ACK];
 #endif
-#endif
+#endif*/
 	//hihouse message header
 		uint8_t _ms_type;			//1 bit
 		uint8_t _ms_action;			//1 bit
