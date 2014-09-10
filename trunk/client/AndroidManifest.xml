@@ -8,7 +8,10 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="20" />
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     <application
         android:allowBackup="true"
@@ -25,6 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name="com.web.ones.hihouse.HiHouseService"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>

@@ -1,14 +1,22 @@
 package com.web.ones.hihouse;
 
 
+import com.web.ones.hihouse.HiHouseService.HiHouseTask;
+import com.web.ones.hihouse.HiHouseService.LocalBinder;
 import com.web.ones.hihouse.VoiceTranslation.OnVoiceCommand;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
@@ -18,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class HiHouse extends Activity implements OnVoiceCommand{
@@ -36,6 +45,27 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     private ListView mDrawerList;
     private CharSequence mTitle,mDrawerTitle;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    //para manejar el HiHouseService
+    HiHouseService mHiHouseService;
+    boolean mBound = false;
+    
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to HiHouseService, cast the IBinder and get HiHouseService instance
+            LocalBinder binder = (LocalBinder) service;
+            mHiHouseService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +115,39 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         Fragment fragment = new VoiceTranslation();
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.voiceButton_frame, fragment).commit();
+        
+        //arrancamos el HiHouseService explicitamente para que sea un Started Service
+        startService(new Intent(this, HiHouseService.class));
+        // Bind to HiHouseService
+        Intent intent = new Intent(this, HiHouseService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        
+        // Message handling - from service:
+        final IntentFilter myFilter = new IntentFilter(HiHouseTask.NEW_RESPONSE);
+        registerReceiver(mReceiver, myFilter);
 	}
+	
+	@Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+	@Override
+    protected void onStop() {
+        super.onStop();
+    }
+	
+	@Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+            //Toast.makeText(this, "Service Unbound", Toast.LENGTH_SHORT).show();
+        }
+    }
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -238,4 +300,38 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 		//TODO Callback de VoiceTranslation fragment
 
 	}
+	
+	public void stopService(View v){
+		stopService(new Intent(this, HiHouseService.class));
+	}
+	public void callServiceMethod(View v){
+		if (mBound) {
+            // Call a method from the HiHouseService.
+            // However, if this call were something that might hang, then this request should
+            // occur in a separate thread to avoid slowing down the activity performance.
+            mHiHouseService.testMethod();
+        }
+
+	}
+	
+	private class DataUpdateReceiver extends BroadcastReceiver {
+ 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(HiHouseTask.NEW_RESPONSE)) {
+                // do something with the tweet
+            	Toast.makeText(context, "Broadcast!", Toast.LENGTH_SHORT).show();
+            }
+ 
+        }
+    }
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final TextView responseFromService = (TextView) findViewById(R.id.broadcast);
+            responseFromService.setText(intent.getCharSequenceExtra("data"));
+        }
+	};
+
 }
