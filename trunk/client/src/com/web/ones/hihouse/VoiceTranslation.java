@@ -170,16 +170,15 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
  
     @Override
     public void onResults(Bundle results) {
-        Log.i(LOG_TAG, "onResults");
-        ArrayList<String> matches = results
-                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        String text = "";
-        for (String result : matches)
-            text += result + "\n";
+        //Log.i(LOG_TAG, "onResults");
+        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
  
+        CommandBuilder c = new CommandBuilder();
+        String s = c.generateCommand(matches);
+        
         //Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
         TextView t = (TextView) getActivity().findViewById(R.id.text);
-        t.setText(text);
+        t.setText(s);
         button.setVisibility(View.VISIBLE);
         loadingBar.setVisibility(View.GONE);
 		speak_box.setVisibility(View.GONE);
