@@ -10,6 +10,11 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet>
+  	<servlet-name>Backgroudn Service</servlet-name>
+  	<servlet-class>server.model.BackgroundServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
   <servlet-mapping>
     <servlet-name>HiHouse REST Service</servlet-name>
     <url-pattern>/*</url-pattern>
