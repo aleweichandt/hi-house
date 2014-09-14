@@ -9,6 +9,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import server.model.SessionHandler;
+import server.model.UserSession;
+import server.model.devices.Device;
+
 @Path("/devices")
 public class DeviceService {
 	@GET
@@ -24,6 +28,14 @@ public class DeviceService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response getDevice(@PathParam("id") String deviceid, @QueryParam("token")String tkn) {
+		return Response.status(200).entity("device:"+ deviceid).build();
+	}
+	
+	@GET
+	@Path("{id}/state")
+	@Produces(MediaType.TEXT_PLAIN)
+	//@Produces(MediaType.APPLICATION_JSON)
+	public Response getDeviceState(@PathParam("id") String deviceid, @QueryParam("token")String tkn) {
 		return Response.status(200).entity("device:"+ deviceid).build();
 	}
 	
@@ -48,6 +60,14 @@ public class DeviceService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteDevice(@PathParam("id") String deviceid, @QueryParam("token")String tkn) {
+		return Response.status(200).entity("device:"+ deviceid).build();
+	}
+	
+	@POST
+	@Path("{id}/state")
+	@Produces(MediaType.TEXT_PLAIN)
+	//@Produces(MediaType.APPLICATION_JSON)
+	public Response setDeviceState(@PathParam("id") String deviceid, @QueryParam("enabled")boolean enabled, @QueryParam("token")String tkn) {
 		return Response.status(200).entity("device:"+ deviceid).build();
 	}
 }

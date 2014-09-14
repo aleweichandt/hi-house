@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import server.model.devices.Device;
+
 public class Profile {
 	static Profile getFromDB(String profileid) {
 		DBRequestHandler request = new DBRequestHandler();
