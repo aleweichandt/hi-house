@@ -3,6 +3,8 @@ package server.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import server.model.devices.Device;
+
 public class SupportDataManager {
 	// Singleton begin
 	private static SupportDataManager sInstance = null;
