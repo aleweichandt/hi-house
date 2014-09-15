@@ -3,10 +3,14 @@ package com.web.ones.hihouse;
 import java.util.ArrayList;
 
 public class CommandBuilder {
-	private ArrayList<String> commands,devices;
+	private ArrayList<String> commands;
+	private HiHouse hiHouse;
 	
 	
-	public CommandBuilder() {
+	public CommandBuilder(HiHouse activity) {
+		
+		this.hiHouse = activity; 
+		
 		commands = new ArrayList<String>();
 		commands.add("abrir");
 		commands.add("cerrar");
@@ -14,19 +18,7 @@ public class CommandBuilder {
 		commands.add("encender");
 		commands.add("apagar");
 		commands.add("activar");
-		
-		 devices = new ArrayList<String>();
-		 devices.add("luz cocina");
-		 devices.add("luz living");
-		 devices.add("luz jardin");
-		 devices.add("luz habitacion 1");
-		 devices.add("luz habitacion 2");
-		 devices.add("luz chicos");
-		 devices.add("luz comedor");
-		 devices.add("puerta principal");
-		 devices.add("puerta trasera");
-		 devices.add("persiana living");
-		 devices.add("alarma central");
+		commands.add("desactivar");
 	}
 
 	public String generateCommand(ArrayList<String> matches) {
@@ -45,9 +37,12 @@ public class CommandBuilder {
 				command = com;
 			}
 			
-			if(!device_set && devices.contains(dev)){
-				device_set = true;
-				device = dev;
+			if(!device_set){
+				String str = hiHouse.mydb.getDevice(dev);
+				if(str!=""){
+					device_set = true;
+					device = str;
+				}
 			}
 
 		}
