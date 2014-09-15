@@ -37,6 +37,7 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
 	private String LOG_TAG = "VoiceRecognitionActivity";
 	private ProgressBar loadingBar;
 	private TextView speak_box;
+    DBHelper mydb;
 
 	public static VoiceTranslation newInstance() {
 		VoiceTranslation fragment = new VoiceTranslation();
@@ -64,7 +65,7 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
 		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);	
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
 	}
 
 	@Override
@@ -173,9 +174,9 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
         //Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
  
-        CommandBuilder c = new CommandBuilder();
+        CommandBuilder c = new CommandBuilder((HiHouse)this.getActivity());
         String s = c.generateCommand(matches);
-        
+
         //Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
         TextView t = (TextView) getActivity().findViewById(R.id.text);
         t.setText(s);

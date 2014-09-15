@@ -50,6 +50,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     HiHouseService mHiHouseService;
     boolean mBound = false;
     
+    //DB
+    DBHelper mydb;
+    
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -125,6 +128,15 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         // Message handling - from service:
         final IntentFilter myFilter = new IntentFilter(HiHouseTask.NEW_RESPONSE);
         registerReceiver(mReceiver, myFilter);
+        
+        // DB operations
+        mydb = new DBHelper(this);
+        
+        //insertamos alguns devices de prueba
+        mydb.insertDevice(1, "luz cocina");
+        mydb.insertDevice(2, "luz living");
+        mydb.insertDevice(3, "puerta principal");
+        mydb.insertDevice(4, "alarma central");
 	}
 	
 	@Override
