@@ -1,11 +1,10 @@
 package server.model;
 
 import java.util.Date;
-import java.util.List;
 
 public class UserSession {
 	
-	private User mUser = null;
+	private String mUserId = null;
 	private AdminRights mAdmin = null;
 	private String mToken;
 	private Date mExpirationTime;
@@ -14,7 +13,7 @@ public class UserSession {
 	private static int counter = 0; //For testing purpose
 	
 	public UserSession(User user) {
-		mUser = user;
+		mUserId = user.getId();
 		if(user.isAdmin()) {
 			mAdmin = new AdminRights();
 		}
@@ -39,26 +38,20 @@ public class UserSession {
 	
 	public boolean isMyUser(String userid){
 		return (userid.compareTo("me") == 0 || 
-				userid.compareTo(mUser.getId()) == 0);
+				userid.compareTo(mUserId) == 0);
 	}
 	
 	public User getUser() {
-		return mUser;
+		return User.getFromDB(mUserId);
+	}
+	
+	public AdminRights getAdmin() {
+		return mAdmin;
 	}
 	
 	public User getUser(String userid) {
 		if(isMyUser(userid)) {
 			return getUser();
-		}
-		else if(mAdmin != null) {
-			return mAdmin.getUser(userid);
-		}
-		return null;
-	}
-	
-	public List<String> listAllUsers() {
-		if(mAdmin != null) {
-			return mAdmin.listAllUsers();
 		}
 		return null;
 	}
