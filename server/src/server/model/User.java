@@ -1,16 +1,14 @@
 package server.model;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-
-import sun.org.mozilla.javascript.internal.ast.WhileLoop;
 
 public class User {
 		static User getFromDB(String userid) {
@@ -22,19 +20,33 @@ public class User {
 								(String)values.get("Password"),
 								(String)values.get("Email"),
 								((Boolean)values.get("Admin")).booleanValue(),
-								((Boolean)values.get("Receptor_Alerta")).booleanValue());
+								((Boolean)values.get("Receptor_Alerta")).booleanValue()).tagDB();
 					
 			}
 			return null;
 		}
 		
+		static User getFromJson(String userid, JsonObject params) {
+			if(params.containsKey("name") && params.containsKey("pwd") &&
+			   params.containsKey("email") && params.containsKey("admin") &&
+			   params.containsKey("receptor")) {
+				return new User(userid, params.getString("name"),
+								params.getString("pwd"),
+								params.getString("email"),
+								params.getBoolean("admin"),
+								params.getBoolean("receptor"));
+			}
+			return null;
+		}
+		
+		private boolean mFromDB = false;
 		private String mId = null;
 		private String mName = null;
 		private String mPassword = null;
 		private String mEmail = "";
 		private boolean mAdmin = false;
 		private boolean mAlertReceptor = false;
-		private Map<String, Profile> mProfiles = null;
+		private List<String> mProfiles = null;
 		
 		public User(String id, String name, String pwd, String email, boolean admin, boolean receptor) {
 			mId = id;
@@ -43,31 +55,37 @@ public class User {
 			mEmail = (email!=null)?email:"";
 			mAdmin = admin;
 			mAlertReceptor = receptor;
-			mProfiles = new HashMap<String, Profile>();
+			mProfiles = new ArrayList<String>();
 			
 			DBRequestHandler request = new DBRequestHandler();
 			List<Object> ids = request.getUserProfileIds(id);
 			if(!ids.isEmpty()) {
 				for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-					mProfiles.put((String)it.next(), null);
+					mProfiles.add((String)it.next());
 				}
 			}
 		}
 		
-		public boolean isValidPassword(String pwd) {
-			return pwd.compareTo(mPassword) == 0;
+		private User tagDB() {
+			mFromDB = true;
+			return this;
 		}
 		
-		public boolean isAdmin(){
-			return mAdmin;
+		public boolean commitToDB() {
+			DBRequestHandler request = new DBRequestHandler();
+			if(mFromDB) {
+				return request.updateUser(this);
+			} else {
+				return request.addUser(this);
+			}
 		}
 		
-		public String getId() {
-			return mId;
-		}
-		
-		public Set<String> getProfiles() {
-			return mProfiles.keySet();
+		public boolean deleteFromDB() {
+			if(mFromDB) {
+				DBRequestHandler request = new DBRequestHandler();
+				return request.deleteUser(mId);
+			}
+			return true;
 		}
 		
 		
@@ -84,5 +102,61 @@ public class User {
 										.add("alert_receptor", mAlertReceptor);
 			if(forAdm) builder.add("pwd", mPassword);
 			return builder.build();
+		}
+		
+		public boolean isValidPassword(String pwd) {
+			return pwd.compareTo(mPassword) == 0;
+		}
+		
+		public boolean isAdmin(){
+			return mAdmin;
+		}
+		
+		public void setAdmin(boolean b) {
+			mAdmin = b;
+		}
+		
+		public boolean isReceptor() {
+			return mAlertReceptor;
+		}
+		
+		public void setReceptor(boolean b) {
+			mAlertReceptor = b;
+		}
+		
+		public String getId() {
+			return mId;
+		}
+		
+		public String getName() {
+			return mName;
+		}
+		
+		public void setName(String name) {
+			mName = name;
+		}
+		
+		public String getPwd() {
+			return mPassword;
+		}
+		
+		public void setPwd(String pwd) {
+			mPassword = pwd;
+		}
+		
+		public String getEmail() {
+			return mEmail;
+		}
+		
+		public void setEmail(String email) {
+			mEmail = email;
+		}
+		
+		public List<String> getProfiles() {
+			return mProfiles;
+		}
+		
+		public void setProfiles(Collection<String> c) {
+			mProfiles.clear();
 		}
 }

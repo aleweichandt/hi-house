@@ -1,4 +1,5 @@
 package server.model;
+import server.model.devices.Device;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,6 +38,19 @@ public class DBRequestHandler {
 			if(mConnect!=null)mConnect.close();
 		} catch (Exception e) {
 		}
+	}
+	
+	private boolean runUpdate(String query) {
+		boolean ret = true;
+		try {
+			open();
+			mStatement.executeUpdate(query);
+		}catch(Exception e){
+			ret = false;
+		} finally {
+			close();
+		}
+		return ret;
 	}
 	
 	private List<List<Object>> runQuery(String query) { 
@@ -89,23 +103,63 @@ public class DBRequestHandler {
 	
 //interface
 //usuarios
+	public List<Object> listAllUsers() {
+		return getAllColumnFromQuery("ID_Usuario", C.Queries.GET_ALL_USER_IDS);
+	}
 	public Map<String,Object> getUser(String userid) {
 		return getFirstFromQuery(C.Queries.GET_USER_WITH_ID(userid));
 	}
 	public List<Object> getUserProfileIds(String userid) {
 		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_PROFILE_IDS_FOR_USER_WITH_ID(userid));
 	}
+	public boolean addUser(User usr) {
+		return runUpdate(C.Queries.INSERT_USER(usr));
+		//TODO add profilelist
+	}
+	public boolean updateUser(User usr) {
+		return runUpdate(C.Queries.UPDATE_USER(usr));
+		//TODO update profilelist
+	}
+	public boolean deleteUser(String userid) {
+		return runUpdate(C.Queries.DELETE_USER(userid));
+	}
 	
 //perfiles
+	public List<Object> listAllProfiles() {
+		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_ALL_PROFILE_IDS);
+	}
 	public Map<String,Object> getProfile(String profileid) {
 		return getFirstFromQuery(C.Queries.GET_PROFILE_WITH_ID(profileid));
 	}
 	public List<Object> getProfileDeviceIds(String profileid) {
 		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICES_IDS_FOR_PROFILE_WITH_ID(profileid));
 	}
+	public boolean addProfile(Profile prf) {
+		return runUpdate(C.Queries.INSERT_PROFILE(prf));
+		//TODO add devicelist
+	}
+	public boolean updateProfile(Profile prf) {
+		return runUpdate(C.Queries.UPDATE_PROFILE(prf));
+		//TODO update devicelist
+	}
+	public boolean deleteProfile(String profileid) {
+		return runUpdate(C.Queries.DELETE_PROFILE(profileid));
+	}
 	
 //dispositivos
+	public List<Object> listAllDevices() {
+		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_ALL_DEVICE_IDS);
+	}
 	public Map<String,Object> getDevice(String deviceid) {
 		return getFirstFromQuery(C.Queries.GET_DEVICE_WITH_ID(deviceid));
+	}
+	public boolean addDevice(Device dvc) {
+		return runUpdate(C.Queries.INSERT_DEVICE(dvc));
+	}
+	public boolean updateDevice(Device dvc) {
+		return runUpdate(C.Queries.UPDATE_DEVICE(dvc));
+	}
+	public boolean deleteDevice(String deviceid) {
+		return runUpdate(C.Queries.DELETE_DEVICE(deviceid));
 	}
 }

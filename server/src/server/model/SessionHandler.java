@@ -22,7 +22,7 @@ public class SessionHandler {
 	}
 	
 	public UserSession createSessionForUser(String userid, String password) {
-		User user = SupportDataManager.getInstance().getUser(userid);
+		User user = User.getFromDB(userid);
 		if(user != null) {
 			if(user.isValidPassword(password)) {
 				UserSession session = new UserSession(user);
