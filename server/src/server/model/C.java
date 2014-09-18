@@ -1,7 +1,15 @@
 package server.model;
 
+import java.io.StringReader;
+//import java.util.Iterator;
+//import java.util.List;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+
 import server.model.devices.Device;
-import server.model.devices.TermalActuator;
+//import server.model.devices.TermalActuator;
 
 public final class C {
 	
@@ -69,7 +77,7 @@ public final class C {
 		}
 		
 		public static final String DELETE_USER(String userid) {
-			return "DELETE * FROM usuarios WHERE ID_Usuario='"+userid+"'";
+			return "DELETE FROM usuarios WHERE ID_Usuario='"+userid+"'";
 		}
 
 		public static final String INSERT_PROFILE(Profile prf){
@@ -88,7 +96,7 @@ public final class C {
 		}
 		
 		public static final String DELETE_PROFILE(String profileid) {
-			return "DELETE * FROM perfiles WHERE ID_Perfil='"+profileid+"'";
+			return "DELETE FROM perfiles WHERE ID_Perfil='"+profileid+"'";
 		}
 
 		public static final String INSERT_DEVICE(Device dvc){
@@ -129,25 +137,59 @@ public final class C {
 		}
 		
 		public static final String DELETE_DEVICE(String deviceid) {
-			return "DELETE * FROM dispositivos WHERE ID_Dispositivo='"+deviceid+"'";
+			return "DELETE FROM dispositivos WHERE ID_Dispositivo='"+deviceid+"'";
 		}
 		
-		public static final String INSERT_USER_PROFILE(String userid, String profileid) {
-			return "INSERT INTO usuario_perfil VALUES ('" + userid + "','" + profileid + "')";
+		/*public static final String INSERT_USER_PROFILE(List<String> users, List<String> profiles) {
+			return "INSERT INTO usuario_perfil VALUES" + getPairStringList(users, profiles);
 		}
 		
-		public static final String DELETE_USER_PROFILE(String userid, String profileid) {
-			return "DELETE * FROM usuario_perfil WHERE ID_Usuario='" + userid +
-				   "' AND ID_Perfil='" + profileid + "'";
+		public static final String DELETE_USER_PROFILE(List<String> users, List<String> profiles) {
+			return "DELETE FROM usuario_perfil WHERE ID_Usuario IN " + getStringList(users) +
+				   " AND ID_Perfil IN " + getStringList(profiles);
 		}
 		
-		public static final String INSERT_PROFILE_DEVICE(String profileid, String deviceid) {
-			return "INSERT INTO perfil_dispositivo VALUES ('" + profileid + "','" + deviceid + "')";
+		public static final String INSERT_PROFILE_DEVICE(List<String> profiles, List<String> devices) {
+			return "INSERT INTO perfil_dispositivo VALUES" + getPairStringList(profiles, devices);
 		}
 		
-		public static final String DELETE_PROFILE_DEVICE(String profileid, String deviceid) {
-			return "DELETE * FROM perfil_dispositivo WHERE ID_Perfil='" + profileid +
-				   "' AND ID_Dispositivo='" + deviceid + "'";
+		public static final String DELETE_PROFILE_DEVICE(List<String> profiles, List<String> devices) {
+			return "DELETE FROM perfil_dispositivo WHERE ID_Perfil IN " + getStringList(profiles) +
+				   " AND ID_Dispositivo IN " + getStringList(devices);
 		}
+		
+		private static final String getStringList( List<String> values) {
+			String ret = "(";
+			Iterator<String> it = values.iterator();
+			while(it.hasNext()) {
+				ret += ("'" + it.next() + "'");
+				if(it.hasNext()) {
+					ret += ",";
+				}
+			}
+			ret += ")";
+			return ret;
+		}
+		
+		private static final String getPairStringList( List<String> values1, List<String> values2) {
+			String ret = "";
+			Iterator<String> it1 = values1.iterator();
+			while(it1.hasNext()) {
+				String v1 = it1.next();
+				Iterator<String> it2 = values2.iterator();
+				while(it2.hasNext()) {
+					ret += ("('" + v1 + "','" + it2.next() + "')");
+					if(it1.hasNext() || it2.hasNext()) {
+						ret += ",";
+					}
+				}
+			}
+			return ret;
+		}*/
+	}
+	
+	public static JsonObject getJsonFromString(String obj) {
+		JsonReader reader = Json.createReader(new StringReader(obj));
+		return reader.readObject();
 	}
 }

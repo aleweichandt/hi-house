@@ -41,7 +41,7 @@ public class UserSession {
 				userid.compareTo(mUserId) == 0);
 	}
 	
-	public User getUser() {
+	private User getUser() {
 		return User.getFromDB(mUserId);
 	}
 	

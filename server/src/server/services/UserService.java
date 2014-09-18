@@ -15,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import server.model.C;
 import server.model.SessionHandler;
 import server.model.User;
 import server.model.UserSession;
@@ -100,7 +101,7 @@ public class UserService {
 		}
 		JsonObject ret = Json.createObjectBuilder()
 							.add("token", newSession.getToken())
-							.add("admin", newSession.getUser().isAdmin())
+							.add("admin", newSession.getAdmin() != null)
 							.build();
 		return Response.status(200).entity(ret.toString()).build();
 	}
@@ -108,7 +109,7 @@ public class UserService {
 	@POST
 	@Path("{id}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response addUser(@PathParam("id") String userid, @QueryParam("token") String tkn) {
+	public Response addUser(@PathParam("id") String userid, @QueryParam("token") String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
@@ -116,21 +117,35 @@ public class UserService {
 		if(newSession.getAdmin() == null) {
 			return Response.status(403).entity("no admin rights").build();
 		}
-		return Response.status(200).entity("").build();
+		
+		JsonObject params = C.getJsonFromString(body);
+		if(!newSession.getAdmin().addUser(userid, params)){
+			Response.status(500).entity(userid + " already exist").build();
+		}
+		return Response.status(200).entity(userid + " added").build();
 	}
 	
 	@POST
 	@Path("{id}/update")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response updateUser(@PathParam("id") String userid, @QueryParam("token") String tkn) {
+	public Response updateUser(@PathParam("id") String userid, @QueryParam("token") String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
 		}
-		if(newSession.getAdmin() == null) {
-			return Response.status(403).entity("no admin rights").build();
+		User user = newSession.getUser(userid);
+		if(user == null) {
+			if(newSession.getAdmin() == null) {
+				return Response.status(403).entity("no admin rights").build();
+			}
+			user = newSession.getAdmin().getUser(userid);
+			if(user == null) {
+				return Response.status(500).entity("not found").build();
+			}
 		}
-		return Response.status(200).entity("").build();
+		JsonObject params = C.getJsonFromString(body);
+		user.updateWithParams(params, true);
+		return Response.status(200).entity(userid + " updated").build();
 	}
 	
 	@POST
@@ -144,6 +159,9 @@ public class UserService {
 		if(newSession.getAdmin() == null) {
 			return Response.status(403).entity("no admin rights").build();
 		}
-		return Response.status(200).entity("").build();
+		if(!newSession.getAdmin().deleteUser(userid)) {
+			return Response.status(500).entity("not found").build();
+		}
+		return Response.status(200).entity(userid + " removed").build();
 	}
 }
