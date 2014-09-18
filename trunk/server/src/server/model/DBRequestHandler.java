@@ -114,11 +114,9 @@ public class DBRequestHandler {
 	}
 	public boolean addUser(User usr) {
 		return runUpdate(C.Queries.INSERT_USER(usr));
-		//TODO add profilelist
 	}
 	public boolean updateUser(User usr) {
 		return runUpdate(C.Queries.UPDATE_USER(usr));
-		//TODO update profilelist
 	}
 	public boolean deleteUser(String userid) {
 		return runUpdate(C.Queries.DELETE_USER(userid));
@@ -136,11 +134,9 @@ public class DBRequestHandler {
 	}
 	public boolean addProfile(Profile prf) {
 		return runUpdate(C.Queries.INSERT_PROFILE(prf));
-		//TODO add devicelist
 	}
 	public boolean updateProfile(Profile prf) {
 		return runUpdate(C.Queries.UPDATE_PROFILE(prf));
-		//TODO update devicelist
 	}
 	public boolean deleteProfile(String profileid) {
 		return runUpdate(C.Queries.DELETE_PROFILE(profileid));

@@ -9,6 +9,10 @@ import javax.servlet.ServletResponse;
 
 public class BackgroundServlet extends GenericServlet implements Runnable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7609162475370456548L;
 	private long mLast = 0;
 	@Override
 	public void service(ServletRequest arg0, ServletResponse arg1)

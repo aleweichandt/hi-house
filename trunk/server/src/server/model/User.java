@@ -1,7 +1,6 @@
 package server.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 
 public class User {
 		static User getFromDB(String userid) {
@@ -27,14 +27,28 @@ public class User {
 		}
 		
 		static User getFromJson(String userid, JsonObject params) {
-			if(params.containsKey("name") && params.containsKey("pwd") &&
-			   params.containsKey("email") && params.containsKey("admin") &&
-			   params.containsKey("receptor")) {
-				return new User(userid, params.getString("name"),
+			if(params.containsKey("name") && params.containsKey("pwd") && 
+			   params.containsKey("admin") && params.containsKey("alert_receptor")) {
+				
+				String mail = null;
+				if(params.containsKey("email"))
+					mail = params.getString("email");
+				
+				User ret = new User(userid, params.getString("name"),
 								params.getString("pwd"),
-								params.getString("email"),
+								mail,
 								params.getBoolean("admin"),
-								params.getBoolean("receptor"));
+								params.getBoolean("alert_receptor"));
+				if(params.containsKey("profiles")) {
+					List<JsonValue> prfparam = params.getJsonArray("profiles");
+					List<String> profiles = new ArrayList<String>();
+					Iterator<JsonValue> it = prfparam.iterator();
+					while(it.hasNext()) {
+						profiles.add(it.next().toString());
+					}
+					ret.setProfiles(profiles);
+				}
+				return ret;
 			}
 			return null;
 		}
@@ -104,6 +118,36 @@ public class User {
 			return builder.build();
 		}
 		
+		public void updateWithParams(JsonObject values, boolean commit) {
+			if(values.containsKey("name")) {
+				mName = values.getString("name");
+			}
+			if(values.containsKey("pwd")) {
+				mPassword = values.getString("pwd");
+			}
+			if(values.containsKey("email")) {
+				mEmail = values.getString("email");
+			}
+			if(values.containsKey("admin")) {
+				mAdmin = values.getBoolean("admin");
+			}
+			if(values.containsKey("alert_receptor")) {
+				mAlertReceptor = values.getBoolean("alert_receptor");
+			}
+			if(values.containsKey("profiles")) {
+				List<JsonValue> prfparam = values.getJsonArray("profiles");
+				List<String> profiles = new ArrayList<String>();
+				Iterator<JsonValue> it = prfparam.iterator();
+				while(it.hasNext()) {
+					profiles.add(it.next().toString());
+				}
+				setProfiles(profiles);
+			}
+			if(commit) {
+				commitToDB();
+			}
+		}
+		
 		public boolean isValidPassword(String pwd) {
 			return pwd.compareTo(mPassword) == 0;
 		}
@@ -156,7 +200,7 @@ public class User {
 			return mProfiles;
 		}
 		
-		public void setProfiles(Collection<String> c) {
-			mProfiles.clear();
+		public void setProfiles(List<String> l) {
+			mProfiles = l;
 		}
 }
