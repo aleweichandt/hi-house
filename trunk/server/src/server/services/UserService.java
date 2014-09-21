@@ -1,5 +1,6 @@
 package server.services;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import server.model.C;
+import server.model.Profile;
 import server.model.SessionHandler;
 import server.model.User;
 import server.model.UserSession;
@@ -84,6 +86,40 @@ public class UserService {
 			}
 		}
 		List<String> profiles = user.getProfiles();
+		JsonArrayBuilder builder = Json.createArrayBuilder();
+		for(Iterator<String> it = profiles.iterator();it.hasNext();) {
+			builder.add(it.next());
+		}
+		return Response.status(200).entity(builder.build().toString()).build();
+	}
+	
+	@GET
+	@Path("{id}/devices")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response getUserDevices(@PathParam("id") String userid, @QueryParam("token") String tkn) {
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession == null) {
+			return Response.status(401).entity("invalid token").build();
+		}
+		User user = newSession.getUser(userid);
+		if(user == null) {
+			if(newSession.getAdmin() == null) {
+				return Response.status(403).entity("no admin rights").build();
+			}
+			user = newSession.getAdmin().getUser(userid);
+			if(user == null) {
+				return Response.status(500).entity("not found").build();
+			}
+		}
+		List<String> devices = new ArrayList<String>();
+		List<String> profiles = user.getProfiles();
+		Iterator<String> itt = profiles.iterator();
+		while(itt.hasNext()) {
+			Profile prf = newSession.getAdmin().getProfile(itt.next());
+			if(prf != null) {
+				devices.addAll(prf.getDevices());
+			}
+		}
 		JsonArrayBuilder builder = Json.createArrayBuilder();
 		for(Iterator<String> it = profiles.iterator();it.hasNext();) {
 			builder.add(it.next());

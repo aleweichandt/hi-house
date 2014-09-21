@@ -12,4 +12,9 @@ public class LightActuator extends Actuator {
 		return 0;
 	}
 
+	@Override
+	public int getClassType() {
+		return DEVICE_TYPE_AC_LIGHT;
+	}
+
 }
