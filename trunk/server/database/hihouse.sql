@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-09-2014 a las 03:38:56
+-- Tiempo de generación: 21-09-2014 a las 18:08:39
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -26,6 +26,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `dispositivos`
 --
 
+DROP TABLE IF EXISTS `dispositivos`;
 CREATE TABLE IF NOT EXISTS `dispositivos` (
   `ID_Dispositivo` char(20) NOT NULL,
   `Tipo` char(2) NOT NULL,
@@ -45,7 +46,17 @@ CREATE TABLE IF NOT EXISTS `dispositivos` (
 --
 
 INSERT INTO `dispositivos` (`ID_Dispositivo`, `Tipo`, `Ambiente`, `Descripcion_Ejec_Voz`, `Estado`, `Pin1`, `Pin2`, `Pin3`, `Param1`, `Param2`) VALUES
-('test', '2', 'none', 'test', '0', 13, -1, -1, NULL, NULL);
+('test', '2', 'casa', 'test', '0', 13, -1, -1, NULL, NULL);
+
+--
+-- Disparadores `dispositivos`
+--
+DROP TRIGGER IF EXISTS `delete_device_trigger`;
+DELIMITER //
+CREATE TRIGGER `delete_device_trigger` AFTER DELETE ON `dispositivos`
+ FOR EACH ROW DELETE FROM perfil_dispositivo WHERE ID_Dispositivo=OLD.ID_Dispositivo
+//
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -53,6 +64,7 @@ INSERT INTO `dispositivos` (`ID_Dispositivo`, `Tipo`, `Ambiente`, `Descripcion_E
 -- Estructura de tabla para la tabla `perfiles`
 --
 
+DROP TABLE IF EXISTS `perfiles`;
 CREATE TABLE IF NOT EXISTS `perfiles` (
   `ID_Perfil` char(20) NOT NULL,
   `Ambiente` varchar(20) NOT NULL,
@@ -68,12 +80,26 @@ CREATE TABLE IF NOT EXISTS `perfiles` (
 INSERT INTO `perfiles` (`ID_Perfil`, `Ambiente`, `Descripcion`, `ID_Simulador`) VALUES
 ('default', 'none', NULL, 0);
 
+--
+-- Disparadores `perfiles`
+--
+DROP TRIGGER IF EXISTS `delete_profile_trigger`;
+DELIMITER //
+CREATE TRIGGER `delete_profile_trigger` AFTER DELETE ON `perfiles`
+ FOR EACH ROW BEGIN
+DELETE FROM usuario_perfil WHERE ID_Perfil=OLD.ID_Perfil;
+DELETE FROM perfil_dispositivo WHERE ID_Perfil=OLD.ID_Perfil;
+END
+//
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `perfil_dispositivo`
 --
 
+DROP TABLE IF EXISTS `perfil_dispositivo`;
 CREATE TABLE IF NOT EXISTS `perfil_dispositivo` (
   `ID_Perfil` char(20) NOT NULL,
   `ID_Dispositivo` char(20) NOT NULL,
@@ -94,6 +120,7 @@ INSERT INTO `perfil_dispositivo` (`ID_Perfil`, `ID_Dispositivo`) VALUES
 -- Estructura de tabla para la tabla `usuarios`
 --
 
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `ID_Usuario` char(12) NOT NULL,
   `Nombre` varchar(50) NOT NULL,
@@ -111,12 +138,23 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Password`, `Email`, `Admin`, `Receptor_Alerta`) VALUES
 ('admin', 'administrador', '1234', NULL, 1, 0);
 
+--
+-- Disparadores `usuarios`
+--
+DROP TRIGGER IF EXISTS `delete_user_trigger`;
+DELIMITER //
+CREATE TRIGGER `delete_user_trigger` AFTER DELETE ON `usuarios`
+ FOR EACH ROW DELETE FROM usuario_perfil WHERE ID_Usuario=OLD.ID_Usuario
+//
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `usuario_perfil`
 --
 
+DROP TABLE IF EXISTS `usuario_perfil`;
 CREATE TABLE IF NOT EXISTS `usuario_perfil` (
   `ID_Usuario` char(12) NOT NULL,
   `ID_Perfil` char(20) NOT NULL,
