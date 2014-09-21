@@ -18,4 +18,9 @@ public class TermalSensor extends Sensor {
 		return 1;
 	}
 
+	@Override
+	public int getClassType() {
+		return DEVICE_TYPE_SN_TERMAL;
+	}
+
 }

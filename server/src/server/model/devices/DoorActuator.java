@@ -11,4 +11,9 @@ public class DoorActuator extends Actuator {
 	public int getValueType() {
 		return 2;
 	}
+
+	@Override
+	public int getClassType() {
+		return DEVICE_TYPE_AC_DOOR;
+	}
 }

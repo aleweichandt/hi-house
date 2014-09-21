@@ -47,7 +47,7 @@ public final class C {
 			return "SELECT * from perfiles where ID_Perfil = '" + profileid + "'";
 		}
 		public static final String GET_DEVICES_IDS_FOR_PROFILE_WITH_ID(String profileid){
-			return "SELECT distinct dispositivos.ID_Dispositivo from perfiles, perfil_dispositivo, dispositivos where perfiles.ID_Perfil = perfil_dispositivo.ID_Perfil and perfil_dispositivo.ID_Dispositivo = dispositivos.ID_Dispositivo and perfil.ID_Perfil = '" + profileid + "'";
+			return "SELECT distinct dispositivos.ID_Dispositivo from perfiles, perfil_dispositivo, dispositivos where perfiles.ID_Perfil = perfil_dispositivo.ID_Perfil and perfil_dispositivo.ID_Dispositivo = dispositivos.ID_Dispositivo and perfiles.ID_Perfil = '" + profileid + "'";
 		}
 		public static final String GET_DEVICE_WITH_ID(String deviceid){
 			return "SELECT * from dispositivos where ID_Dispositivo = '" + deviceid + "'";
@@ -84,15 +84,17 @@ public final class C {
 			String id = "'" + prf.getId() + "'";
 			String name = "'" + prf.getName() + "'";
 			String desc = (prf.getDescription().isEmpty())?("'" + prf.getDescription() + "'"): "NULL";
-			return "INSERT INTO perfiles VALUES (" +id + "," + name + "," + desc + ")";
+			String simid = "'" + prf.getId() + "'";
+			return "INSERT INTO perfiles VALUES (" +id + "," + name + "," + desc + "," + simid + ")";
 		}
 		
 		public static final String UPDATE_PROFILE(Profile prf){
 			String id = "'" + prf.getId() + "'";
 			String name = "'" + prf.getName() + "'";
 			String desc = (prf.getDescription().isEmpty())?("'" + prf.getDescription() + "'"): "NULL";
+			String simid = "'" + prf.getId() + "'";
 			return "UPDATE perfiles SET Ambiente=" + name + ",Descripcion=" + desc +
-				   "WHERE ID_Perfil="+id;
+				   ",ID_Simulador=" + simid + "WHERE ID_Perfil="+id;
 		}
 		
 		public static final String DELETE_PROFILE(String profileid) {

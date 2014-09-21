@@ -11,4 +11,9 @@ public class TermalActuator extends Actuator {
 	public int getValueType() {
 		return 1;
 	}
+
+	@Override
+	public int getClassType() {
+		return DEVICE_TYPE_AC_TERMAL;
+	}
 }

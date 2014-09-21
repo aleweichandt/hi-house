@@ -10,6 +10,8 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
+import server.model.devices.Device;
+
 public class User {
 		static User getFromDB(String userid) {
 			DBRequestHandler request = new DBRequestHandler();
@@ -150,6 +152,26 @@ public class User {
 		
 		public boolean isValidPassword(String pwd) {
 			return pwd.compareTo(mPassword) == 0;
+		}
+		
+		public Profile getProfile(String profileid) {
+			if(mProfiles.contains(profileid)) {
+				return Profile.getFromDB(profileid);
+			}
+			return null;
+		}
+		
+		public Device getDevice(String deviceid) {
+			Device dv = null;
+			Iterator<String> it = mProfiles.iterator();
+			while(it.hasNext()) {
+				Profile prf = Profile.getFromDB(it.next());
+				dv = prf.getDevice(deviceid);
+				if(dv != null) {
+					return dv;
+				}
+			}
+			return null;
 		}
 		
 		public boolean isAdmin(){
