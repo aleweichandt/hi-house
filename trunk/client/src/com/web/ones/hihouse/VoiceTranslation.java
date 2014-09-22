@@ -65,7 +65,7 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
 		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-		recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
 	public void onClick(View arg0) {
 		speech.startListening(recognizerIntent);
 		if (mListener != null) {
-			mListener.onVoiceInputInteraction();//llama al Callback de la Activity
+			//mListener.onVoiceInputInteraction();//llama al Callback de la Activity
 		}
 	}
 
@@ -177,9 +177,12 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
         CommandBuilder c = new CommandBuilder((HiHouse)this.getActivity());
         String s = c.generateCommand(matches);
 
+        if (mListener != null) {
+			mListener.onVoiceInputInteraction();//llama al Callback de la Activity
+		}
         //Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-        TextView t = (TextView) getActivity().findViewById(R.id.text);
-        t.setText(s);
+        //TextView t = (TextView) getActivity().findViewById(R.id.text);
+        //t.setText(s);
         button.setVisibility(View.VISIBLE);
         loadingBar.setVisibility(View.GONE);
 		speak_box.setVisibility(View.GONE);

@@ -311,6 +311,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	public void onVoiceInputInteraction() {
 		//TODO Callback de VoiceTranslation fragment
 		//Toast.makeText(this, "asd!", Toast.LENGTH_SHORT).show();
+		mHiHouseService.testMethod();
 	}
 	
 	public void stopService(View v){
