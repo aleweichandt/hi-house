@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-09-2014 a las 03:10:45
+-- Tiempo de generación: 22-09-2014 a las 20:34:09
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `hihouse`
 --
+CREATE DATABASE IF NOT EXISTS `hihouse` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `hihouse`;
 
 -- --------------------------------------------------------
 
