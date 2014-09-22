@@ -96,7 +96,7 @@ public class SocketOperator {
 			
 			PrintWriter out = new PrintWriter(connection.getOutputStream());
 			
-			out.print(params);
+			//out.print(params);
 			out.close();
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));

@@ -47,11 +47,13 @@ public class HiHouseService extends Service{
 		 //Toast.makeText(this, "Service Bounded", Toast.LENGTH_SHORT).show();
 		 return mBinder;
 	 }
-	 
+	 private boolean a = true;
 	public void testMethod(){
 		 SocketOperator so = new SocketOperator(this);
 		 //String params = "" + URLEncoder.encode("username","UTF-8")+"="+ URLEncoder.encode("Charly","UTF-8");
-		 so.sendRequest(false, "http://192.168.1.110/AppServer/", "username=Charly");
+		 //so.sendRequest(false, "http://192.168.1.110:8080/", "username=Charly");
+		 so.sendRequest(false, "http://192.168.1.101:8080/HiHouse/devices/test/state?enabled="+a+"&token=0", "enabled=true&token=0");
+		 a= !a;
 	}
 	 
 	public class HiHouseTask {
