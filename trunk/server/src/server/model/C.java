@@ -108,36 +108,38 @@ public final class C {
 			String id = "'" + dvc.getId() + "'";
 			String name = "'" + dvc.getName() + "'";
 			String vid = "'" + dvc.getVoiceId() +"'";
-			String type = Integer.toString(dvc.getClassType());
-			String state = dvc.getState()?"1":"0";
+			String type = "'" + Integer.toString(dvc.getClassType()) + "'";
+			String state = dvc.getState()?"'1'":"'0'";
 			String pin1 = (dvc.getPin(0) >= 0)?Integer.toString(dvc.getPin(0)):"NULL";
 			String pin2 = (dvc.getPin(1) >= 0)?Integer.toString(dvc.getPin(1)):"NULL";
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
 			String param1 = "NULL";
+			String param2 = "NULL";
 			/*if(dvc.getClass().toString() == "TermalActuator") {
 				param1 = ((TermalActuator)dvc).getSubType();
 			}*/
 			return "INSERT INTO dispositivos VALUES (" +id + "," + type + "," + name + "," + 
-				   vid + "," + state + "," + pin1 + "," + pin2 + "," + pin3 + "," + param1 +")";
+				   vid + "," + state + "," + pin1 + "," + pin2 + "," + pin3 + "," + param1 + "," + param2 +")";
 		}
 		
 		public static final String UPDATE_DEVICE(Device dvc){
 			String id = "'" + dvc.getId() + "'";
 			String name = "'" + dvc.getName() + "'";
 			String vid = "'" + dvc.getVoiceId() +"'";
-			String type = Integer.toString(dvc.getClassType());
-			String state = dvc.getState()?"1":"0";
+			String type = "'" + Integer.toString(dvc.getClassType()) + "'";
+			String state = dvc.getState()?"'1'":"'0'";
 			String pin1 = (dvc.getPin(0) >= 0)?Integer.toString(dvc.getPin(0)):"NULL";
 			String pin2 = (dvc.getPin(1) >= 0)?Integer.toString(dvc.getPin(1)):"NULL";
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
 			String param1 = "NULL";
+			String param2 = "NULL";
 			/*if(dvc.getClass().toString() == "TermalActuator") {
 				param1 = ((TermalActuator)dvc).getSubType();
 			}*/
 			return "UPDATE dispositivos SET Tipo=" + type + ",Ambiente=" + name + 
 				   ",Descripcion_Ejec_Voz=" + vid + ",Estado=" + state + 
 				   ",Pin1=" + pin1 + ",Pin2=" + pin2 + ",Pin3=" + pin3 +
-				   ",Param1=" + param1 +
+				   ",Param1=" + param1 + "," + ",Param2=" + param2 +
 				   "WHERE ID_Dispositivo="+id;
 		}
 		

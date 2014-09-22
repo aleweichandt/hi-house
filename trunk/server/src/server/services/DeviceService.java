@@ -106,7 +106,7 @@ public class DeviceService {
 		
 		JsonObject params = C.getJsonFromString(body);
 		if(!newSession.getAdmin().addDevice(deviceid, params)){
-			Response.status(500).entity(deviceid + " already exist").build();
+			return Response.status(500).entity(deviceid + " already exist").build();
 		}
 		return Response.status(200).entity(deviceid + " added").build();
 	}

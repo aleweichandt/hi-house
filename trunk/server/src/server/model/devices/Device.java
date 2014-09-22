@@ -46,10 +46,16 @@ public abstract class Device {
 			String voiceid = (String)values.get("Descripcion_Ejec_Voz");
 			int intstate = Integer.parseInt((String)values.get("Estado"));
 			boolean state = (Boolean)(intstate == 1);
-			int pin1 = (int) values.get("Pin1");
-			int pin2 = (int) values.get("Pin2");
-			int pin3 = (int) values.get("Pin3");
-			
+			int pin1 = -1, pin2 = -1, pin3 = -1;
+			if(values.get("Pin1") != null) {
+				pin1 = (int) values.get("Pin1");
+				if(values.get("Pin2") != null) {
+					pin2 = (int) values.get("Pin2");
+					if(values.get("Pin3") != null) {
+						pin3 = (int) values.get("Pin3");
+					}
+				}
+			}
 			return Device.createFromType(id, ambient, type, voiceid, state, pin1, pin2, pin3).tagDB();
 		}
 		return null;
@@ -60,12 +66,15 @@ public abstract class Device {
 		   params.containsKey("voice_id")) {
 			
 			int pin1 = -1, pin2 = -1, pin3 = -1;
-			if(params.containsKey("pin1"))
+			if(params.containsKey("pin1")) {
 				pin1 = params.getInt("pin1");
-			if(params.containsKey("pin2"))
-				pin2 = params.getInt("pin2");
-			if(params.containsKey("pin3"))
-				pin3 = params.getInt("pin3");
+				if(params.containsKey("pin2")) {
+					pin2 = params.getInt("pin2");
+					if(params.containsKey("pin3")) {
+						pin3 = params.getInt("pin3");
+					}
+				}
+			}
 			
 			return Device.createFromType(deviceid, params.getString("name"), params.getInt("type"),
 										 params.getString("voice_id"), false, pin1, pin2, pin3);
@@ -90,16 +99,16 @@ public abstract class Device {
 		mPins = new ArrayList<Integer>();
 		mPinValues = new ArrayList<Integer>();
 		if(pin1>=0) {
-			mPins.add(pin1);
+			mPins.add(0,pin1);
 			mPinValues.add(0);
-		}
-		if(pin2>=0) {
-			mPins.add(pin2);
-			mPinValues.add(0);
-		}
-		if(pin3>=0) {
-			mPins.add(pin3);
-			mPinValues.add(0);
+			if(pin2>=0) {
+				mPins.add(1,pin2);
+				mPinValues.add(0);
+				if(pin3>=0) {
+					mPins.add(2,pin3);
+					mPinValues.add(0);
+				}
+			}
 		}
 	}
 	
@@ -145,13 +154,13 @@ public abstract class Device {
 			mVoiceId = values.getString("voice_id");
 		}
 		if(values.containsKey("pin1")) {
-			mPins.set(0, values.getInt("pin1"));
-		}
-		if(values.containsKey("pin2")) {
-			mPins.set(1, values.getInt("pin2"));
-		}
-		if(values.containsKey("pin3")) {
-			mPins.set(2, values.getInt("pin3"));
+			setPin(0, values.getInt("pin1"));
+			if(values.containsKey("pin2")) {
+				setPin(1, values.getInt("pin2"));
+				if(values.containsKey("pin3")) {
+					setPin(2, values.getInt("pin3"));
+				}
+			}
 		}
 		if(commit) {
 			commitToDB();
@@ -167,6 +176,17 @@ public abstract class Device {
 	
 	public int getPinsAmount() {
 		return mPins.size();
+	}
+	
+	public void setPin(int id, int value) {
+		if(mPins.size() > id && id >= 0) {
+			mPins.set(id, value);
+			mPinValues.set(id, 0);
+		}
+		else {
+			mPins.add(id, value);
+			mPinValues.add(id, 0);
+		}
 	}
 	
 	public String getId() {

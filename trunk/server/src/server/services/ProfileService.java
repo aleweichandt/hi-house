@@ -105,7 +105,7 @@ public class ProfileService {
 		
 		JsonObject params = C.getJsonFromString(body);
 		if(!newSession.getAdmin().addProfile(profileid, params)){
-			Response.status(500).entity(profileid + " already exist").build();
+			return Response.status(500).entity(profileid + " already exist").build();
 		}
 		return Response.status(200).entity(profileid + " added").build();
 	}
