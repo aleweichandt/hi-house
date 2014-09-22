@@ -1,12 +1,12 @@
 package server.services;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -111,20 +111,22 @@ public class UserService {
 				return Response.status(500).entity("not found").build();
 			}
 		}
-		List<String> devices = new ArrayList<String>();
+		JsonObjectBuilder obuild = Json.createObjectBuilder();
+		List<String> devices;
 		List<String> profiles = user.getProfiles();
 		Iterator<String> itt = profiles.iterator();
 		while(itt.hasNext()) {
 			Profile prf = newSession.getAdmin().getProfile(itt.next());
 			if(prf != null) {
-				devices.addAll(prf.getDevices());
+				JsonArrayBuilder abuild = Json.createArrayBuilder();
+				devices = prf.getDevices();
+				for(Iterator<String> it = devices.iterator();it.hasNext();) {
+					abuild.add(it.next());
+				}
+				obuild.add(prf.getId(), abuild);
 			}
 		}
-		JsonArrayBuilder builder = Json.createArrayBuilder();
-		for(Iterator<String> it = profiles.iterator();it.hasNext();) {
-			builder.add(it.next());
-		}
-		return Response.status(200).entity(builder.build().toString()).build();
+		return Response.status(200).entity(obuild.build().toString()).build();
 	}
 	
 	@GET

@@ -4,6 +4,9 @@ import java.io.StringReader;
 //import java.util.Iterator;
 //import java.util.List;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -142,35 +145,12 @@ public final class C {
 			return "DELETE FROM dispositivos WHERE ID_Dispositivo='"+deviceid+"'";
 		}
 		
-		/*public static final String INSERT_USER_PROFILE(List<String> users, List<String> profiles) {
+		public static final String INSERT_USER_PROFILE(List<String> users, List<String> profiles) {
 			return "INSERT INTO usuario_perfil VALUES" + getPairStringList(users, profiles);
-		}
-		
-		public static final String DELETE_USER_PROFILE(List<String> users, List<String> profiles) {
-			return "DELETE FROM usuario_perfil WHERE ID_Usuario IN " + getStringList(users) +
-				   " AND ID_Perfil IN " + getStringList(profiles);
 		}
 		
 		public static final String INSERT_PROFILE_DEVICE(List<String> profiles, List<String> devices) {
 			return "INSERT INTO perfil_dispositivo VALUES" + getPairStringList(profiles, devices);
-		}
-		
-		public static final String DELETE_PROFILE_DEVICE(List<String> profiles, List<String> devices) {
-			return "DELETE FROM perfil_dispositivo WHERE ID_Perfil IN " + getStringList(profiles) +
-				   " AND ID_Dispositivo IN " + getStringList(devices);
-		}
-		
-		private static final String getStringList( List<String> values) {
-			String ret = "(";
-			Iterator<String> it = values.iterator();
-			while(it.hasNext()) {
-				ret += ("'" + it.next() + "'");
-				if(it.hasNext()) {
-					ret += ",";
-				}
-			}
-			ret += ")";
-			return ret;
 		}
 		
 		private static final String getPairStringList( List<String> values1, List<String> values2) {
@@ -187,7 +167,7 @@ public final class C {
 				}
 			}
 			return ret;
-		}*/
+		}
 	}
 	
 	public static JsonObject getJsonFromString(String obj) {
