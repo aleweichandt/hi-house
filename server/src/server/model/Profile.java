@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonString;
 import javax.json.JsonValue;
 
 import server.model.devices.Device;
@@ -34,11 +35,12 @@ public class Profile {
 			
 			Profile ret = new Profile(profileid, params.getString("name"), desc);
 			if(params.containsKey("devices")) {
-				List<JsonValue> dvsparam = params.getJsonArray("profiles");
+				List<JsonValue> dvsparam = params.getJsonArray("devices");
 				List<String> devices = new ArrayList<String>();
 				Iterator<JsonValue> it = dvsparam.iterator();
 				while(it.hasNext()) {
-					devices.add(it.next().toString());
+					JsonString value = (JsonString) it.next();
+					devices.add(value.getString());
 				}
 				ret.setDevices(devices);
 			}
@@ -112,7 +114,8 @@ public class Profile {
 			List<String> devices = new ArrayList<String>();
 			Iterator<JsonValue> it = dvsparam.iterator();
 			while(it.hasNext()) {
-				devices.add(it.next().toString());
+				JsonString value = (JsonString) it.next();
+				devices.add(value.getString());
 			}
 			setDevices(devices);
 		}
