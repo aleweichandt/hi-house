@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-09-2014 a las 18:08:39
+-- Tiempo de generación: 22-09-2014 a las 03:10:45
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -53,7 +53,7 @@ INSERT INTO `dispositivos` (`ID_Dispositivo`, `Tipo`, `Ambiente`, `Descripcion_E
 --
 DROP TRIGGER IF EXISTS `delete_device_trigger`;
 DELIMITER //
-CREATE TRIGGER `delete_device_trigger` AFTER DELETE ON `dispositivos`
+CREATE TRIGGER `delete_device_trigger` BEFORE DELETE ON `dispositivos`
  FOR EACH ROW DELETE FROM perfil_dispositivo WHERE ID_Dispositivo=OLD.ID_Dispositivo
 //
 DELIMITER ;
@@ -85,11 +85,17 @@ INSERT INTO `perfiles` (`ID_Perfil`, `Ambiente`, `Descripcion`, `ID_Simulador`) 
 --
 DROP TRIGGER IF EXISTS `delete_profile_trigger`;
 DELIMITER //
-CREATE TRIGGER `delete_profile_trigger` AFTER DELETE ON `perfiles`
+CREATE TRIGGER `delete_profile_trigger` BEFORE DELETE ON `perfiles`
  FOR EACH ROW BEGIN
 DELETE FROM usuario_perfil WHERE ID_Perfil=OLD.ID_Perfil;
 DELETE FROM perfil_dispositivo WHERE ID_Perfil=OLD.ID_Perfil;
 END
+//
+DELIMITER ;
+DROP TRIGGER IF EXISTS `update_profile_trigger`;
+DELIMITER //
+CREATE TRIGGER `update_profile_trigger` BEFORE UPDATE ON `perfiles`
+ FOR EACH ROW DELETE FROM perfil_dispositivo WHERE ID_Perfil=OLD.ID_Perfil
 //
 DELIMITER ;
 
@@ -143,7 +149,13 @@ INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Password`, `Email`, `Admin`, `R
 --
 DROP TRIGGER IF EXISTS `delete_user_trigger`;
 DELIMITER //
-CREATE TRIGGER `delete_user_trigger` AFTER DELETE ON `usuarios`
+CREATE TRIGGER `delete_user_trigger` BEFORE DELETE ON `usuarios`
+ FOR EACH ROW DELETE FROM usuario_perfil WHERE ID_Usuario=OLD.ID_Usuario
+//
+DELIMITER ;
+DROP TRIGGER IF EXISTS `update_user_trigger`;
+DELIMITER //
+CREATE TRIGGER `update_user_trigger` BEFORE UPDATE ON `usuarios`
  FOR EACH ROW DELETE FROM usuario_perfil WHERE ID_Usuario=OLD.ID_Usuario
 //
 DELIMITER ;
