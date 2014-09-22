@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-09-2014 a las 20:34:09
+-- Tiempo de generación: 22-09-2014 a las 20:43:09
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `perfiles` (
   `ID_Perfil` char(20) NOT NULL,
   `Ambiente` varchar(20) NOT NULL,
   `Descripcion` varchar(50) DEFAULT NULL,
-  `ID_Simulador` int(11) NOT NULL,
+  `ID_Simulador` varchar(20) NOT NULL,
   PRIMARY KEY (`ID_Perfil`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `perfiles` (
 --
 
 INSERT INTO `perfiles` (`ID_Perfil`, `Ambiente`, `Descripcion`, `ID_Simulador`) VALUES
-('default', 'none', NULL, 0);
+('default', 'none', NULL, '0');
 
 --
 -- Disparadores `perfiles`
