@@ -113,10 +113,22 @@ public class DBRequestHandler {
 		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_PROFILE_IDS_FOR_USER_WITH_ID(userid));
 	}
 	public boolean addUser(User usr) {
-		return runUpdate(C.Queries.INSERT_USER(usr));
+		boolean ret = runUpdate(C.Queries.INSERT_USER(usr));
+		if(ret) {
+			List<String> users = new ArrayList<String>();
+			users.add(usr.getId());
+			runUpdate(C.Queries.INSERT_USER_PROFILE(users, usr.getProfiles()));
+		}
+		return ret;
 	}
 	public boolean updateUser(User usr) {
-		return runUpdate(C.Queries.UPDATE_USER(usr));
+		boolean ret = runUpdate(C.Queries.UPDATE_USER(usr));
+		if(ret) {
+			List<String> users = new ArrayList<String>();
+			users.add(usr.getId());
+			runUpdate(C.Queries.INSERT_USER_PROFILE(users, usr.getProfiles()));
+		}
+		return ret;
 	}
 	public boolean deleteUser(String userid) {
 		return runUpdate(C.Queries.DELETE_USER(userid));
@@ -133,10 +145,22 @@ public class DBRequestHandler {
 		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICES_IDS_FOR_PROFILE_WITH_ID(profileid));
 	}
 	public boolean addProfile(Profile prf) {
-		return runUpdate(C.Queries.INSERT_PROFILE(prf));
+		boolean ret = runUpdate(C.Queries.INSERT_PROFILE(prf));
+		if(ret) {
+			List<String> profiles = new ArrayList<String>();
+			profiles.add(prf.getId());
+			runUpdate(C.Queries.INSERT_PROFILE_DEVICE(profiles, prf.getDevices()));
+		}
+		return ret;
 	}
 	public boolean updateProfile(Profile prf) {
-		return runUpdate(C.Queries.UPDATE_PROFILE(prf));
+		boolean ret = runUpdate(C.Queries.UPDATE_PROFILE(prf));
+		if(ret) {
+			List<String> profiles = new ArrayList<String>();
+			profiles.add(prf.getId());
+			runUpdate(C.Queries.INSERT_PROFILE_DEVICE(profiles, prf.getDevices()));
+		}
+		return ret;
 	}
 	public boolean deleteProfile(String profileid) {
 		return runUpdate(C.Queries.DELETE_PROFILE(profileid));
