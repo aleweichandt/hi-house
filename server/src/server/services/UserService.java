@@ -158,7 +158,7 @@ public class UserService {
 		
 		JsonObject params = C.getJsonFromString(body);
 		if(!newSession.getAdmin().addUser(userid, params)){
-			Response.status(500).entity(userid + " already exist").build();
+			return Response.status(500).entity(userid + " already exist").build();
 		}
 		return Response.status(200).entity(userid + " added").build();
 	}
