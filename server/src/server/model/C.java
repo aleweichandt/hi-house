@@ -60,7 +60,7 @@ public final class C {
 			String id = "'" + user.getId() + "'";
 			String name = "'" + user.getName() + "'";
 			String pwd = user.getPwd();
-			String email = (user.getEmail().isEmpty())?("'" + user.getEmail() + "'"): "NULL";
+			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
 			String adm = user.isAdmin()?"1":"0";
 			String recv = user.isReceptor()?"1":"0";
 			return "INSERT INTO usuarios VALUES (" +id + "," + name + "," + pwd +
@@ -71,12 +71,12 @@ public final class C {
 			String id = "'" + user.getId() + "'";
 			String name = "'" + user.getName() + "'";
 			String pwd = user.getPwd();
-			String email = (user.getEmail().isEmpty())?("'" + user.getEmail() + "'"): "NULL";
+			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
 			String adm = user.isAdmin()?"1":"0";
 			String recv = user.isReceptor()?"1":"0";
 			return "UPDATE usuarios SET Nombre=" + name + ",Password=" + pwd +
-				   ",Email=" + email + ",Admin=" + adm + ",Receptor_Alerta" + recv +
-				   "WHERE ID_Usuario="+id;
+				   ",Email=" + email + ",Admin=" + adm + ",Receptor_Alerta=" + recv +
+				   " WHERE ID_Usuario="+id;
 		}
 		
 		public static final String DELETE_USER(String userid) {
@@ -86,7 +86,7 @@ public final class C {
 		public static final String INSERT_PROFILE(Profile prf){
 			String id = "'" + prf.getId() + "'";
 			String name = "'" + prf.getName() + "'";
-			String desc = (prf.getDescription().isEmpty())?("'" + prf.getDescription() + "'"): "NULL";
+			String desc = (prf.getDescription().isEmpty())?"NULL":("'" + prf.getDescription() + "'");
 			String simid = "'" + prf.getId() + "'";
 			return "INSERT INTO perfiles VALUES (" +id + "," + name + "," + desc + "," + simid + ")";
 		}
@@ -94,10 +94,10 @@ public final class C {
 		public static final String UPDATE_PROFILE(Profile prf){
 			String id = "'" + prf.getId() + "'";
 			String name = "'" + prf.getName() + "'";
-			String desc = (prf.getDescription().isEmpty())?("'" + prf.getDescription() + "'"): "NULL";
+			String desc = (prf.getDescription().isEmpty())?"NULL":("'" + prf.getDescription() + "'");
 			String simid = "'" + prf.getId() + "'";
 			return "UPDATE perfiles SET Ambiente=" + name + ",Descripcion=" + desc +
-				   ",ID_Simulador=" + simid + "WHERE ID_Perfil="+id;
+				   ",ID_Simulador=" + simid + " WHERE ID_Perfil="+id;
 		}
 		
 		public static final String DELETE_PROFILE(String profileid) {
@@ -140,7 +140,7 @@ public final class C {
 				   ",Descripcion_Ejec_Voz=" + vid + ",Estado=" + state + 
 				   ",Pin1=" + pin1 + ",Pin2=" + pin2 + ",Pin3=" + pin3 +
 				   ",Param1=" + param1 + "," + ",Param2=" + param2 +
-				   "WHERE ID_Dispositivo="+id;
+				   " WHERE ID_Dispositivo="+id;
 		}
 		
 		public static final String DELETE_DEVICE(String deviceid) {
