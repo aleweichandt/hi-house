@@ -12,11 +12,11 @@ import server.model.DBRequestHandler;
 
 public abstract class Device {
 
-	static final int DEVICE_TYPE_SN_TERMAL = 0;
-	static final int DEVICE_TYPE_SN_LIGHT = 1;
-	static final int DEVICE_TYPE_AC_LIGHT = 2;
-	static final int DEVICE_TYPE_AC_TERMAL = 3;
-	static final int DEVICE_TYPE_AC_DOOR = 4;
+	public static final int DEVICE_TYPE_SN_TERMAL = 0;
+	public static final int DEVICE_TYPE_SN_LIGHT = 1;
+	public static final int DEVICE_TYPE_AC_LIGHT = 2;
+	public static final int DEVICE_TYPE_AC_TERMAL = 3;
+	public static final int DEVICE_TYPE_AC_DOOR = 4;
 	
 	public static Device createFromType(String id, String name, int type, String voiceid,
 				 						boolean state, int pin1, int pin2, int pin3) {
