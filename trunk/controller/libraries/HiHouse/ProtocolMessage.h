@@ -31,7 +31,12 @@ class ProtocolMessage {
 		uint8_t getPinsAmount() { return _ms_pins_amount; };
 		uint8_t getPin( uint8_t index ) { return _ms_pin_ids[ index ]; };
 		uint8_t getPinValue( uint8_t index ) { return _ms_pin_values[ index ]; };
+			
+		void setResponseMode() { _ms_type = MSG_TYPE_RESP; };
+		void setPinValue( uint8_t index , uint8_t value) { _ms_pin_values[ index ] = value; };
 		
+		uint8_t serialize(char* message);
+		uint8_t getSerializedSize();
 	private:
 /*#ifdef FLOW_CONTROL_PROTOCOL_1
 	//protocolo header

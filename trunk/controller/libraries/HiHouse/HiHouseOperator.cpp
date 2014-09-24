@@ -20,6 +20,7 @@ void HiHouseOperator::update() {
 	if(received->isRequest()) {
 	//operate message
 		execOperationMessage(received);
+		sendResponse(received);
 	}
 }
 
@@ -34,7 +35,6 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 				if(isReadOperation) {
 					value = digitalRead(pin);
 				} else {
-					//digitalWrite(pin, ( ( value > 0 ) ? HIGH : LOW ) );
 					digitalWrite(pin, value);
 				}
 				break;
@@ -62,9 +62,14 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 				break;
 			}
 		}
+		message->setPinValue(i, value);
 	}
 }
 
-ProtocolMessage* HiHouseOperator::makeResponse(const ProtocolMessage message) {
-
+void HiHouseOperator::sendResponse(ProtocolMessage* message) {
+	message->setResponseMode();
+	char* serialized;
+	int len = message->serialize(serialized);
+	_serial->write(serialized, len);
+	free(serialized);
 }

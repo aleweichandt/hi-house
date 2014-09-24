@@ -2,7 +2,7 @@
 #define __HIHOUSE_H__
 
 //enable to debug code, output to serial, only use for one side connection
-#define SERIAL_DEBUG 1
+//#define SERIAL_DEBUG 1
 #ifdef SERIAL_DEBUG
 #define DLOG_BUFF(a,b) Serial.write(a,b)
 #define DLOG(a) Serial.write(a)
