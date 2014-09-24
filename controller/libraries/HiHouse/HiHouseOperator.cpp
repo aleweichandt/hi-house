@@ -62,6 +62,7 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 				break;
 			}
 		}
+		value = map(value, 0, 1023, 0, 255);
 		message->setPinValue(i, value);
 	}
 }
