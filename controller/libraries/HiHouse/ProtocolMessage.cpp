@@ -51,4 +51,29 @@ ProtocolMessage::ProtocolMessage(char* buffer, int len) {
 		DLOG("pin val=");DLOG(char(_ms_pin_values[i]));DLOG("\n");
 #endif
 	}
+}
+	
+uint8_t ProtocolMessage::getSerializedSize() {
+/*#ifdef FLOW_CONTROL_PROTOCOL_1
+#elif FLOW_CONTROL_PROTOCOL_2
+#else*/
+	return 1 + ( 2 * getPinsAmount() ) + 1;
+//#endif
+}
+	
+uint8_t ProtocolMessage::serialize(char* message) {
+	uint8_t size = getSerializedSize();
+	memset( message, 0, size );
+//header
+	char header = ((_ms_type & 0x01) << 7) +
+				  ((_ms_action & 0x01) << 6) + 
+				  ((_ms_value_type & 0x03) << 4) +
+				  ((_ms_pins_amount & 0x03) << 2) + 
+				  ((_ms_future & 0x03));
+	message[0] = header;
+	for(int i = 0; i < _ms_pins_amount ; i++) {
+		message[1 + (2 * i)] = _ms_pin_ids[i];
+		message[2 + (2 * i)] = _ms_pin_values[i];
+	}
+	return size;
 }	

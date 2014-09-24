@@ -13,7 +13,7 @@ class HiHouseOperator {
 		void update();
 	private:
 		void execOperationMessage(ProtocolMessage* message);
-		ProtocolMessage* makeResponse(const ProtocolMessage message);
+		void sendResponse(ProtocolMessage* message);
 		
 		Servo* _servo;
 		SerialReader* _serial;
