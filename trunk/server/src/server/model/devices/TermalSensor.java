@@ -8,7 +8,7 @@ public class TermalSensor extends Sensor {
 	}
 
 	@Override
-	public int getValue() {
+	public float getValue() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -17,7 +17,7 @@ public abstract class Sensor extends Device {
 		return mState;
 	}
 	
-	public int getValue() {
+	public float getValue() {
 		ArduinoHandler.getInstance().addOperation(this, false);
 		//TODO make async
 		return 0;

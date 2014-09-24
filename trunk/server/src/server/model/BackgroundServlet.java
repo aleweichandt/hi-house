@@ -32,7 +32,11 @@ public class BackgroundServlet extends GenericServlet implements Runnable{
 		while(true) {
 			long now = System.currentTimeMillis();
 			int dt = (int) (now - mLast);
+		//update all services
 			ArduinoHandler.getInstance().update(dt);
+			AmbientMgr.getInstance().update(dt);
+			SecurityMgr.getInstance().update(dt);
+			SimulationMgr.getInstance().update(dt);
 			mLast = now;
 		}
 	}

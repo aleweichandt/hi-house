@@ -26,6 +26,12 @@ public final class C {
 		public static final String DATABASE_LOCATION ="localhost:3306/hihouse";
 		public static final String DATABASE_USER = "hihouse";
 		public static final String DATABASE_PASSWORD = "hihouse";
+		
+	//Ambient Manager
+		public static final int 	AMBIENT_UPDATE_TIME = 45000;
+		public static final float 	AMBIENT_MAX_DIFF_DEGREES = (float) 5.0;
+	//Security Manager
+		public static final int SECURITY_UPDATE_TIME = 10000;
 	}
 
 	//MySQL Queries
@@ -54,6 +60,10 @@ public final class C {
 		}
 		public static final String GET_DEVICE_WITH_ID(String deviceid){
 			return "SELECT * from dispositivos where ID_Dispositivo = '" + deviceid + "'";
+		}
+		
+		public static final String GET_DEVICE_IDS_WITH_TYPE(String type) {
+			return "SELECT distinct ID_Dispositivo from dispositivos where Tipo = '" + type + "'";
 		}
 		
 		public static final String INSERT_USER(User user){
