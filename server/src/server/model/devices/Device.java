@@ -237,6 +237,11 @@ public abstract class Device {
 	public boolean getState() {
 		return mState;
 	}
+	
+	public void onStateResponse(int values[]) {
+		
+	}
+	
 	public abstract boolean setState(boolean state);
 	public abstract int getClassType();
 	public abstract int getValueType();

@@ -14,6 +14,7 @@ public class ArduinoHandler implements SerialPortEventListener{
 	// Singleton begin
 	private static ArduinoHandler sInstance = null;
 	private List<byte[]> mMessageList = null;
+	private List<Device> mCallbackList = null;
 	
 	public static ArduinoHandler getInstance() {
 		if(sInstance == null) {
@@ -25,6 +26,7 @@ public class ArduinoHandler implements SerialPortEventListener{
 	SerialPort mSerial = null;
 	public ArduinoHandler() {
 		mMessageList = new ArrayList<byte[]>();
+		mCallbackList = new ArrayList<Device>();
 		mSerial = new SerialPort(C.Config.ARDUINO_PORT_NAME); 
         try {
         	mSerial.openPort();//Open port
@@ -43,10 +45,15 @@ public class ArduinoHandler implements SerialPortEventListener{
 	public void serialEvent(SerialPortEvent event) {
 		//TODO really check for response and deliver result
 		 if(event.isRXCHAR()){//If data is available
-             if(event.getEventValue() == 10){//Check bytes count in the input buffer
+             if(event.getEventValue() > 2){//Check bytes count in the input buffer
                  //Read data, if 10 bytes available 
                  try {
-                     byte buffer[] = mSerial.readBytes(10);
+                     byte lenMsg[] = mSerial.readBytes(2);
+                     int len = (lenMsg[1] << 8) + lenMsg[0];
+                     if(event.getEventValue() >= len) {
+                    	 byte msg[] = mSerial.readBytes(len);
+                    	 execResponse(msg);
+                     }
                  }
                  catch (SerialPortException ex) {
                      System.out.println(ex);
@@ -102,5 +109,18 @@ public class ArduinoHandler implements SerialPortEventListener{
 			buffer[id++] = (byte)(values[i] & 0xFF);
 		}
 		mMessageList.add(buffer);
+		mCallbackList.add(dev);
+	}
+	
+	void execResponse(byte[] msg) {
+		byte header = msg[0];
+		int pins = (int)(header & 0x0C);
+		int values[] = new int[pins];
+		for(int i=0;i<pins; i++) {
+			values[i] = (int)(msg[(i+1)*2] & 0xFF);
+		}
+		Device caller = mCallbackList.get(0);
+		mCallbackList.remove(0);
+		caller.onStateResponse(values);
 	}
 }
