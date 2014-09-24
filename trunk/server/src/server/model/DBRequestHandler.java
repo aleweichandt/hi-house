@@ -173,6 +173,9 @@ public class DBRequestHandler {
 	public Map<String,Object> getDevice(String deviceid) {
 		return getFirstFromQuery(C.Queries.GET_DEVICE_WITH_ID(deviceid));
 	}
+	public Map<String,Object> getDeviceByName(String deviceName) {
+		return getFirstFromQuery(C.Queries.GET_DEVICE_WITH_NAME(deviceName));
+	}
 	public boolean addDevice(Device dvc) {
 		return runUpdate(C.Queries.INSERT_DEVICE(dvc));
 	}
