@@ -153,7 +153,7 @@ public final class C {
 			return "UPDATE dispositivos SET Tipo=" + type + ",Ambiente=" + name + 
 				   ",Descripcion_Ejec_Voz=" + vid + ",Estado=" + state + 
 				   ",Pin1=" + pin1 + ",Pin2=" + pin2 + ",Pin3=" + pin3 +
-				   ",Param1=" + param1 + "," + ",Param2=" + param2 +
+				   ",Param1=" + param1 + ",Param2=" + param2 +
 				   " WHERE ID_Dispositivo="+id;
 		}
 		
