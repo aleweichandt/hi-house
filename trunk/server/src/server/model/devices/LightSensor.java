@@ -9,8 +9,7 @@ public class LightSensor extends Sensor {
 
 	@Override
 	public float getValue() {
-		// TODO Auto-generated method stub
-		return 0;
+		return super.getValue();
 	}
 
 	@Override

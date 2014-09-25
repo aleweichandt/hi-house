@@ -120,6 +120,7 @@ public abstract class Device {
 	protected boolean mState = false;
 	protected List<Integer> mPins = null;
 	protected List<Integer> mPinValues = null;
+	protected boolean mBlocked = false;
 	
 	public Device(String id, String name, String voiceid,
 				  boolean state, int pin1, int pin2, int pin3) {
@@ -141,6 +142,7 @@ public abstract class Device {
 				}
 			}
 		}
+		mBlocked = false;
 	}
 	
 	protected Device tagDB() {
@@ -244,8 +246,26 @@ public abstract class Device {
 		return mState;
 	}
 	
-	public void onStateResponse(int values[]) {
-		
+	public void lock() {
+		mBlocked = true;
+	}
+	
+	public void waitLock() {
+		synchronized(this){ 
+			while(mBlocked)
+				Thread.yield();
+		}
+	}
+	
+	public void unlock() {
+		mBlocked = false;
+	}
+	
+	public void onOperationResponse(int values[]) {
+		for(int i=0;i<values.length;i++) {
+			mPinValues.set(i, values[i]);
+		}
+		unlock();
 	}
 	
 	public abstract boolean setState(boolean state);

@@ -9,8 +9,7 @@ public class TermalSensor extends Sensor {
 
 	@Override
 	public float getValue() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (float) (((super.getValue() * 0.004882814)  - 0.5) * 100.0);
 	}
 
 	@Override

@@ -32,6 +32,9 @@ public class TermalActuator extends Actuator {
 		}
 		int values[] = translateValues();
 		ArduinoHandler.getInstance().addOperation(this, false, values);
+		waitLock();
+		mState = state;
+		this.commitToDB();
 		return true;
 	}
 	

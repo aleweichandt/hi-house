@@ -19,7 +19,7 @@ public final class C {
 //Configuration
 	public final static class Config {
 	//Arduino serial port
-		public static final String ARDUINO_PORT_NAME = "COM2";
+		public static final String ARDUINO_PORT_NAME = "COM6";
 		public static final int ARDUINO_PORT_READ = 9600;
 		
 	//MySQL Database
