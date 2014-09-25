@@ -175,11 +175,17 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
  
         CommandBuilder c = new CommandBuilder((HiHouse)this.getActivity());
-        String s = c.generateCommand(matches);
+        Command command = c.generateCommand(matches);
 
-        if (mListener != null) {
+        if (command!=null)
+        	((HiHouse)getActivity()).mHiHouseService.testMethod(command);
+        else{
+        	Toast.makeText(getActivity(), "Comando no reconocido", Toast.LENGTH_LONG).show();
+        }
+        
+        /*if (mListener != null) {
 			mListener.onVoiceInputInteraction();//llama al Callback de la Activity
-		}
+		}*/
         //Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
         //TextView t = (TextView) getActivity().findViewById(R.id.text);
         //t.setText(s);
