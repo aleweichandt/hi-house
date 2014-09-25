@@ -70,6 +70,7 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 void HiHouseOperator::sendResponse(ProtocolMessage* message) {
 	message->setResponseMode();
 	char* serialized;
+	serialized = (char *) malloc(8 * sizeof(char));
 	int len = message->serialize(serialized);
 	_serial->write(serialized, len);
 	free(serialized);
