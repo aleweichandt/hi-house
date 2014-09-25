@@ -86,6 +86,12 @@ public abstract class Device {
 		return null;
 	}
 	
+	public static List<Object> getListFromDBByUserId(String userId) {
+		DBRequestHandler request = new DBRequestHandler();
+		List<Object> values = request.listAllDevicesByUser(userId);
+		return values;
+	}
+	
 	public static Device getFromJson(String deviceid, JsonObject params) {
 		if(params.containsKey("name") && params.containsKey("type") && 
 		   params.containsKey("voice_id")) {
