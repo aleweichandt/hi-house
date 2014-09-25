@@ -29,11 +29,11 @@ public class RequestService {
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
 		}
-		if(newSession.getAdmin() == null) {
-			return Response.status(403).entity("no admin rights").build();
-		}
 		
+		List<Object> userDecices = Device.getListFromDBByUserId(newSession.getUser().getId());
 		Object device = Device.getFromDBByName(deviceName);
+		DeviceService service = new DeviceService();
+		service.setDeviceState("1", true, tkn);	
 		
 		JsonArrayBuilder builder = Json.createArrayBuilder();
 		//for(Iterator<String> it = devices.iterator();it.hasNext();) {
