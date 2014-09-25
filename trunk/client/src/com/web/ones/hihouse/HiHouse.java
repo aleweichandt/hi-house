@@ -133,10 +133,10 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         mydb = new DBHelper(this);
         
         //insertamos alguns devices de prueba
-        mydb.insertDevice(1, "luz cocina");
-        mydb.insertDevice(2, "luz living");
-        mydb.insertDevice(3, "puerta principal");
-        mydb.insertDevice(4, "alarma central");
+        //mydb.insertDevice("test", "luz cocina");
+        //mydb.insertDevice(2, "luz living");
+        //mydb.insertDevice(3, "puerta principal");
+        //mydb.insertDevice(4, "alarma central");
 	}
 	
 	@Override
@@ -311,7 +311,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	public void onVoiceInputInteraction() {
 		//TODO Callback de VoiceTranslation fragment
 		//Toast.makeText(this, "asd!", Toast.LENGTH_SHORT).show();
-		mHiHouseService.testMethod();
+		//mHiHouseService.testMethod();
 	}
 	
 	public void stopService(View v){
@@ -322,7 +322,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             // Call a method from the HiHouseService.
             // However, if this call were something that might hang, then this request should
             // occur in a separate thread to avoid slowing down the activity performance.
-            mHiHouseService.testMethod();
+            //mHiHouseService.testMethod();
         }
 
 	}

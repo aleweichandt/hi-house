@@ -98,11 +98,14 @@ public class SocketOperator {
 			
 			if(!method){ //POST - Send params
 				connection.setDoOutput(true);
-				PrintWriter out = new PrintWriter(connection.getOutputStream());
-				out.print(params);
-				out.close();
+				if(!"".equals(params)){
+					PrintWriter out = new PrintWriter(connection.getOutputStream());
+					out.print(params);
+					out.close();
+				}
 			}
 			
+			int i = connection.getResponseCode();
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
 			

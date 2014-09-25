@@ -21,37 +21,47 @@ public class CommandBuilder {
 		commands.add("desactivar");
 	}
 
-	public String generateCommand(ArrayList<String> matches) {
+	public Command generateCommand(ArrayList<String> matches) {
 		String result="";
 		int i;
 		String command="", device="", com, dev;
 		boolean command_set=false, device_set=false;
 		
+		//TODO traer el token del User
+		
+		//primero obtengo el comando
 		for (String s : matches){
-			if((i = s.indexOf(' '))<=0) return "Comando no reconocido.";
+			if((i = s.indexOf(' '))<=0) return null;
 			com = s.substring(0, i);
-			dev = s.substring(i+1);
 			
-			if(!command_set && commands.contains(com)){
-				command_set = true;
+			if("prender".equals(com) || "encender".equals(com)){
 				command = com;
+				String deviceId = getDeviceId(matches);
+				if(deviceId!=null)
+					return new Command(false, "devices/"+deviceId+"/state?enabled=true&token=0", "");
+				return null;
 			}
-			
-			if(!device_set){
-				String str = hiHouse.mydb.getDevice(dev);
-				if(str!=""){
-					device_set = true;
-					device = str;
-				}
+			if("apagar".equals(com)){
+				command = com;
+				String deviceId = getDeviceId(matches);
+				if(deviceId!=null)
+					return new Command(false, "devices/"+deviceId+"/state?enabled=false&token=0", "");
+				return null;
 			}
-
 		}
 		
-		if(command_set && device_set){
-			result += "Comando:\""+command+"\" Device:\""+device+"\"\n";
-			return result;
+		return null;
+	}
+
+	private String getDeviceId(ArrayList<String> matches) {
+
+		int i;
+		for (String s : matches){
+			if((i = s.indexOf(' '))<=0) return null;
+			String deviceId = hiHouse.mydb.getDevice(s.substring(i+1));
+			if(deviceId!=null) return deviceId;
 		}
-		return "Comando no reconocido.";
+		return null;
 	}
 
 }

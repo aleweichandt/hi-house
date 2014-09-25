@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	public static final String DATABASE_NAME = "HiHouse.db";
 	public static final String TABLE_NAME_DEVICES = "devices";
 	public static final String DEVICES_COLUMN_ID = "id";
@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// create table
 		db.execSQL(	"CREATE TABLE " + TABLE_NAME_DEVICES + " (" +
-					DEVICES_COLUMN_ID + " INTEGER PRIMARY KEY, "+
+					DEVICES_COLUMN_ID + " text PRIMARY KEY, "+
 					DEVICES_COLUMN_DESC_VOICE + " text)");
 	}
 	
@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 	
-	public long insertDevice(int id, String desc_voice){
+	public long insertDevice(String id, String desc_voice){
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		
@@ -62,7 +62,7 @@ public class DBHelper extends SQLiteOpenHelper {
         	return cursor.getString(cursor.getColumnIndex(DBHelper.DEVICES_COLUMN_ID));
         }
         else{
-        	return "";
+        	return null;
         }
 	}
 }
