@@ -86,18 +86,22 @@ public class SocketOperator {
 		URL url;
 		String result = new String();
 		
+		if(method){ //GET
+			serverUrl += "?" + params;
+		}
+		
 		try{
 			url = new URL(serverUrl);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setReadTimeout(10000 /* milliseconds */);
 			connection.setConnectTimeout(15000 /* milliseconds */);
-			connection.setRequestMethod(method?"GET":"POST");
-			connection.setDoOutput(true);
 			
-			PrintWriter out = new PrintWriter(connection.getOutputStream());
-			
-			//out.print(params);
-			out.close();
+			if(!method){ //POST - Send params
+				connection.setDoOutput(true);
+				PrintWriter out = new PrintWriter(connection.getOutputStream());
+				out.print(params);
+				out.close();
+			}
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
@@ -106,6 +110,7 @@ public class SocketOperator {
 				result = result.concat(inputLine);	
 			}
 			in.close();
+			connection.disconnect();
 		}
 		catch (MalformedURLException e) {
 			e.printStackTrace();

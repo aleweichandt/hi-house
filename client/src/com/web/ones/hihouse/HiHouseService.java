@@ -51,8 +51,12 @@ public class HiHouseService extends Service{
 	public void testMethod(){
 		 SocketOperator so = new SocketOperator(this);
 		 //String params = "" + URLEncoder.encode("username","UTF-8")+"="+ URLEncoder.encode("Charly","UTF-8");
-		 //so.sendRequest(false, "http://192.168.1.110:8080/", "username=Charly");
-		 so.sendRequest(false, "http://192.168.1.101:8080/HiHouse/devices/test/state?enabled="+a+"&token=0", "enabled=true&token=0");
+		 //so.sendRequest(false, "http://192.168.1.110/", "username=Charly");
+		 //so.sendRequest(false, "http://192.168.1.110:8080/HiHouse/devices/test/state?enabled="+a+"&token=0", "enabled=true&token=0");
+		 //so.sendRequest(true, "http://192.168.1.110:8080/HiHouse/users/login?id=admin&pwd=1234", " ");
+		 //http://localhost:8080/HiHouse/users/login?id=admin&pwd=1234
+		 //http://localhost:8080/HiHouse/devices/test/state?enabled=true&token=0
+		 so.sendRequest(false, "http://192.168.1.110/AppServer/", "x=asd");
 		 a= !a;
 	}
 	 
