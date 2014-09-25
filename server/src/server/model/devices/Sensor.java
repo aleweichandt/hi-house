@@ -14,12 +14,13 @@ public abstract class Sensor extends Device {
 	@Override
 	public boolean setState(boolean state) {
 		mState = state;
-		return mState;
+		this.commitToDB();
+		return true;
 	}
 	
 	public float getValue() {
-		ArduinoHandler.getInstance().addOperation(this, false);
-		//TODO make async
-		return 0;
-	};
+		ArduinoHandler.getInstance().addOperation(this, true);
+		waitLock();
+		return mPinValues.get(0);
+	}
 }

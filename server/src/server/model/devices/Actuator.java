@@ -13,6 +13,9 @@ public abstract class Actuator extends Device {
 	public boolean setState(boolean state) {
 		int values[] = {state?1:0};
 		ArduinoHandler.getInstance().addOperation(this, false, values);
+		waitLock();
+		mState = state;
+		this.commitToDB();
 		return true;
 	}
 }

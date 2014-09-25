@@ -34,6 +34,8 @@ public class ArduinoHandler implements SerialPortEventListener{
         	//Add SerialPortEventListener
             int mask = SerialPort.MASK_RXCHAR;
             mSerial.setEventsMask(mask);
+            mSerial.setRTS(false); 
+            mSerial.setDTR(false);
             mSerial.addEventListener(this);
         }
         catch (SerialPortException ex) {
@@ -43,22 +45,19 @@ public class ArduinoHandler implements SerialPortEventListener{
 	
 	@Override
 	public void serialEvent(SerialPortEvent event) {
-		//TODO really check for response and deliver result
 		 if(event.isRXCHAR()){//If data is available
-             if(event.getEventValue() > 2){//Check bytes count in the input buffer
-                 //Read data, if 10 bytes available 
-                 try {
-                     byte lenMsg[] = mSerial.readBytes(2);
-                     int len = (lenMsg[1] << 8) + lenMsg[0];
-                     if(event.getEventValue() >= len) {
-                    	 byte msg[] = mSerial.readBytes(len);
-                    	 execResponse(msg);
-                     }
-                 }
-                 catch (SerialPortException ex) {
-                     System.out.println(ex);
-                 }
-             }
+             try {
+				if(mSerial.getInputBufferBytesCount() >= 2) {//Read data, if 2 bytes available 
+				    byte lenMsg[] = mSerial.readBytes(2);
+			         int len = (lenMsg[1] << 8) + lenMsg[0];
+			         if(mSerial.getInputBufferBytesCount() >= len) {
+			        	 byte msg[] = mSerial.readBytes(len);
+			        	 execResponse(msg);
+			         }
+				 }
+			} catch (SerialPortException e) {
+				e.printStackTrace();
+			}
          }
 	}
 	
@@ -110,17 +109,19 @@ public class ArduinoHandler implements SerialPortEventListener{
 		}
 		mMessageList.add(buffer);
 		mCallbackList.add(dev);
+		dev.lock();
 	}
 	
 	void execResponse(byte[] msg) {
 		byte header = msg[0];
-		int pins = (int)(header & 0x0C);
+		int pins = (int)((header>>2) & 0x03);
 		int values[] = new int[pins];
 		for(int i=0;i<pins; i++) {
 			values[i] = (int)(msg[(i+1)*2] & 0xFF);
 		}
 		Device caller = mCallbackList.get(0);
 		mCallbackList.remove(0);
-		caller.onStateResponse(values);
+		caller.onOperationResponse(values);
+		caller.unlock();
 	}
 }
