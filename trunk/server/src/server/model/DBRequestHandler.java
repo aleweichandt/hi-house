@@ -188,4 +188,7 @@ public class DBRequestHandler {
 	public List<Object> listAllDevicesOfType(int type) {
 		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICE_IDS_WITH_TYPE(Integer.toString(type)));
 	}
+	public List<Object> listAllDevicesByUser(String userId) {
+		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICE_IDS_WITH_USER(userId));
+	}
 }
