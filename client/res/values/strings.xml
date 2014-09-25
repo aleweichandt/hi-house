@@ -38,7 +38,7 @@
     <string name="temp">Temp:</string>
     <string name="popup_alarm_dest_title">Seleccione un destinatario del alerta</string>
     <string name="speak_box_text">Hable ahora</string>
-    
+    <string name="checkbox_remember">Recordar Usuario</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
