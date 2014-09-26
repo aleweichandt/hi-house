@@ -21,26 +21,30 @@ import android.widget.Toast;
 
 public class LoginFragment extends Fragment {
 	
+	private CheckBox recordar;
 	public LoginFragment() {
         // Empty constructor required for fragment subclasses
-    }
+	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);   
-        final CheckBox recordar = (CheckBox) rootView.findViewById(R.id.checkbox_remember);
+        recordar = (CheckBox) rootView.findViewById(R.id.checkbox_remember);
        
         Button login_btn = (Button) rootView.findViewById(R.id.login);
         login_btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
 				//TODO Validar datos y loguear usuario.
-					
-				Toast.makeText(getActivity(), "Login", Toast.LENGTH_SHORT).show();
+		
+				
+				Toast.makeText(getActivity(), ""+recordar.isChecked(), Toast.LENGTH_SHORT).show();
 				if(recordar.isChecked()){
-					recordar.setText("Prueba");
+					recordar.setText("Mode On");
+				}else{
+					recordar.setText("Mode Off");
 				}
-			}
+				}
 		});
         
         return rootView;
