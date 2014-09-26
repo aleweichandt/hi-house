@@ -89,7 +89,7 @@ public class SocketOperator {
 		URL url;
 		String result = new String();
 		
-		if(method){ //GET
+		if(method && !params.equals("")){ //GET
 			serverUrl += "?" + params;
 		}
 		
@@ -101,7 +101,7 @@ public class SocketOperator {
 			
 			if(!method){ //POST - Send params
 				connection.setDoOutput(true);
-				if(!"".equals(params)){
+				if(!params.equals("")){
 					PrintWriter out = new PrintWriter(connection.getOutputStream());
 					out.print(params);
 					out.close();

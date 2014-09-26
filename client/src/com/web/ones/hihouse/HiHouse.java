@@ -1,6 +1,7 @@
 package com.web.ones.hihouse;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.json.JSONArray;
@@ -51,6 +52,16 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     private ListView mDrawerList;
     private CharSequence mTitle,mDrawerTitle;
     private ActionBarDrawerToggle mDrawerToggle;
+    
+    //TODO remover cuando este User
+    private ArrayList<Profile> userProfiles = new ArrayList<Profile>();
+    public String getDeviceByVoiceDesc(String voice_desc){
+    	for(Profile p : userProfiles){
+    		String id = p.getDeviceByVoiceDesc(voice_desc);
+    		if(id!=null) return id;
+    	}
+    	return null;
+    }
 
     //para manejar el HiHouseService
     HiHouseService mHiHouseService;
@@ -143,6 +154,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         //mydb.insertDevice(2, "luz living");
         //mydb.insertDevice(3, "puerta principal");
         //mydb.insertDevice(4, "alarma central");
+        
+
 	}
 	
 	@Override
@@ -342,30 +355,31 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		Toast.makeText(context, "SET_DEVICE_STATE", Toast.LENGTH_SHORT).show();
         		break;
         	case Request.GET_USER_DEVICES:
-        		//Toast.makeText(context, "GET_USER_DEVICES", Toast.LENGTH_SHORT).show();
+        		//TODO poner todo esto en el User
         		String in = intent.getCharSequenceExtra("data").toString();
             	JSONObject reader, device;
             	JSONArray prof;
-            	String perfil_name,id,voice;
+            	String perfil_name;
     			try {
     				reader = new JSONObject(in);
     				Iterator<?> keys = reader.keys();
     				while(keys.hasNext()){//itero sobre los perfiles
     					perfil_name = (String)keys.next();
+    					Profile p = new Profile(perfil_name);
     					prof = reader.getJSONArray(perfil_name);
     					for(int i=0; i<prof.length(); i++){//itero sobre los dispositivos
     						device = prof.getJSONObject(i);
-    						id = device.getString("id");
-    						voice = device.getString("voice");
+    						Device d = new Device(device.getString("id"), device.getString("voice_id"), device.getBoolean("state"));
+    						p.addDevice(d);
     					}
-    					keys.hasNext();
+    					userProfiles.add(p);
     				}
     			} catch (JSONException e) {
     				e.printStackTrace();
     			}
             	
                 final TextView responseFromService = (TextView) findViewById(R.id.broadcast);
-                responseFromService.setText(intent.getCharSequenceExtra("data"));
+                responseFromService.setText(userProfiles.toString());
         		break;
         	}
         }
