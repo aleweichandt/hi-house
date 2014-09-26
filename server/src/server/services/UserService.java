@@ -92,7 +92,10 @@ public class UserService {
 		List<String> profiles = user.getProfiles();
 		JsonArrayBuilder builder = Json.createArrayBuilder();
 		for(Iterator<String> it = profiles.iterator();it.hasNext();) {
-			builder.add(it.next());
+			Profile prf = Profile.getFromDB(it.next());
+			JsonObject jo = Json.createObjectBuilder().add("id", prf.getId())
+								.add("name", prf.getName()).build();
+			builder.add(jo);
 		}
 		return Response.status(200).entity(builder.build().toString()).build();
 	}
@@ -131,12 +134,13 @@ public class UserService {
 					if(dv != null) {
 						JsonObjectBuilder dvbuild = Json.createObjectBuilder();
 						dvbuild.add("id", dv.getId());
+						dvbuild.add("name", dv.getName());
 						if(addVoice) dvbuild.add("voice_id", dv.getVoiceId());
 						if(addState) dvbuild.add("state", dv.getState());
 						abuild.add(dvbuild.build());
 					}
 				}
-				obuild.add(prf.getId(), abuild);
+				obuild.add(prf.getName(), abuild);
 			}
 		}
 		return Response.status(200).entity(obuild.build().toString()).build();

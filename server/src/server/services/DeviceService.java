@@ -40,7 +40,10 @@ public class DeviceService {
 		}
 		JsonArrayBuilder builder = Json.createArrayBuilder();
 		for(Iterator<String> it = devices.iterator();it.hasNext();) {
-			builder.add(it.next());
+			Device dv = Device.getFromDB(it.next());
+			JsonObject jo = Json.createObjectBuilder().add("id", dv.getId())
+								.add("name", dv.getName()).build();
+			builder.add(jo);
 		}
 		return Response.status(200).entity(builder.build().toString()).build();
 	}

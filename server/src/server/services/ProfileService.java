@@ -19,6 +19,7 @@ import server.model.C;
 import server.model.Profile;
 import server.model.SessionHandler;
 import server.model.UserSession;
+import server.model.devices.Device;
 
 @Path("/profiles")
 public class ProfileService {
@@ -39,7 +40,10 @@ public class ProfileService {
 		}
 		JsonArrayBuilder builder = Json.createArrayBuilder();
 		for(Iterator<String> it = profiles.iterator();it.hasNext();) {
-			builder.add(it.next());
+			Profile prf = Profile.getFromDB(it.next());
+			JsonObject jo = Json.createObjectBuilder().add("id", prf.getId())
+								.add("name", prf.getName()).build();
+			builder.add(jo);
 		}
 		return Response.status(200).entity(builder.build().toString()).build();
 	}
@@ -86,7 +90,10 @@ public class ProfileService {
 		List<String> devices = prf.getDevices();
 		JsonArrayBuilder builder = Json.createArrayBuilder();
 		for(Iterator<String> it = devices.iterator();it.hasNext();) {
-			builder.add(it.next());
+			Device dv = Device.getFromDB(it.next());
+			JsonObject jo = Json.createObjectBuilder().add("id", dv.getId())
+								.add("name", dv.getName()).build();
+			builder.add(jo);
 		}
 		return Response.status(200).entity(builder.build().toString()).build();
 	}
