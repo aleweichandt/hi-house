@@ -173,9 +173,6 @@ public class DBRequestHandler {
 	public Map<String,Object> getDevice(String deviceid) {
 		return getFirstFromQuery(C.Queries.GET_DEVICE_WITH_ID(deviceid));
 	}
-	public Map<String,Object> getDeviceByName(String deviceName) {
-		return getFirstFromQuery(C.Queries.GET_DEVICE_WITH_NAME(deviceName));
-	}
 	public boolean addDevice(Device dvc) {
 		return runUpdate(C.Queries.INSERT_DEVICE(dvc));
 	}
@@ -187,8 +184,5 @@ public class DBRequestHandler {
 	}
 	public List<Object> listAllDevicesOfType(int type) {
 		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICE_IDS_WITH_TYPE(Integer.toString(type)));
-	}
-	public List<Object> listAllDevicesByUser(String userId) {
-		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICE_IDS_WITH_USER(userId));
 	}
 }

@@ -66,17 +66,6 @@ public final class C {
 			return "SELECT distinct ID_Dispositivo from dispositivos where Tipo = '" + type + "'";
 		}
 		
-		public static final String GET_DEVICE_IDS_WITH_USER(String userId) {
-			return "SELECT distinct d.ID_dispositivo from usuario_perfil as up" +
-					"INNER JOIN perfil_dispositivo as pd on pd.Id_perfil = up.ID_perfil" +
-					"INNER JOIN dispositivos as d on d.ID_dispositivo = pd.ID_dispositivo" +
-					"WHERE up.ID_usuario ='" + userId + "'";
-		}
-		
-		public static final String GET_DEVICE_WITH_NAME(String deviceName){
-			return "SELECT * from dispositivos where Descripcion_Ejec_Voz = '" + deviceName + "'";
-		}
-		
 		public static final String INSERT_USER(User user){
 			String id = "'" + user.getId() + "'";
 			String name = "'" + user.getName() + "'";
