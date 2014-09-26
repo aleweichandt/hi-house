@@ -1,5 +1,7 @@
 package server.model.devices;
 
+import server.model.ArduinoHandler;
+
 public class DoorActuator extends Actuator {
 
 	public DoorActuator(String id, String name, String voiceid,
@@ -15,5 +17,15 @@ public class DoorActuator extends Actuator {
 	@Override
 	public int getClassType() {
 		return DEVICE_TYPE_AC_DOOR;
+	}
+
+	@Override
+	public boolean setState(boolean state) {
+		int values[] = {state?0:180};
+		ArduinoHandler.getInstance().addOperation(this, false, values);
+		waitLock();
+		mState = state;
+		this.commitToDB();
+		return true;
 	}
 }
