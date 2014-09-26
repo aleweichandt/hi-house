@@ -6,13 +6,19 @@ public class Command {
 	private boolean method;
 	private String requestURL;
 	private String bodyParams;
-	
-	public Command(boolean method, String requestURL, String params){
+	private int type;
+
+	public Command(int type, boolean method, String requestURL, String params){
+		this.type = type;
 		this.method = method;
 		this.requestURL = requestURL;
 		this.bodyParams = params;
 	}
 
+	public int getType() {
+		return type;
+	}
+	
 	public boolean getMethod() {
 		return method;
 	}

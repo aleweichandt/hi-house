@@ -178,7 +178,7 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
         Command command = c.generateCommand(matches);
 
         if (command!=null)
-        	((HiHouse)getActivity()).mHiHouseService.testMethod(command);
+        	((HiHouse)getActivity()).mHiHouseService.sendCommand(command);
         else{
         	Toast.makeText(getActivity(), "Comando no reconocido", Toast.LENGTH_LONG).show();
         }

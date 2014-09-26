@@ -42,9 +42,9 @@ public class SocketOperator {
 	 * @param url Server URL
 	 * @param params Parametros para el request
 	 */
-	public void sendRequest(boolean method, String url, String params){
+	public void sendRequest(int type, boolean method, String url, String params){
 		if (checkNetworkConn()) {
-	    	new SendRequestTask(method, url, params).execute();
+	    	new SendRequestTask(type, method, url, params).execute();
 	    } else {
 	        // display error
 	    	Toast.makeText(context, "Error: No Network Connection", Toast.LENGTH_SHORT).show();
@@ -54,8 +54,10 @@ public class SocketOperator {
 	private class SendRequestTask extends AsyncTask<Void, Void, String> {
 		boolean method;
 		String url, params;
+		int type;
 		
-		public SendRequestTask(boolean method, String url, String params){
+		public SendRequestTask(int type, boolean method, String url, String params){
+			this.type = type;
 			this.method = method;
 			this.url = url;
 			this.params = params;
@@ -77,6 +79,7 @@ public class SocketOperator {
         protected void onPostExecute(String result) {
             //Toast.makeText(context, result, Toast.LENGTH_LONG).show();
         	Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
+        	hiHouseMessage.putExtra("type", type);
             hiHouseMessage.putExtra("data", result);
             context.sendBroadcast(hiHouseMessage);
        }

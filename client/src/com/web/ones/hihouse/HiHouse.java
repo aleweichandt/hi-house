@@ -1,6 +1,12 @@
 package com.web.ones.hihouse;
 
 
+import java.util.Iterator;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.web.ones.hihouse.HiHouseService.HiHouseTask;
 import com.web.ones.hihouse.HiHouseService.LocalBinder;
 import com.web.ones.hihouse.VoiceTranslation.OnVoiceCommand;
@@ -322,28 +328,46 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             // Call a method from the HiHouseService.
             // However, if this call were something that might hang, then this request should
             // occur in a separate thread to avoid slowing down the activity performance.
-            //mHiHouseService.testMethod();
+            mHiHouseService.testMethod();
         }
 
 	}
 	
-	private class DataUpdateReceiver extends BroadcastReceiver {
- 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(HiHouseTask.NEW_RESPONSE)) {
-                // do something with the tweet
-            	Toast.makeText(context, "Broadcast!", Toast.LENGTH_SHORT).show();
-            }
- 
-        }
-    }
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            final TextView responseFromService = (TextView) findViewById(R.id.broadcast);
-            responseFromService.setText(intent.getCharSequenceExtra("data"));
+        	switch(intent.getIntExtra("type",0)){
+        	case Request.SET_DEVICE_STATE:
+        		Toast.makeText(context, "SET_DEVICE_STATE", Toast.LENGTH_SHORT).show();
+        		break;
+        	case Request.GET_USER_DEVICES:
+        		//Toast.makeText(context, "GET_USER_DEVICES", Toast.LENGTH_SHORT).show();
+        		String in = intent.getCharSequenceExtra("data").toString();
+            	JSONObject reader, device;
+            	JSONArray prof;
+            	String perfil_name,id,voice;
+    			try {
+    				reader = new JSONObject(in);
+    				Iterator<?> keys = reader.keys();
+    				while(keys.hasNext()){//itero sobre los perfiles
+    					perfil_name = (String)keys.next();
+    					prof = reader.getJSONArray(perfil_name);
+    					for(int i=0; i<prof.length(); i++){//itero sobre los dispositivos
+    						device = prof.getJSONObject(i);
+    						id = device.getString("id");
+    						voice = device.getString("voice");
+    					}
+    					keys.hasNext();
+    				}
+    			} catch (JSONException e) {
+    				e.printStackTrace();
+    			}
+            	
+                final TextView responseFromService = (TextView) findViewById(R.id.broadcast);
+                responseFromService.setText(intent.getCharSequenceExtra("data"));
+        		break;
+        	}
         }
 	};
 
