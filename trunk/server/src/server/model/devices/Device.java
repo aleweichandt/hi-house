@@ -61,37 +61,6 @@ public abstract class Device {
 		return null;
 	}
 	
-	public static Device getFromDBByName(String deviceName) {
-		DBRequestHandler request = new DBRequestHandler();
-		Map<String, Object> values = request.getDeviceByName(deviceName);
-		if(!values.isEmpty()){
-			String id = (String)values.get("ID_Dispositivo");
-			String ambient = (String)values.get("Ambiente");
-			int type = Integer.parseInt((String)values.get("Tipo"));
-			String voiceid = (String)values.get("Descripcion_Ejec_Voz");
-			int intstate = Integer.parseInt((String)values.get("Estado"));
-			boolean state = (Boolean)(intstate == 1);
-			int pin1 = -1, pin2 = -1, pin3 = -1;
-			if(values.get("Pin1") != null) {
-				pin1 = (int) values.get("Pin1");
-				if(values.get("Pin2") != null) {
-					pin2 = (int) values.get("Pin2");
-					if(values.get("Pin3") != null) {
-						pin3 = (int) values.get("Pin3");
-					}
-				}
-			}
-			return Device.createFromType(id, ambient, type, voiceid, state, pin1, pin2, pin3).tagDB();
-		}
-		return null;
-	}
-	
-	public static List<Object> getListFromDBByUserId(String userId) {
-		DBRequestHandler request = new DBRequestHandler();
-		List<Object> values = request.listAllDevicesByUser(userId);
-		return values;
-	}
-	
 	public static Device getFromJson(String deviceid, JsonObject params) {
 		if(params.containsKey("name") && params.containsKey("type") && 
 		   params.containsKey("voice_id")) {
