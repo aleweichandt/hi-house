@@ -38,14 +38,14 @@ public class CommandBuilder {
 				command = com;
 				String deviceId = getDeviceId(matches);
 				if(deviceId!=null)
-					return new Command(false, "devices/"+deviceId+"/state?enabled=true&token=0", "");
+					return new Command(Request.SET_DEVICE_STATE,false, "devices/"+deviceId+"/state?enabled=true&token=0", "");
 				return null;
 			}
 			if("apagar".equals(com)){
 				command = com;
 				String deviceId = getDeviceId(matches);
 				if(deviceId!=null)
-					return new Command(false, "devices/"+deviceId+"/state?enabled=false&token=0", "");
+					return new Command(Request.SET_DEVICE_STATE,false, "devices/"+deviceId+"/state?enabled=false&token=0", "");
 				return null;
 			}
 		}
