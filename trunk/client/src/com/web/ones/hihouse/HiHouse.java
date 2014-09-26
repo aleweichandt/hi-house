@@ -54,13 +54,10 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     private ActionBarDrawerToggle mDrawerToggle;
     
     //TODO remover cuando este User
-    private ArrayList<Profile> userProfiles = new ArrayList<Profile>();
-    public String getDeviceByVoiceDesc(String voice_desc){
-    	for(Profile p : userProfiles){
-    		String id = p.getDeviceByVoiceDesc(voice_desc);
-    		if(id!=null) return id;
-    	}
-    	return null;
+    //private ArrayList<Profile> userProfiles = new ArrayList<Profile>();
+    private User user; 
+    public User getUser(){
+    	return user;
     }
 
     //para manejar el HiHouseService
@@ -68,7 +65,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     boolean mBound = false;
     
     //DB
-    DBHelper mydb;
+    //DBHelper mydb;
     
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -79,6 +76,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             LocalBinder binder = (LocalBinder) service;
             mHiHouseService = binder.getService();
             mBound = true;
+            mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token=2&add_voice_id=true&add_state=true", ""));
         }
 
         @Override
@@ -147,7 +145,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         registerReceiver(mReceiver, myFilter);
         
         // DB operations
-        mydb = new DBHelper(this);
+        //mydb = new DBHelper(this);
         
         //insertamos alguns devices de prueba
         //mydb.insertDevice("test", "luz cocina");
@@ -155,7 +153,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         //mydb.insertDevice(3, "puerta principal");
         //mydb.insertDevice(4, "alarma central");
         
-
+        user = new User();
 	}
 	
 	@Override
@@ -372,14 +370,14 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     						Device d = new Device(device.getString("id"), device.getString("voice_id"), device.getBoolean("state"));
     						p.addDevice(d);
     					}
-    					userProfiles.add(p);
+    					user.addProfile(p);
     				}
     			} catch (JSONException e) {
     				e.printStackTrace();
     			}
             	
-                final TextView responseFromService = (TextView) findViewById(R.id.broadcast);
-                responseFromService.setText(userProfiles.toString());
+                //final TextView responseFromService = (TextView) findViewById(R.id.broadcast);
+                //responseFromService.setText(userProfiles.toString());
         		break;
         	}
         }

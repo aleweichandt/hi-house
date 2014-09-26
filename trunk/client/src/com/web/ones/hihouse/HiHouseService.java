@@ -45,7 +45,6 @@ public class HiHouseService extends Service{
 	 @Override
 	 public IBinder onBind(Intent intent) {
 		 //Toast.makeText(this, "Service Bounded", Toast.LENGTH_SHORT).show();
-		 sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token=2&add_voice_id=true&add_state=true", ""));
 		 return mBinder;
 	 }
 	 //private boolean a = true;
