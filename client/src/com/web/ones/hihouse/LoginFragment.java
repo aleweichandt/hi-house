@@ -41,8 +41,10 @@ public class LoginFragment extends Fragment {
 				Toast.makeText(getActivity(), ""+recordar.isChecked(), Toast.LENGTH_SHORT).show();
 				if(recordar.isChecked()){
 					recordar.setText("Mode On");
+					//User.class.guardarDatos();
 				}else{
 					recordar.setText("Mode Off");
+					//User.class.borrarDatos();
 				}
 				}
 		});
