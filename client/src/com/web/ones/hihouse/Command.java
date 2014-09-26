@@ -2,7 +2,7 @@ package com.web.ones.hihouse;
 
 public class Command {
 
-	private final static String serverURL = "http://192.168.1.110:8080/HiHouse/";
+	public final static String serverURL = "http://192.168.1.110:8080/HiHouse/";
 	private boolean method;
 	private String requestURL;
 	private String bodyParams;

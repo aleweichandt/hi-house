@@ -33,6 +33,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,9 +53,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     private ListView mDrawerList;
     private CharSequence mTitle,mDrawerTitle;
     private ActionBarDrawerToggle mDrawerToggle;
+    private ProgressBar mainLoadingBar;
     
-    //TODO remover cuando este User
-    //private ArrayList<Profile> userProfiles = new ArrayList<Profile>();
     private User user; 
     public User getUser(){
     	return user;
@@ -76,7 +76,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             LocalBinder binder = (LocalBinder) service;
             mHiHouseService = binder.getService();
             mBound = true;
-            mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token=2&add_voice_id=true&add_state=true", ""));
+            mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token="+user.getToken()+"&add_voice_id=true&add_state=true", ""));
         }
 
         @Override
@@ -90,11 +90,21 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hi_house);
 
+		//Recibimos los parametros del Login
+		Intent intentLogin = getIntent();
+		String user = intentLogin.getStringExtra(LoginActivity.EXTRA_USER);
+		String pass = intentLogin.getStringExtra(LoginActivity.EXTRA_PASS);
+		String token = intentLogin.getStringExtra(LoginActivity.EXTRA_TOKEN);
+		boolean save = intentLogin.getBooleanExtra(LoginActivity.EXTRA_SAVE, false);
+		
+		this.user = new User(user, pass, token);
+		
 		mTitle = getTitle();
 		mDrawerTitle = getString(R.string.drawer_title);
 		menuItems = getResources().getStringArray(R.array.nav_drawer_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mainLoadingBar = (ProgressBar) findViewById(R.id.main_loading_bar);
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, menuItems));
@@ -127,7 +137,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(DRAWER_MENU_INDEX_LOGIN);
+            //selectItem(DRAWER_MENU_INDEX_LOGIN);
         }
         
         Fragment fragment = new VoiceTranslation();
@@ -153,7 +163,6 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         //mydb.insertDevice(3, "puerta principal");
         //mydb.insertDevice(4, "alarma central");
         
-        user = new User();
 	}
 	
 	@Override
@@ -371,6 +380,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     						p.addDevice(d);
     					}
     					user.addProfile(p);
+    					mainLoadingBar.setVisibility(View.GONE);
+    					selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
     				}
     			} catch (JSONException e) {
     				e.printStackTrace();

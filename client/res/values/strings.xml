@@ -59,12 +59,15 @@
         <item>A/C</item>
         <item>Sensor Termico</item>
         <item>Sensor Luminico</item>
-    </string-array> 
+    </string-array>
     <!-- Device Subtypes Items -->
     <string-array name="device_term_subtype_items">
         <item>Frio</item>
         <item>Calor</item>
         <item>Ambas</item>
     </string-array>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
