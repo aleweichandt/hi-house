@@ -14,7 +14,7 @@ import javax.json.JsonValue;
 import server.model.devices.Device;
 
 public class Profile {
-	static Profile getFromDB(String profileid) {
+	public static Profile getFromDB(String profileid) {
 		DBRequestHandler request = new DBRequestHandler();
 		Map<String, Object> values = request.getProfile(profileid);
 		if(!values.isEmpty()){
@@ -26,7 +26,7 @@ public class Profile {
 		return null;
 	}
 	
-	static Profile getFromJson(String profileid, JsonObject params) {
+	public static Profile getFromJson(String profileid, JsonObject params) {
 		if(params.containsKey("name") && params.containsKey("description")) {
 			
 			String desc = null;

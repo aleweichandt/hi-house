@@ -42,7 +42,10 @@ public class UserService {
 		}
 		JsonArrayBuilder builder = Json.createArrayBuilder();
 		for(Iterator<String> it = users.iterator();it.hasNext();) {
-			builder.add(it.next());
+			User usr = User.getFromDB(it.next());
+			JsonObject jo = Json.createObjectBuilder().add("id", usr.getId())
+								.add("name", usr.getName()).build();
+			builder.add(jo);
 		}
 		return Response.status(200).entity(builder.build().toString()).build();
 	}
@@ -119,7 +122,7 @@ public class UserService {
 		List<String> profiles = user.getProfiles();
 		Iterator<String> itt = profiles.iterator();
 		while(itt.hasNext()) {
-			Profile prf = newSession.getAdmin().getProfile(itt.next());
+			Profile prf = Profile.getFromDB(itt.next());
 			if(prf != null) {
 				JsonArrayBuilder abuild = Json.createArrayBuilder();
 				devices = prf.getDevices();
