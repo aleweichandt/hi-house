@@ -12,13 +12,15 @@ public class User {
 	private String user;
 	private String password;
 	private String token;
+	private boolean admin;
 	private ArrayList<Profile> profiles;
 	
-	public User(String user, String pass, String token){
+	public User(String user, String pass, String token, boolean admin){
 		profiles = new ArrayList<Profile>();
 		this.user = user;
 		this.password = pass;
 		this.token = token;
+		this.admin = admin;
 	}
 	
 	public String getUser() {
@@ -31,6 +33,10 @@ public class User {
 
 	public String getToken() {
 		return token;
+	}
+	
+	public boolean isAdmin() {
+		return admin;
 	}
 	public ArrayList<Profile> getProfiles(){
 		return profiles;
