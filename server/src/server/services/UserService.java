@@ -21,6 +21,7 @@ import server.model.Profile;
 import server.model.SessionHandler;
 import server.model.User;
 import server.model.UserSession;
+import server.model.devices.Device;
 
 @Path("/users")
 public class UserService {
@@ -96,7 +97,9 @@ public class UserService {
 	@GET
 	@Path("{id}/devices")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response getUserDevices(@PathParam("id") String userid, @QueryParam("token") String tkn) {
+	public Response getUserDevices(@PathParam("id") String userid, @QueryParam("token") String tkn,
+								   @QueryParam("add_voice_id") boolean addVoice,
+								   @QueryParam("add_state") boolean addState) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
@@ -121,7 +124,14 @@ public class UserService {
 				JsonArrayBuilder abuild = Json.createArrayBuilder();
 				devices = prf.getDevices();
 				for(Iterator<String> it = devices.iterator();it.hasNext();) {
-					abuild.add(it.next());
+					Device dv = Device.getFromDB(it.next());
+					if(dv != null) {
+						JsonObjectBuilder dvbuild = Json.createObjectBuilder();
+						dvbuild.add("id", dv.getId());
+						if(addVoice) dvbuild.add("voice_id", dv.getVoiceId());
+						if(addState) dvbuild.add("state", dv.getState());
+						abuild.add(dvbuild.build());
+					}
 				}
 				obuild.add(prf.getId(), abuild);
 			}
