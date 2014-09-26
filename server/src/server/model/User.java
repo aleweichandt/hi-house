@@ -14,7 +14,7 @@ import javax.json.JsonValue;
 import server.model.devices.Device;
 
 public class User {
-		static User getFromDB(String userid) {
+		public static User getFromDB(String userid) {
 			DBRequestHandler request = new DBRequestHandler();
 			Map<String, Object> values = request.getUser(userid);
 			if(!values.isEmpty()){
@@ -29,7 +29,7 @@ public class User {
 			return null;
 		}
 		
-		static User getFromJson(String userid, JsonObject params) {
+		public static User getFromJson(String userid, JsonObject params) {
 			if(params.containsKey("name") && params.containsKey("pwd") && 
 			   params.containsKey("admin") && params.containsKey("alert_receptor")) {
 				
