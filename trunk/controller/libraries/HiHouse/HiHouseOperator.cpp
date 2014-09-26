@@ -55,6 +55,7 @@ void HiHouseOperator::execOperationMessage(ProtocolMessage* message){
 				} else {
 					_servo->write(value);
 				}
+				delay(1000);
 				_servo->detach();
 				break;
 			}
