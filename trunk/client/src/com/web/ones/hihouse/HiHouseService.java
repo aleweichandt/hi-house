@@ -45,9 +45,10 @@ public class HiHouseService extends Service{
 	 @Override
 	 public IBinder onBind(Intent intent) {
 		 //Toast.makeText(this, "Service Bounded", Toast.LENGTH_SHORT).show();
+		 sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token=2&add_voice_id=true&add_state=true", ""));
 		 return mBinder;
 	 }
-	 private boolean a = true;
+	 //private boolean a = true;
 	public void testMethod(){
 		SocketOperator so = new SocketOperator(this);
 		//String params = "" + URLEncoder.encode("username","UTF-8")+"="+ URLEncoder.encode("Charly","UTF-8");
@@ -58,8 +59,9 @@ public class HiHouseService extends Service{
 		//http://localhost:8080/HiHouse/devices/test/state?enabled=true&token=0
 		//so.sendRequest(false, "http://192.168.1.110/AppServer/", "x=asd");
 		//so.sendRequest(Request.GET_USER_DEVICES, true, "http://192.168.1.110/AppServer", "");
-		so.sendRequest(Request.SET_DEVICE_STATE, false, "http://192.168.1.110:8080/HiHouse/devices/test/state?enabled="+a+"&token=0", "");
-		a= !a;
+		//so.sendRequest(Request.SET_DEVICE_STATE, false, "http://192.168.1.110:8080/HiHouse/devices/test/state?enabled="+a+"&token=0", "");
+		//a= !a;
+		so.sendRequest(Request.GET_USER_DEVICES, true, "http://192.168.1.110:8080/HiHouse/users/admin/devices?token=1&add_voice_id=true&add_state=true", "");
 	}
 	public void sendCommand(Command c){
 		SocketOperator so = new SocketOperator(this);

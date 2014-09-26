@@ -8,6 +8,7 @@ public class Profile {
 	
 	public Profile(String name){
 		this.name = name;
+		devices = new ArrayList<Device>();
 	}
 
 	public ArrayList<Device> getDevices() {
@@ -22,4 +23,10 @@ public class Profile {
 		return name;
 	}
 	
+	public String getDeviceByVoiceDesc(String voice_desc){
+		for(Device d : devices){
+			if(d.getVoice().equals(voice_desc)) return d.getId();
+		}
+		return null;
+	}
 }

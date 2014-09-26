@@ -53,12 +53,13 @@ public class CommandBuilder {
 		return null;
 	}
 
-	private String getDeviceId(ArrayList<String> matches) {
-
+	private String getDeviceId(ArrayList<String> matches) {		
+		
 		int i;
 		for (String s : matches){
 			if((i = s.indexOf(' '))<=0) return null;
-			String deviceId = hiHouse.mydb.getDevice(s.substring(i+1));
+			//String deviceId = hiHouse.mydb.getDevice(s.substring(i+1));
+			String deviceId = hiHouse.getDeviceByVoiceDesc(s.substring(i+1));
 			if(deviceId!=null) return deviceId;
 		}
 		return null;
