@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+
 public class User {
 
 	private String user;
@@ -11,6 +12,7 @@ public class User {
 	
 
 	public void guardarDatos() {
+		//decian los tutos con get activity pero no gustaba, por los fragments?
 		Context context = null ;
 		
 		SharedPreferences sharedPref = context.getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
