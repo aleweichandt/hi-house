@@ -58,7 +58,8 @@ public class MyDevicesFragment extends Fragment{
 		
         loadProfilesDevicesList();
         
-        myExpListAdapter = new MyExpandableListAdapter(this.getActivity(), listDataHeader, listDataChild);
+        //myExpListAdapter = new MyExpandableListAdapter(this.getActivity(), listDataHeader, listDataChild);
+        myExpListAdapter = new MyExpandableListAdapter(this.getActivity(), ((HiHouse)getActivity()).getUser().getProfiles());
         // setting list adapter
         expListView.setAdapter(myExpListAdapter);
         

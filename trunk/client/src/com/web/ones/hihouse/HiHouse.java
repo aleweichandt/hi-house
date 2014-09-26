@@ -78,6 +78,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             mBound = true;
             
             mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token="+user.getToken()+"&add_voice_id=true&add_state=true", ""));
+            //mHiHouseService.testMethod();
         }
 
         @Override
