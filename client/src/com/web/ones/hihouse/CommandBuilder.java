@@ -59,7 +59,7 @@ public class CommandBuilder {
 		for (String s : matches){
 			if((i = s.indexOf(' '))<=0) return null;
 			//String deviceId = hiHouse.mydb.getDevice(s.substring(i+1));
-			String deviceId = hiHouse.getDeviceByVoiceDesc(s.substring(i+1));
+			String deviceId = hiHouse.getUser().getDeviceByVoiceDesc(s.substring(i+1));
 			if(deviceId!=null) return deviceId;
 		}
 		return null;
