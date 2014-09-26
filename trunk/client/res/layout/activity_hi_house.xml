@@ -12,13 +12,21 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 	        android:layout_alignParentTop="true"
-	        android:layout_above="@+id/fixedlayout_voiceButton">
+	        android:layout_above="@+id/fixedlayout_voiceButton"
+	        android:orientation="vertical" >
 
 		    <!-- The main content view -->
 		    <FrameLayout
 		        android:id="@+id/content_frame"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content" />
+		    <ProgressBar
+		        android:id="@+id/main_loading_bar"
+		        style="?android:attr/progressBarStyleLarge"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_vertical"
+		        android:visibility="visible"/>
     
     	</LinearLayout>
     	<LinearLayout
@@ -36,7 +44,7 @@
 		        android:layout_height="match_parent" />
 		    
     	</LinearLayout>
-    	
+    	<!-- 
     	<LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
@@ -55,7 +63,7 @@
         android:id="@+id/broadcast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    	</LinearLayout>
+    	</LinearLayout> -->
     </RelativeLayout>
     <!-- The navigation drawer -->
     <ListView android:id="@+id/left_drawer"

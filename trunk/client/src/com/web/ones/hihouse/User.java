@@ -11,12 +11,28 @@ public class User {
 
 	private String user;
 	private String password;
+	private String token;
 	private ArrayList<Profile> profiles;
 	
-	public User(){
+	public User(String user, String pass, String token){
 		profiles = new ArrayList<Profile>();
+		this.user = user;
+		this.password = pass;
+		this.token = token;
 	}
 	
+	public String getUser() {
+		return user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
 	public void addProfile(Profile p){
 		profiles.add(p);
 	}

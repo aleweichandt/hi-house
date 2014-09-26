@@ -51,7 +51,7 @@ public class SocketOperator {
 	    }
 	}
 	
-	private class SendRequestTask extends AsyncTask<Void, Void, String> {
+	private class SendRequestTask extends AsyncTask<Void, Void, Intent> {
 		boolean method;
 		String url, params;
 		int type;
@@ -64,30 +64,31 @@ public class SocketOperator {
 		}
 		
         @Override
-        protected String doInBackground(Void... args) {
+        protected Intent doInBackground(Void... args) {
              
             // params comes from the execute() call: params[0] is the url.
             try {
                 //return downloadUrl(params[0]);
             	return downloadUrl(method, url, params);
             } catch (IOException e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+            	Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
+            	hiHouseMessage.putExtra("type", Request.ERROR);
+            	hiHouseMessage.putExtra("data","Unable to retrieve web page. URL may be invalid.");
+            	return hiHouseMessage;
             }
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
-        protected void onPostExecute(String result) {
-            //Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-        	Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
+        protected void onPostExecute(Intent hiHouseMessage) {
         	hiHouseMessage.putExtra("type", type);
-            hiHouseMessage.putExtra("data", result);
             context.sendBroadcast(hiHouseMessage);
        }
     }
 	
-	private String downloadUrl(boolean method, String serverUrl, String params) throws IOException {
+	private Intent downloadUrl(boolean method, String serverUrl, String params) throws IOException {
 		URL url;
 		String result = new String();
+		int responseCode = 0;
 		
 		if(method && !params.equals("")){ //GET
 			serverUrl += "?" + params;
@@ -107,8 +108,8 @@ public class SocketOperator {
 					out.close();
 				}
 			}
-			
-			int i = connection.getResponseCode();
+
+			responseCode = connection.getResponseCode();
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
 			
@@ -126,6 +127,9 @@ public class SocketOperator {
 			result = null;
 		}
 		
-		return result;
+		Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
+		hiHouseMessage.putExtra("data", result);
+		hiHouseMessage.putExtra("responseCode", responseCode);
+		return hiHouseMessage;
 	}
 }
