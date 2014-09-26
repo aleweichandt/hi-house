@@ -10,11 +10,12 @@ import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 
-public class ArduinoHandler implements SerialPortEventListener{
+public class ArduinoHandler {
 	// Singleton begin
 	private static ArduinoHandler sInstance = null;
 	private List<byte[]> mMessageList = null;
 	private List<Device> mCallbackList = null;
+	private int mReadLen = 0;
 	
 	public static ArduinoHandler getInstance() {
 		if(sInstance == null) {
@@ -25,43 +26,37 @@ public class ArduinoHandler implements SerialPortEventListener{
 	// Singleton end
 	SerialPort mSerial = null;
 	public ArduinoHandler() {
+		mReadLen = 0;
 		mMessageList = new ArrayList<byte[]>();
 		mCallbackList = new ArrayList<Device>();
 		mSerial = new SerialPort(C.Config.ARDUINO_PORT_NAME); 
         try {
         	mSerial.openPort();//Open port
         	mSerial.setParams(C.Config.ARDUINO_PORT_READ, 8, 1, 0);//Set params
-        	//Add SerialPortEventListener
-            int mask = SerialPort.MASK_RXCHAR;
-            mSerial.setEventsMask(mask);
-            mSerial.setRTS(false); 
-            mSerial.setDTR(false);
-            mSerial.addEventListener(this);
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
         }
 	}
 	
-	@Override
-	public void serialEvent(SerialPortEvent event) {
-		 if(event.isRXCHAR()){//If data is available
-             try {
-				if(mSerial.getInputBufferBytesCount() >= 2) {//Read data, if 2 bytes available 
-				    byte lenMsg[] = mSerial.readBytes(2);
-			         int len = (lenMsg[1] << 8) + lenMsg[0];
-			         if(mSerial.getInputBufferBytesCount() >= len) {
-			        	 byte msg[] = mSerial.readBytes(len);
-			        	 execResponse(msg);
-			         }
-				 }
-			} catch (SerialPortException e) {
-				e.printStackTrace();
+	public void serialRead() {
+		try {
+			if(mSerial.getInputBufferBytesCount() >= 2 || mReadLen > 0) {
+				//Read data, if 2 bytes available 
+			    byte lenMsg[] = mSerial.readBytes(2);
+			    mReadLen = (lenMsg[1] << 8) + lenMsg[0];
+		        if(mSerial.getInputBufferBytesCount() >= mReadLen) {
+			        byte msg[] = mSerial.readBytes(mReadLen);
+			        mReadLen = 0;
+			        execResponse(msg);
+		        }
 			}
-         }
+		} catch (SerialPortException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void update(int dt) {
+	public void serialWrite() {
 		if(!mMessageList.isEmpty()) {
 			byte message[] = mMessageList.get(0);
 			try {
@@ -73,6 +68,11 @@ public class ArduinoHandler implements SerialPortEventListener{
 				mMessageList.remove(0);
 			}
 		}
+	}
+	
+	public void update(int dt) {
+		serialWrite();
+		serialRead();
 	}
 	
 	public void addOperation(Device dev, boolean readOperation) {
