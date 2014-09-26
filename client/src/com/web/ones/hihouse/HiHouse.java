@@ -96,13 +96,14 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 		String user = intentLogin.getStringExtra(LoginActivity.EXTRA_USER);
 		String pass = intentLogin.getStringExtra(LoginActivity.EXTRA_PASS);
 		String token = intentLogin.getStringExtra(LoginActivity.EXTRA_TOKEN);
+		boolean admin = intentLogin.getBooleanExtra(LoginActivity.EXTRA_ADMIN, false);
 		boolean save = intentLogin.getBooleanExtra(LoginActivity.EXTRA_SAVE, false);
 		
-		this.user = new User(user, pass, token);
+		this.user = new User(user, pass, token, admin);
 		
 		mTitle = getTitle();
 		mDrawerTitle = getString(R.string.drawer_title);
-		menuItems = getResources().getStringArray(R.array.nav_drawer_items);
+		menuItems = getResources().getStringArray(this.user.isAdmin()?R.array.nav_drawer_items_admin:R.array.nav_drawer_items_default);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mainLoadingBar = (ProgressBar) findViewById(R.id.main_loading_bar);
@@ -250,7 +251,11 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		backStackTag = UserInfoFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_USERS:
-    		fragment = new UserAdminFragment();
+    		if(this.user.isAdmin()) {
+    			fragment = new UserAdminFragment();
+    		} else {
+    			fragment = new UserInfoFragment("yo", true);
+    		}
     		break;
     	case DRAWER_MENU_INDEX_ADD_PROFILE: 
     		fragment = new ProfileInfoFragment("Nuevo", true);

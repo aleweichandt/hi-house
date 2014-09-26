@@ -1,37 +1,31 @@
 package com.web.ones.hihouse;
 
-import java.util.Iterator;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.web.ones.hihouse.HiHouseService.HiHouseTask;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.os.Build;
 
 public class LoginActivity extends Activity {
 	public final static String EXTRA_USER = "hihouse.extra.user";
 	public final static String EXTRA_PASS = "hihouse.extra.pass";
 	public final static String EXTRA_SAVE = "hihouse.extra.save";
 	public final static String EXTRA_TOKEN = "hihouse.extra.token";
+	public final static String EXTRA_ADMIN = "hihouse.extra.admin";
 
 	private CheckBox recordar;
 	private EditText user, pass;
@@ -98,7 +92,7 @@ public class LoginActivity extends Activity {
         			try{
         				reader = new JSONObject(in);
         				String token = reader.getString("token");
-        				//String admin = reader.getString("admin");
+        				boolean admin = reader.getBoolean("admin");
         				
         				// Creamos el intento para la HiHouse activity y mandamos los parametros
             	    	Intent activityIntent = new Intent(context, HiHouse.class);
@@ -106,6 +100,7 @@ public class LoginActivity extends Activity {
             	    	activityIntent.putExtra(EXTRA_PASS, pass.getText());
             	    	activityIntent.putExtra(EXTRA_SAVE, recordar.isChecked());
             	    	activityIntent.putExtra(EXTRA_TOKEN, token);
+            	    	activityIntent.putExtra(EXTRA_ADMIN, admin);
             	    	startActivity(activityIntent);
             	    	finish();
         			}
