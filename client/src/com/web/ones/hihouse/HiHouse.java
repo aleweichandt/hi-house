@@ -76,6 +76,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             LocalBinder binder = (LocalBinder) service;
             mHiHouseService = binder.getService();
             mBound = true;
+            
             mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token="+user.getToken()+"&add_voice_id=true&add_state=true", ""));
         }
 
@@ -376,13 +377,13 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     					prof = reader.getJSONArray(perfil_name);
     					for(int i=0; i<prof.length(); i++){//itero sobre los dispositivos
     						device = prof.getJSONObject(i);
-    						Device d = new Device(device.getString("id"), device.getString("voice_id"), device.getBoolean("state"));
+    						Device d = new Device(device.getString("id"), device.getString("name"), device.getString("voice_id"), device.getBoolean("state"));
     						p.addDevice(d);
     					}
     					user.addProfile(p);
-    					mainLoadingBar.setVisibility(View.GONE);
-    					selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
     				}
+    				mainLoadingBar.setVisibility(View.GONE);
+    				selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
     			} catch (JSONException e) {
     				e.printStackTrace();
     			}

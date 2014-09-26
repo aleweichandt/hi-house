@@ -32,6 +32,9 @@ public class User {
 	public String getToken() {
 		return token;
 	}
+	public ArrayList<Profile> getProfiles(){
+		return profiles;
+	}
 
 	public void addProfile(Profile p){
 		profiles.add(p);
