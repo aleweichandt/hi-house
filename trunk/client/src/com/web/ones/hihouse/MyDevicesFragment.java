@@ -33,7 +33,7 @@ public class MyDevicesFragment extends Fragment{
 	private List<String> listDataHeader;
 	private HashMap<String, List<String>> listDataChild;
 	private ExpandableListView expListView;
-	private ExpandableListAdapter listAdapter;
+	private ExpandableListAdapter myExpListAdapter;
 	private EditText temp_input;
 	private SeekBar temp_seekBar;
 	
@@ -58,9 +58,9 @@ public class MyDevicesFragment extends Fragment{
 		
         loadProfilesDevicesList();
         
-        listAdapter = new MyExpandableListAdapter(this.getActivity(), listDataHeader, listDataChild);
+        myExpListAdapter = new MyExpandableListAdapter(this.getActivity(), listDataHeader, listDataChild);
         // setting list adapter
-        expListView.setAdapter(listAdapter);
+        expListView.setAdapter(myExpListAdapter);
         
         return mRootView;
     }
@@ -132,42 +132,18 @@ public class MyDevicesFragment extends Fragment{
 
 	private void loadProfilesDevicesList() {
 		//TODO load real devices
-	    
+	    int i = 0;
 	    listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         
-        // Adding headers data
-        listDataHeader.add("Exterior");
-        listDataHeader.add("Cocina");
-        listDataHeader.add("Living");
-        listDataHeader.add("Alarmas");
-        
-        // Adding child data
-        List<String> exterior = new ArrayList<String>();
-        exterior.add("Luz Puerta Principal");
-        exterior.add("Porton Garage");
-        exterior.add("Puerta Principal");
-        exterior.add("Luz Jardin Trasero");
-        
-        List<String> cocina = new ArrayList<String>();
-        cocina.add("Luz Cocina");
-        cocina.add("Persiana Cocina");
-        
-        List<String> living = new ArrayList<String>();
-        living.add("Luz Principal Living");
-        living.add("Luz Fondo Living");
-        living.add("Climatizador Living");
-        
-        List<String> alarmas = new ArrayList<String>();
-        alarmas.add("Alarma Central");
-        
-        // Header, Child data
-        listDataChild.put(listDataHeader.get(0), exterior);
-        listDataChild.put(listDataHeader.get(1), cocina);
-        listDataChild.put(listDataHeader.get(2), living);
-        listDataChild.put(listDataHeader.get(3), alarmas);
-        
-        
+        for(Profile p : ((HiHouse)getActivity()).getUser().getProfiles()){
+        	listDataHeader.add(p.getName());
+        	List<String> perfil = new ArrayList<String>();
+        	for(Device d : p.getDevices()){
+        		perfil.add(d.getName());
+        	}
+        	listDataChild.put(listDataHeader.get(i++), perfil);
+        }
 	}
 	
 }

@@ -57,10 +57,10 @@ public class HiHouseService extends Service{
 		//http://localhost:8080/HiHouse/users/login?id=admin&pwd=1234
 		//http://localhost:8080/HiHouse/devices/test/state?enabled=true&token=0
 		//so.sendRequest(false, "http://192.168.1.110/AppServer/", "x=asd");
-		//so.sendRequest(Request.GET_USER_DEVICES, true, "http://192.168.1.110/AppServer", "");
+		so.sendRequest(Request.GET_USER_DEVICES, true, "http://192.168.1.110/AppServer", "");
 		//so.sendRequest(Request.SET_DEVICE_STATE, false, "http://192.168.1.110:8080/HiHouse/devices/test/state?enabled="+a+"&token=0", "");
 		//a= !a;
-		so.sendRequest(Request.GET_USER_DEVICES, true, "http://192.168.1.110:8080/HiHouse/users/admin/devices?token=1&add_voice_id=true&add_state=true", "");
+		//so.sendRequest(Request.GET_USER_DEVICES, true, "http://192.168.1.110:8080/HiHouse/users/admin/devices?token=1&add_voice_id=true&add_state=true", "");
 	}
 	public void sendCommand(Command c){
 		SocketOperator so = new SocketOperator(this);
