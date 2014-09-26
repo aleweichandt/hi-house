@@ -6,8 +6,6 @@ import java.util.List;
 
 import server.model.devices.Device;
 import jssc.SerialPort;
-import jssc.SerialPortEvent;
-import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 
 public class ArduinoHandler {
@@ -80,7 +78,7 @@ public class ArduinoHandler {
 		addOperation(dev, readOperation, values);
 	}
 	
-	public void addOperation(Device dev, boolean readOperation, int[] values) {
+	public synchronized void addOperation(Device dev, boolean readOperation, int[] values) {
 		int vtype = dev.getValueType();
 		int pins = dev.getPinsAmount();
 		
