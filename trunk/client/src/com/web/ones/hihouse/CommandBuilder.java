@@ -34,14 +34,14 @@ public class CommandBuilder {
 			if((i = s.indexOf(' '))<=0) return null;
 			com = s.substring(0, i);
 			
-			if("prender".equals(com) || "encender".equals(com)){
+			if("prender".equals(com) || "encender".equals(com) || "abrir".equals(com)){
 				command = com;
 				String deviceId = getDeviceId(matches);
 				if(deviceId!=null)
 					return new Command(Request.SET_DEVICE_STATE,false, "devices/"+deviceId+"/state?enabled=true&token="+hiHouse.getUser().getToken(), "");
 				return null;
 			}
-			if("apagar".equals(com)){
+			if("apagar".equals(com) || "cerrar".equals(com)){
 				command = com;
 				String deviceId = getDeviceId(matches);
 				if(deviceId!=null)

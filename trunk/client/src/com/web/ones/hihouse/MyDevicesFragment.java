@@ -125,8 +125,15 @@ public class MyDevicesFragment extends Fragment{
             		//TODO mostrar popup destinatario alarma
             		UserAlarmDestDialog ud = new UserAlarmDestDialog(null);
             		ud.show(getFragmentManager(), "userdest");
+            	} else {
+            		Profile prf = ((HiHouse)getActivity()).getUser().getProfiles().get(groupPos);
+	            	Device dvc = prf.getDevices().get(childPos);
+	            	dvc.setEstado(!dvc.getEstado());
+	            	String tkn = ((HiHouse)getActivity()).getUser().getToken();
+	            	String request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=" + dvc.getEstado();
+	            	((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
             	}
-                return false;
+	            return false;
             }
         });
 	}
