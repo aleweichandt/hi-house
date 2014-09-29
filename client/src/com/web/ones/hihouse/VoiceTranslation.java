@@ -37,7 +37,6 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
 	private String LOG_TAG = "VoiceRecognitionActivity";
 	private ProgressBar loadingBar;
 	private TextView speak_box;
-    DBHelper mydb;
 
 	public static VoiceTranslation newInstance() {
 		VoiceTranslation fragment = new VoiceTranslation();
