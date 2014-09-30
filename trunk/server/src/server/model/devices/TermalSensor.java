@@ -1,5 +1,7 @@
 package server.model.devices;
 
+import server.model.C;
+
 public class TermalSensor extends Sensor {
 
 	public TermalSensor(String id, String name, String voiceid,
@@ -20,6 +22,11 @@ public class TermalSensor extends Sensor {
 	@Override
 	public int getClassType() {
 		return DEVICE_TYPE_SN_TERMAL;
+	}
+
+	@Override
+	public boolean isWarnValue(float value) {
+		return value > C.Config.SECURITY_SN_TERMAL_LIMIT;
 	}
 
 }

@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import server.model.devices.Device;
-import server.model.devices.TermalSensor;
+import server.model.devices.Sensor;
 
 public class SecurityMgr {
 	// Singleton begin
@@ -42,11 +42,13 @@ public class SecurityMgr {
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
 				String deviceid = (String)it.next();
-				TermalSensor sensor = (TermalSensor) Device.getFromDB(deviceid);
+				Sensor sensor = (Sensor) Device.getFromDB(deviceid);
 				if(sensor.getState()) {
 					float value = sensor.getValue();
-					//TODO do something with this value
-					//TODO sendAlert() if anything goes wrong
+					if(sensor.isWarnValue(value)) {
+						sendAlert();
+						break;
+					}
 				}
 			}
 		}

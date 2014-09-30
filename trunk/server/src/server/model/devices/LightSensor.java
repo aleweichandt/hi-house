@@ -1,5 +1,7 @@
 package server.model.devices;
 
+import server.model.C;
+
 public class LightSensor extends Sensor {
 
 	public LightSensor(String id, String name, String voiceid,
@@ -20,6 +22,11 @@ public class LightSensor extends Sensor {
 	@Override
 	public int getClassType() {
 		return DEVICE_TYPE_SN_LIGHT;
+	}
+
+	@Override
+	public boolean isWarnValue(float value) {
+		return value > C.Config.SECURITY_SN_LIGHT_LIMIT;
 	}
 
 }

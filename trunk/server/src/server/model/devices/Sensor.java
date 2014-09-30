@@ -23,4 +23,6 @@ public abstract class Sensor extends Device {
 		waitLock();
 		return mPinValues.get(0);
 	}
+	
+	public abstract boolean isWarnValue(float value);
 }

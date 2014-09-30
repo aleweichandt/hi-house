@@ -32,6 +32,8 @@ public final class C {
 		public static final float 	AMBIENT_MAX_DIFF_DEGREES = (float) 5.0;
 	//Security Manager
 		public static final int SECURITY_UPDATE_TIME = 10000;
+		public static final float SECURITY_SN_LIGHT_LIMIT = 100;
+		public static final float SECURITY_SN_TERMAL_LIMIT = 40;
 	}
 
 	//MySQL Queries
