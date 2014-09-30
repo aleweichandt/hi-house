@@ -36,7 +36,7 @@
 	        android:layout_alignParentBottom="true"
 	        android:orientation="vertical"
 	        android:id="@id/fixedlayout_voiceButton"
-	        android:background="#333" >
+ >
 		    
 		    <!-- Fragmento VoiceInputButton -->
 		    <FrameLayout
