@@ -7,12 +7,17 @@ public class TermalActuator extends Actuator {
 	public static final int TERMAL_ACT_SUBSTATE_COOL = -1;
 	public static final int TERMAL_ACT_SUBSTATE_NONE = 0;
 	public static final int TERMAL_ACT_SUBSTATE_HEAT = 1;
+
+	protected static final int TERMAL_ACT_SUBTYPE_COOL = 1;//binary 01
+	protected static final int TERMAL_ACT_SUBTYPE_HEAT = 2;//binary 10
 	
 	private int mTermalState = 0;
+	private int mSubtype = 0;
 	public TermalActuator(String id, String name, String voiceid,
-			boolean state, int pin1, int pin2, int pin3) {
+			boolean state, int pin1, int pin2, int pin3, String subtype) {
 		super(id, name, voiceid, state, pin1, pin2, pin3);
 		mTermalState = TERMAL_ACT_SUBSTATE_NONE;
+		mSubtype = Integer.parseInt(subtype);
 	}
 
 	@Override
@@ -49,15 +54,14 @@ public class TermalActuator extends Actuator {
 			return values;
 		}
 		default:{
-			int values[] = {0,0,0};
+			int values[] = {0,1,0};
 			return values;
 		}
 		}
 	}
 	
 	public boolean canHeat(){ 
-		//TODO check param1
-		return true;
+		return (mSubtype & TERMAL_ACT_SUBTYPE_HEAT) > 0 ;
 	}
 	
 	public void heat(){ 
@@ -65,8 +69,7 @@ public class TermalActuator extends Actuator {
 	}
 
 	public boolean canCool(){ 
-		//TODO check param1
-		return true;
+		return (mSubtype & TERMAL_ACT_SUBTYPE_COOL) > 0 ;
 	}
 	
 	public void cool(){ 
