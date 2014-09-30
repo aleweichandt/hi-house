@@ -62,8 +62,9 @@ public final class C {
 			return "SELECT * from dispositivos where ID_Dispositivo = '" + deviceid + "'";
 		}
 		
-		public static final String GET_DEVICE_IDS_WITH_TYPE(String type) {
-			return "SELECT distinct ID_Dispositivo from dispositivos where Tipo = '" + type + "'";
+		public static final String GET_DEVICE_IDS_WITH_TYPES(List<String> types) {
+			String ts = getStringList(types);
+			return "SELECT distinct ID_Dispositivo from dispositivos where Tipo in " + ts;
 		}
 		
 		public static final String INSERT_USER(User user){
@@ -178,6 +179,19 @@ public final class C {
 					}
 				}
 			}
+			return ret;
+		}
+		
+		private static final String getStringList(List<String> values) {
+			String ret = "(";
+			Iterator<String> it = values.iterator();
+			while(it.hasNext()) {
+				ret += ("'" + it.next() + "'");
+				if(it.hasNext()) {
+					ret += ",";
+				}
+			}
+			ret += ")";
 			return ret;
 		}
 	}
