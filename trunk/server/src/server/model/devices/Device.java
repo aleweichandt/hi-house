@@ -19,14 +19,15 @@ public abstract class Device {
 	public static final int DEVICE_TYPE_AC_DOOR = 4;
 	
 	public static Device createFromType(String id, String name, int type, String voiceid,
-				 						boolean state, int pin1, int pin2, int pin3) {
+				 						boolean state, int pin1, int pin2, int pin3,
+				 						String param1, String param2) {
 		switch(type) {
 		case DEVICE_TYPE_AC_LIGHT:
 			return new LightActuator(id, name, voiceid, state, pin1, pin2, pin3);
 		case DEVICE_TYPE_AC_DOOR:
 			return new DoorActuator(id, name, voiceid, state, pin1, pin2, pin3);
 		case DEVICE_TYPE_AC_TERMAL:
-			return new TermalActuator(id, name, voiceid, state, pin1, pin2, pin3);
+			return new TermalActuator(id, name, voiceid, state, pin1, pin2, pin3, param1);
 		case DEVICE_TYPE_SN_TERMAL:
 			return new TermalSensor(id, name, voiceid, state, pin1, pin2, pin3);
 		case DEVICE_TYPE_SN_LIGHT:
@@ -56,7 +57,11 @@ public abstract class Device {
 					}
 				}
 			}
-			return Device.createFromType(id, ambient, type, voiceid, state, pin1, pin2, pin3).tagDB();
+			String param1 = (String)values.get("Param1");
+			String param2 = (String)values.get("Param2");
+			return Device.createFromType(id, ambient, type, voiceid,
+										 state, pin1, pin2, pin3,
+										 param1, param2).tagDB();
 		}
 		return null;
 	}
@@ -75,9 +80,14 @@ public abstract class Device {
 					}
 				}
 			}
+			String subtype = null;
+			if(params.containsKey("subtype")){
+				subtype = params.getString("subtype");
+			}
 			
 			return Device.createFromType(deviceid, params.getString("name"), params.getInt("type"),
-										 params.getString("voice_id"), false, pin1, pin2, pin3);
+										 params.getString("voice_id"), false, pin1, pin2, pin3, 
+										 subtype, null);
 		}
 		return null;
 	}
