@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
@@ -30,11 +32,17 @@ public class LoginActivity extends Activity {
 	private CheckBox recordar;
 	private EditText user, pass;
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		
+		//Font
+		TextView txt = (TextView) findViewById(R.id.login);
+		Typeface font = Typeface.createFromAsset(getAssets(), "YAHOO.TTF");
+		txt.setTypeface(font);
+		
 		recordar = (CheckBox) findViewById(R.id.checkbox_remember);
 		user = (EditText) findViewById(R.id.user);
 		pass = (EditText) findViewById(R.id.pass);
