@@ -5,49 +5,49 @@
     android:layout_height="fill_parent"
     android:gravity="center_horizontal" >
 	
-	<LinearLayout 
-	    android:orientation="vertical"
+	<LinearLayout
+	    android:id="@+id/button_bar"
+	    style="@style/border"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
-	    android:id="@+id/button_bar"
-	    style="@style/border" >
+	    android:orientation="vertical" >
 
 		<RelativeLayout
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:background="#696969"
 		    android:orientation="vertical" >
-		    
-		    <Switch 
-			    android:id="@+id/on_off_switch"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textOn="@string/on_switch"
-			    android:textOff="@string/off_switch"
-			    android:layout_alignParentLeft="true"
-			    android:layout_centerVertical="true"
-			    android:switchTextAppearance="@style/SwitchTextAppearance"
-			    android:layout_marginLeft="10dp"/>
-	
+
+		    <Switch
+		        android:id="@+id/on_off_switch"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="10dp"
+		        android:switchTextAppearance="@style/SwitchTextAppearance"
+		        android:textOff="@string/off_switch"
+		        android:textOn="@string/on_switch" />
+
 		    <ImageButton
 		        android:id="@+id/open_close_button"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/ic_action_secure"
-			    android:contentDescription="@string/open_close_btn_desc"
-			    android:layout_centerHorizontal="true" />
-		    
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+		        android:contentDescription="@string/open_close_btn_desc"
+		        android:src="@drawable/ic_action_secure" />
+
 		    <ImageButton
 		        android:id="@+id/start_stop_button"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:src="@drawable/ic_action_play_over_video"
-			    android:contentDescription="@string/start_stop_btn_desc"
-			    android:layout_alignParentRight="true"
-			    android:layout_marginRight="20dp" />
-		    
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentRight="true"
+		        android:layout_marginRight="20dp"
+		        android:contentDescription="@string/start_stop_btn_desc"
+		        android:src="@drawable/ic_action_play_over_video" />
 		</RelativeLayout>
+
 		<LinearLayout 
 		    android:orientation="horizontal"
 		    android:layout_width="match_parent"
