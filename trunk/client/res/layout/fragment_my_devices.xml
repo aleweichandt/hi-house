@@ -7,7 +7,6 @@
 	
 	<LinearLayout
 	    android:id="@+id/button_bar"
-	    style="@style/border"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
@@ -15,8 +14,7 @@
 
 		<RelativeLayout
 		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:background="#696969"
+		    android:layout_height="match_parent"
 		    android:orientation="vertical" >
 
 		    <Switch
@@ -35,6 +33,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_centerHorizontal="true"
+		        android:background="#ffffff"
 		        android:contentDescription="@string/open_close_btn_desc"
 		        android:src="@drawable/ic_action_secure" />
 
@@ -48,25 +47,26 @@
 		        android:src="@drawable/ic_action_play_over_video" />
 		</RelativeLayout>
 
-		<LinearLayout 
-		    android:orientation="horizontal"
+		<LinearLayout
 		    android:layout_width="match_parent"
-		    android:background="#696969"
-		    android:layout_height="wrap_content" >
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+
 		    <TextView 
 		        android:layout_width="0dp"
 		    	android:layout_height="wrap_content"
 		    	android:layout_weight="2"
 		    	android:layout_marginLeft="2dp"
 		    	android:text="@string/temp"/>
+
 			<SeekBar
-		        android:id="@+id/seekBar"
-		        android:layout_height="wrap_content"
-		        android:layout_marginTop="5dp"
-		        android:layout_width="0dp"
-		        android:layout_weight="6"
-		        android:background="#696969"
-		        android:max="15" />
+			    android:id="@+id/seekBar"
+			    android:layout_width="0dp"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="5dp"
+			    android:layout_weight="6"
+			    android:max="15" />
+
 			<EditText 
 			    android:layout_height="wrap_content"
 			    android:layout_width="0dp"
