@@ -172,6 +172,10 @@ public class DeviceService {
 		if(!dv.setState(enabled)) {
 			return Response.status(500).entity("internal server error").build();
 		}
-		return Response.status(200).entity("").build();
+		JsonObject ret = Json.createObjectBuilder()
+				.add("id", deviceid)
+				.add("state", enabled)
+				.build();
+		return Response.status(200).entity(ret.toString()).build();
 	}
 }
