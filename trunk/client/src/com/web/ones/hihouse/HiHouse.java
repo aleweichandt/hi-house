@@ -55,6 +55,10 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     private ActionBarDrawerToggle mDrawerToggle;
     private ProgressBar mainLoadingBar;
     
+    public void setLoadingBarVisibility(int v){
+    	mainLoadingBar.setVisibility(v);
+    }
+    
     private User user; 
     public User getUser(){
     	return user;
@@ -354,38 +358,43 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 
         @Override
         public void onReceive(Context context, Intent intent) {
+        	int rc;
         	switch(intent.getIntExtra("type",0)){
         	case Request.SET_DEVICE_STATE:
-        		Toast.makeText(context, "SET_DEVICE_STATE", Toast.LENGTH_SHORT).show();
+        		rc = intent.getIntExtra("responseCode", 0);
+        		if(rc==200){
+        			if(user.updateDevice(intent.getCharSequenceExtra("data").toString())){
+        				Intent updateExpList = new Intent(HiHouseTask.UPDATE_EXP_LIST);
+        				context.sendBroadcast(updateExpList);
+        			}
+        		}
+        		else if(rc==401){
+        			//se vencio el token. Cerramos actividad y mandamos al login.
+        			Toast.makeText(context, "Sesión expirada. Vuelva a ingresar.", Toast.LENGTH_SHORT).show();
+        			Intent activityIntent = new Intent(context, LoginActivity.class);
+        			startActivity(activityIntent);
+        	    	finish();
+        		}
+        		else{
+        			Toast.makeText(context, "Error al actualizar estado", Toast.LENGTH_SHORT).show();
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.GET_USER_DEVICES:
-        		//TODO poner todo esto en el User
-        		String in = intent.getCharSequenceExtra("data").toString();
-            	JSONObject reader, device;
-            	JSONArray prof;
-            	String perfil_name;
-    			try {
-    				reader = new JSONObject(in);
-    				Iterator<?> keys = reader.keys();
-    				while(keys.hasNext()){//itero sobre los perfiles
-    					perfil_name = (String)keys.next();
-    					Profile p = new Profile(perfil_name);
-    					prof = reader.getJSONArray(perfil_name);
-    					for(int i=0; i<prof.length(); i++){//itero sobre los dispositivos
-    						device = prof.getJSONObject(i);
-    						Device d = new Device(device.getString("id"), device.getString("name"), device.getString("voice_id"), device.getBoolean("state"));
-    						p.addDevice(d);
-    					}
-    					user.addProfile(p);
-    				}
-    				mainLoadingBar.setVisibility(View.GONE);
-    				selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
-    			} catch (JSONException e) {
-    				e.printStackTrace();
-    			}
-            	
-                //final TextView responseFromService = (TextView) findViewById(R.id.broadcast);
-                //responseFromService.setText(userProfiles.toString());
+        		rc = intent.getIntExtra("responseCode", 0);
+        		if(rc==401){
+        			Toast.makeText(context, "Error al recuperar los dispositivos", Toast.LENGTH_SHORT).show();
+        			//TODO manejar el error, permitir traer nuevamente (ej refresh btn)
+        		}
+        		else if(rc==200){
+        			if(user.setProfilesAndDevices(intent.getCharSequenceExtra("data").toString())){
+		        		mainLoadingBar.setVisibility(View.GONE);
+		    			selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
+        			}
+        		}
+        		break;
+        	case Request.ERROR:
+        		Toast.makeText(context, "Hubo un error en el request", Toast.LENGTH_SHORT).show();
         		break;
         	}
         }

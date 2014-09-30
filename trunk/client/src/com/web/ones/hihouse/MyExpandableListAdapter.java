@@ -16,17 +16,15 @@ import android.widget.TextView;
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
  
     private Context _context;
-    //private List<String> _listDataHeader; // header titles
     private List<Profile> _listDataHeader;
-    // child data in format of header title, child title
     private HashMap<String, List<String>> _listDataChild;
+    private String selectedItem = "";
+    
+    public void setSelectedItem(String item){
+    	selectedItem = item;
+    	this.notifyDataSetChanged();
+    }
  
-    /*public MyExpandableListAdapter(Context context, List<String> listDataHeader,
-            HashMap<String, List<String>> listChildData) {
-        this._context = context;
-        this._listDataHeader = listDataHeader;
-        this._listDataChild = listChildData;
-    }*/
     public MyExpandableListAdapter(Context context, List<Profile> listDataHeader) {
         this._context = context;
         this._listDataHeader = listDataHeader;
@@ -46,7 +44,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
  
-    	//final String childText = (String) getChild(groupPosition, childPosition);
     	final Profile prof = _listDataHeader.get(groupPosition);
         final Device device = prof.getDevices().get(childPosition);
  
@@ -56,12 +53,15 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         }
  
         LinearLayout deviceLine = (LinearLayout) convertView.findViewById(R.id.device_line);
-        deviceLine.setBackgroundColor(Color.parseColor(device.getEstado()?"#5500ff00":"#44ff0000"));
+        if(device.getId().equals(selectedItem)){
+        	deviceLine.setBackgroundResource(device.getEstado()?R.drawable.item_selected_border_enabled:R.drawable.item_selected_border_disabled);
+        }
+        else deviceLine.setBackgroundResource(device.getEstado()?R.color.enabled:R.color.disabled);
         TextView txtDeviceId = (TextView) convertView.findViewById(R.id.device_id);
         txtDeviceId.setText(device.getId());
         TextView txtDeviceName = (TextView) convertView.findViewById(R.id.device_name);
         txtDeviceName.setText(device.getName());
-        //txtDeviceName.setText(childText);
+
         return convertView;
     }
  

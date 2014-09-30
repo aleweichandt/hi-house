@@ -65,15 +65,12 @@ public class SocketOperator {
 		
         @Override
         protected Intent doInBackground(Void... args) {
-             
-            // params comes from the execute() call: params[0] is the url.
             try {
-                //return downloadUrl(params[0]);
             	return downloadUrl(method, url, params);
             } catch (IOException e) {
             	Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
             	hiHouseMessage.putExtra("type", Request.ERROR);
-            	hiHouseMessage.putExtra("data","Unable to retrieve web page. URL may be invalid.");
+            	//hiHouseMessage.putExtra("data","Unable to retrieve web page. URL may be invalid.");
             	return hiHouseMessage;
             }
         }
@@ -89,6 +86,7 @@ public class SocketOperator {
 		URL url;
 		String result = new String();
 		int responseCode = 0;
+		Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
 		
 		if(method && !params.equals("")){ //GET
 			serverUrl += "?" + params;
@@ -97,8 +95,8 @@ public class SocketOperator {
 		try{
 			url = new URL(serverUrl);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setReadTimeout(10000 /* milliseconds */);
-			connection.setConnectTimeout(15000 /* milliseconds */);
+			connection.setReadTimeout(5000 /* milliseconds */);
+			connection.setConnectTimeout(5000 /* milliseconds */);
 			
 			if(!method){ //POST - Send params
 				connection.setDoOutput(true);
@@ -109,7 +107,14 @@ public class SocketOperator {
 				}
 			}
 
-			responseCode = connection.getResponseCode();
+			try{
+				responseCode = connection.getResponseCode();
+			}
+			catch(IOException e){
+				responseCode = connection.getResponseCode();
+				hiHouseMessage.putExtra("responseCode", responseCode);
+				return hiHouseMessage;
+			}
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
 			
@@ -127,7 +132,6 @@ public class SocketOperator {
 			result = null;
 		}
 		
-		Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
 		hiHouseMessage.putExtra("data", result);
 		hiHouseMessage.putExtra("responseCode", responseCode);
 		return hiHouseMessage;

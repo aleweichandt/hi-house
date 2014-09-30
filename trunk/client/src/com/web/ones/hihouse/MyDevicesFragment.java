@@ -4,18 +4,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.web.ones.hihouse.HiHouseService.HiHouseTask;
+
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -30,8 +42,8 @@ public class MyDevicesFragment extends Fragment{
 	private Switch onOffSwitch;
 	private ImageButton btn_open_close, btn_start_stop;
 	private Boolean toggle_open_close=false, toggle_start_stop=false;
-	private List<String> listDataHeader;
-	private HashMap<String, List<String>> listDataChild;
+	//private List<String> listDataHeader;
+	//private HashMap<String, List<String>> listDataChild;
 	private ExpandableListView expListView;
 	private ExpandableListAdapter myExpListAdapter;
 	private EditText temp_input;
@@ -55,8 +67,6 @@ public class MyDevicesFragment extends Fragment{
 		temp_seekBar = (SeekBar) mRootView.findViewById(R.id.seekBar);
 		
 		setEventsListeners();
-		
-        loadProfilesDevicesList();
         
         //myExpListAdapter = new MyExpandableListAdapter(this.getActivity(), listDataHeader, listDataChild);
         myExpListAdapter = new MyExpandableListAdapter(this.getActivity(), ((HiHouse)getActivity()).getUser().getProfiles());
@@ -65,6 +75,18 @@ public class MyDevicesFragment extends Fragment{
         
         return mRootView;
     }
+	
+	@Override
+	public void onResume(){
+        getActivity().registerReceiver(mUpdatesReceiver, new IntentFilter(HiHouseTask.UPDATE_EXP_LIST));
+        super.onResume();
+	}
+	
+	@Override 
+	public void onPause(){
+		getActivity().unregisterReceiver(mUpdatesReceiver);
+		super.onPause();
+	}
 	
 	private void setEventsListeners() {
 		btn_open_close.setOnClickListener(new OnClickListener(){
@@ -119,39 +141,25 @@ public class MyDevicesFragment extends Fragment{
             @Override
             public boolean onChildClick(ExpandableListView expList, View v, int groupPos, int childPos, long id)
             {
-            	String header = listDataHeader.get(groupPos);
-            	String item = listDataChild.get(header).get(childPos);
-            	if(item.contains("Alarma")){
-            		//TODO mostrar popup destinatario alarma
-            		UserAlarmDestDialog ud = new UserAlarmDestDialog(null);
-            		ud.show(getFragmentManager(), "userdest");
-            	} else {
-            		Profile prf = ((HiHouse)getActivity()).getUser().getProfiles().get(groupPos);
-	            	Device dvc = prf.getDevices().get(childPos);
-	            	dvc.setEstado(!dvc.getEstado());
-	            	String tkn = ((HiHouse)getActivity()).getUser().getToken();
-	            	String request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=" + dvc.getEstado();
-	            	((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
-            	}
-	            return false;
+            	User usr = ((HiHouse)getActivity()).getUser();
+        		Profile prf = usr.getProfiles().get(groupPos);
+            	Device dvc = prf.getDevices().get(childPos);
+            	String tkn = usr.getToken();
+            	String request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=" + !dvc.getEstado();
+            	((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
+            	((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
+            	((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(dvc.getId());
+            	return true;
             }
         });
 	}
+	
+	private BroadcastReceiver mUpdatesReceiver = new BroadcastReceiver() {
 
-	private void loadProfilesDevicesList() {
-		//TODO load real devices
-	    int i = 0;
-	    listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-        
-        for(Profile p : ((HiHouse)getActivity()).getUser().getProfiles()){
-        	listDataHeader.add(p.getName());
-        	List<String> perfil = new ArrayList<String>();
-        	for(Device d : p.getDevices()){
-        		perfil.add(d.getName());
-        	}
-        	listDataChild.put(listDataHeader.get(i++), perfil);
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        	((BaseExpandableListAdapter) myExpListAdapter).notifyDataSetChanged();
         }
-	}
+	};
 	
 }

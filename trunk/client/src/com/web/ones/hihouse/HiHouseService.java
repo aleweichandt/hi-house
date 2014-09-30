@@ -27,7 +27,7 @@ public class HiHouseService extends Service{
 
 	@Override
 	public void onCreate() {
-		Toast.makeText(this, "The new Service was Created", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "The new Service was Created", Toast.LENGTH_SHORT).show();
 	}
 	
 	 @Override
@@ -39,7 +39,7 @@ public class HiHouseService extends Service{
 	 @Override
 	   public void onDestroy() {
 	      super.onDestroy();
-	      Toast.makeText(this, "Service Destroyed", Toast.LENGTH_SHORT).show();
+	      //Toast.makeText(this, "Service Destroyed", Toast.LENGTH_SHORT).show();
 	 }
 	   
 	 @Override
@@ -69,5 +69,6 @@ public class HiHouseService extends Service{
 	 
 	public class HiHouseTask {
 		public static final String NEW_RESPONSE = "hihouse_task.new_response";
+		public static final String UPDATE_EXP_LIST = "hihouse_task.update_exp_list";
 	}
 }
