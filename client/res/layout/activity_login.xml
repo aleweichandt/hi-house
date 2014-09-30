@@ -1,70 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_horizontal" >
-    
+    android:layout_height="match_parent"
+    android:background="@drawable/back2"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <CheckBox
+        android:id="@+id/checkbox_remember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="@string/checkbox_remember"
+        android:textColor="#00FF00" />
+
     <TextView
-        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="50sp"
-        android:textColor="#008A12"
+        android:layout_above="@+id/user"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="@string/app_name"
-        android:layout_marginBottom="50dp" />
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:text="@string/user"
+        android:textColor="#00FF00"
         android:textSize="20sp"
-        android:textColor="#008A12"
-        android:gravity="center"
-        android:text="@string/user" />
-    
+        android:textStyle="bold" />
+
     <EditText
-	       android:id="@+id/user"
-	       android:gravity="center"
-	       android:inputType="text"
-	       android:lines="1"
-	       android:layout_width="200dp"
-	       android:layout_height="wrap_content"
-	       android:textSize="20sp"
-	       android:layout_marginBottom="20dp" />
-    
+        android:id="@+id/user"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignLeft="@+id/pass"
+        android:layout_marginBottom="22dp"
+        android:background="#ffffff"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="text"
+        android:lines="1"
+        android:textColor="#000000"
+        android:textSize="20sp" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/pass"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:background="#ffffff"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberPassword"
+        android:lines="1"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
     <TextView
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="#008A12"
+        android:layout_above="@+id/pass"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="18dp"
         android:gravity="center"
-        android:text="@string/password" />
-    
-    <EditText
-	       android:id="@+id/pass"
-	       android:gravity="center"
-	       android:inputType="numberPassword"
-	       android:lines="1"
-	       android:layout_width="200dp"
-	       android:layout_height="wrap_content"
-	       android:textSize="20sp"
-	       android:layout_marginBottom="20dp" />
-    
+        android:text="@string/password"
+        android:textColor="#00FF00"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <Button
-		    android:id="@+id/login"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/login"
-		    android:textSize="30sp"
-		    android:textColor="#008A12"
-		    android:gravity="center"
-		    android:layout_margin="0dp" />
-    
-    <CheckBox 
-        	android:id="@+id/checkbox_remember"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="@string/checkbox_remember"/>
-    
-</LinearLayout>
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/checkbox_remember"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        android:text="@string/login"
+        android:textColor="#00FF00"
+        android:textSize="30sp" />
+
+</RelativeLayout>
