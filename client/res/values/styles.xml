@@ -27,4 +27,5 @@
 	    <item name="android:orientation">vertical</item>
 	    <item name="android:background">@drawable/shapes</item>
 	</style>
+	
 </resources>

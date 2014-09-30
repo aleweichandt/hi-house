@@ -29,4 +29,11 @@ public class Profile {
 		}
 		return null;
 	}
+
+	public boolean setDeviceState(String id, boolean state) {
+		for(Device d : devices){
+			if(d.setDeviceState(id, state)) return true;
+		}
+		return false;
+	}
 }
