@@ -20,17 +20,16 @@
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
     
-    <TextView 
+    <TextView
         android:id="@+id/speak_box"
         android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center_horizontal|center_vertical"
-	    android:background="#f00"
-	    android:textColor="#fff"
-	    android:textStyle="bold"
-	    android:text="@string/speak_box_text"
-	    android:textSize="25sp"
-	    android:visibility="gone"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="@string/speak_box_text"
+        android:textColor="#fff"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
     
     <TextView 
         android:id="@+id/text"
