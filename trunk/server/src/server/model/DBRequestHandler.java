@@ -182,7 +182,11 @@ public class DBRequestHandler {
 	public boolean deleteDevice(String deviceid) {
 		return runUpdate(C.Queries.DELETE_DEVICE(deviceid));
 	}
-	public List<Object> listAllDevicesOfType(int type) {
-		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICE_IDS_WITH_TYPE(Integer.toString(type)));
+	public List<Object> listAllDevicesOfType(int[] types) {
+		List<String> stypes = new ArrayList<String>();
+		for(int i=0;i<types.length;i++) {
+			stypes.add(Integer.toString(types[i]));
+		}
+		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICE_IDS_WITH_TYPES(stypes));
 	}
 }
