@@ -30,8 +30,11 @@ public class Device {
 	public String getVoice() {
 		return voice;
 	}
-	public boolean getEstado() {
+	public boolean getState() {
 		return state;
+	}
+	public int getType(){
+		return type;
 	}
 	
 	public void setState(boolean state) {
