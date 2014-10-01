@@ -225,6 +225,14 @@ public abstract class Device {
 		return mState;
 	}
 	
+	public String getParam1() {
+		return "";
+	}
+	
+	public String getParam2() {
+		return "";
+	}
+	
 	public void lock() {
 		mBlocked = true;
 	}

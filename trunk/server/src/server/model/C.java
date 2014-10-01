@@ -12,8 +12,6 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 
 import server.model.devices.Device;
-import server.model.devices.TermalActuator;
-//import server.model.devices.TermalActuator;
 
 public final class C {
 	
@@ -51,6 +49,9 @@ public final class C {
 		
 		public static final String GET_USER_WITH_ID(String userid){
 			return "SELECT * from usuarios where ID_Usuario = '" + userid + "'";
+		}
+		public static final String GET_USER_ALERT_RCV(){
+			return "SELECT * from usuarios where Receptor_Alerta = 1";
 		}
 		public static final String GET_PROFILE_IDS_FOR_USER_WITH_ID(String userid){
 			return "SELECT distinct perfiles.ID_Perfil from usuarios, usuario_perfil, perfiles where usuarios.ID_Usuario = usuario_perfil.ID_Usuario and usuario_perfil.ID_Perfil = perfiles.ID_Perfil and usuarios.ID_Usuario = '" + userid + "'";
@@ -127,11 +128,8 @@ public final class C {
 			String pin1 = (dvc.getPin(0) >= 0)?Integer.toString(dvc.getPin(0)):"NULL";
 			String pin2 = (dvc.getPin(1) >= 0)?Integer.toString(dvc.getPin(1)):"NULL";
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
-			String param1 = "NULL";
-			String param2 = "NULL";
-			if(dvc.getClass().getName() == TermalActuator.class.getName()) {
-				param1 = "'" + Integer.toString(((TermalActuator)dvc).getSubType()) + "'";
-			}
+			String param1 = (dvc.getParam1().isEmpty())?"NULL":"'" + dvc.getParam1() + "'";
+			String param2 = (dvc.getParam2().isEmpty())?"NULL":"'" + dvc.getParam2() + "'";
 			return "INSERT INTO dispositivos VALUES (" +id + "," + type + "," + name + "," + 
 				   vid + "," + state + "," + pin1 + "," + pin2 + "," + pin3 + "," + param1 + "," + param2 +")";
 		}
@@ -145,11 +143,8 @@ public final class C {
 			String pin1 = (dvc.getPin(0) >= 0)?Integer.toString(dvc.getPin(0)):"NULL";
 			String pin2 = (dvc.getPin(1) >= 0)?Integer.toString(dvc.getPin(1)):"NULL";
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
-			String param1 = "NULL";
-			String param2 = "NULL";
-			if(dvc.getClass().getName() == TermalActuator.class.getName()) {
-				param1 = "'" + Integer.toString(((TermalActuator)dvc).getSubType()) + "'";
-			}
+			String param1 = (dvc.getParam1().isEmpty())?"NULL":"'" + dvc.getParam1() + "'";
+			String param2 = (dvc.getParam2().isEmpty())?"NULL":"'" + dvc.getParam2() + "'";
 			return "UPDATE dispositivos SET Tipo=" + type + ",Ambiente=" + name + 
 				   ",Descripcion_Ejec_Voz=" + vid + ",Estado=" + state + 
 				   ",Pin1=" + pin1 + ",Pin2=" + pin2 + ",Pin3=" + pin3 +

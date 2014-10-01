@@ -134,6 +134,10 @@ public class DBRequestHandler {
 		return runUpdate(C.Queries.DELETE_USER(userid));
 	}
 	
+	public Map<String,Object> getAlertReceptor() {
+		return getFirstFromQuery(C.Queries.GET_USER_ALERT_RCV());
+	}
+	
 //perfiles
 	public List<Object> listAllProfiles() {
 		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_ALL_PROFILE_IDS);

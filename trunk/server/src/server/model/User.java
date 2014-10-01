@@ -14,9 +14,7 @@ import javax.json.JsonValue;
 import server.model.devices.Device;
 
 public class User {
-		public static User getFromDB(String userid) {
-			DBRequestHandler request = new DBRequestHandler();
-			Map<String, Object> values = request.getUser(userid);
+		public static User createFromDBEntry(Map<String, Object> values) {
 			if(!values.isEmpty()){
 				return new User((String)values.get("ID_Usuario"),
 								(String)values.get("Nombre"),
@@ -27,6 +25,18 @@ public class User {
 					
 			}
 			return null;
+		}
+		
+		public static User getFromDB(String userid) {
+			DBRequestHandler request = new DBRequestHandler();
+			Map<String, Object> values = request.getUser(userid);
+			return createFromDBEntry(values);
+		}
+		
+		public static User getAlertReceiver() {
+			DBRequestHandler request = new DBRequestHandler();
+			Map<String, Object> values = request.getAlertReceptor();
+			return createFromDBEntry(values);
 		}
 		
 		public static User getFromJson(String userid, JsonObject params) {
@@ -135,9 +145,6 @@ public class User {
 			if(values.containsKey("admin")) {
 				mAdmin = values.getBoolean("admin");
 			}
-			if(values.containsKey("alert_receptor")) {
-				mAlertReceptor = values.getBoolean("alert_receptor");
-			}
 			if(values.containsKey("profiles")) {
 				List<JsonValue> prfparam = values.getJsonArray("profiles");
 				List<String> profiles = new ArrayList<String>();
@@ -151,6 +158,16 @@ public class User {
 			if(commit) {
 				commitToDB();
 			}
+		}
+		
+		public boolean setAsReceptor() {
+			mAlertReceptor = true;
+			return commitToDB();
+		}
+		
+		public boolean unsetReceptor() {
+			mAlertReceptor = false;
+			return commitToDB();
 		}
 		
 		public boolean isValidPassword(String pwd) {
@@ -187,10 +204,6 @@ public class User {
 		
 		public boolean isReceptor() {
 			return mAlertReceptor;
-		}
-		
-		public void setReceptor(boolean b) {
-			mAlertReceptor = b;
 		}
 		
 		public String getId() {

@@ -82,7 +82,7 @@ public class TermalActuator extends Actuator {
 		mTermalState = TERMAL_ACT_SUBSTATE_NONE;
 	}
 	
-	public int getSubType() {
-		return mSubtype;
+	public String getParam1() {
+		return Integer.toString(mSubtype);
 	}
 }

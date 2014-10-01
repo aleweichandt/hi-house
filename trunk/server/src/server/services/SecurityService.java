@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import server.model.SecurityMgr;
 import server.model.SessionHandler;
+import server.model.User;
 import server.model.UserSession;
 
 @Path("/security")
@@ -36,7 +37,23 @@ public class SecurityService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response getAlarmConfig(@QueryParam("token") String tkn) {
-		return Response.status(200).entity("alarm destination").build();
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession == null) {
+			return Response.status(401).entity("invalid token").build();
+		}
+		User dest = SecurityMgr.getInstance().getAlertDestination();
+		JsonObject ret;
+		if(dest != null) {
+			ret = Json.createObjectBuilder()
+				.add("id", dest.getId())
+				.add("name", dest.getName())
+				.build();
+		} else {
+			ret = Json.createObjectBuilder()
+				.add("id", "not found")
+				.build();
+		}
+		return Response.status(200).entity(ret.toString()).build();
 	}
 	
 	@POST
@@ -61,6 +78,20 @@ public class SecurityService {
 	@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_JSON)
 	public Response setAlarmConfig(@QueryParam("token") String tkn, String body) {
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession == null) {
+			return Response.status(401).entity("invalid token").build();
+		}
+		if(newSession.getAdmin() == null) {
+			return Response.status(403).entity("no admin rights").build();
+		}
+		User dest = newSession.getAdmin().getUser(body);
+		if(dest == null) {
+			return Response.status(500).entity("invalid user").build();
+		}
+		if(!SecurityMgr.getInstance().setAlertDestination(dest)) {
+			return Response.status(500).entity("server error").build();
+		}
 		return Response.status(200).entity("alarm destination in").build();
 	}
 }
