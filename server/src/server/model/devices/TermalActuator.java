@@ -79,4 +79,8 @@ public class TermalActuator extends Actuator {
 	public void none() {
 		mTermalState = TERMAL_ACT_SUBSTATE_NONE;
 	}
+	
+	public int getSubType() {
+		return mSubtype;
+	}
 }
