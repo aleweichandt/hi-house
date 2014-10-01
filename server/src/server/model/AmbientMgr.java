@@ -24,12 +24,10 @@ public class AmbientMgr {
 	private int mTime;
 	private float mRealTemp;
 	private float mDesiredTemp;
-	private boolean mActuatorsEnabled;
 	public AmbientMgr() {
 		mTime = 0;
 		mRealTemp = -1;
 		mDesiredTemp = -1;
-		mActuatorsEnabled = false;
 	}
 	
 	public void update(int dt) {
@@ -69,29 +67,23 @@ public class AmbientMgr {
 	
 	private void updateActuators() {
 		float diff = mDesiredTemp - mRealTemp;
-		boolean shouldEnable = (Math.abs(diff) > C.Config.AMBIENT_MAX_DIFF_DEGREES);
-		if(shouldEnable != mActuatorsEnabled) {
-			DBRequestHandler request = new DBRequestHandler();
-			List<Object> ids = request.listAllDevicesOfType(sActuatorTypes);
-			if(!ids.isEmpty()) {
-				for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-					String deviceid = (String)it.next();
-					TermalActuator act = (TermalActuator) Device.getFromDB(deviceid);
-					if(act.getState() && shouldEnable) {
-						if(diff>0 && act.canHeat()){
-							act.heat();
-						}else if (diff<0 && act.canCool()){
-							act.cool();
-						} else {
-							act.none();
-						}
-						act.setState(true);
+		DBRequestHandler request = new DBRequestHandler();
+		List<Object> ids = request.listAllDevicesOfType(sActuatorTypes);
+		if(!ids.isEmpty()) {
+			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
+				String deviceid = (String)it.next();
+				TermalActuator act = (TermalActuator) Device.getFromDB(deviceid);
+				if(act.getState()) {
+					if(diff > C.Config.AMBIENT_MAX_DIFF_DEGREES && act.canHeat()){
+						act.heat();
+					}else if (diff < (-C.Config.AMBIENT_MAX_DIFF_DEGREES) && act.canCool()){
+						act.cool();
 					} else {
-						act.setState(false);
+						act.none();
 					}
+					act.setState(true);
 				}
 			}
-			mActuatorsEnabled = shouldEnable;
 		}
 	}
 	

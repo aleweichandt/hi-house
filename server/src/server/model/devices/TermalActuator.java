@@ -22,7 +22,7 @@ public class TermalActuator extends Actuator {
 
 	@Override
 	public int getValueType() {
-		return 1;
+		return 0;
 	}
 
 	@Override
@@ -32,10 +32,12 @@ public class TermalActuator extends Actuator {
 
 	@Override
 	public boolean setState(boolean state) {
-		if(!state) {
+		int values[] = {0,0,0};
+		if(state) {
+			values = translateValues();
+		} else {
 			mTermalState = TERMAL_ACT_SUBSTATE_NONE;
 		}
-		int values[] = translateValues();
 		ArduinoHandler.getInstance().addOperation(this, false, values);
 		waitLock();
 		mState = state;
