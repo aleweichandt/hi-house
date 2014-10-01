@@ -129,7 +129,7 @@ public final class C {
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
 			String param1 = "NULL";
 			String param2 = "NULL";
-			if(dvc.getClass().toString() == TermalActuator.class.getName()) {
+			if(dvc.getClass().getName() == TermalActuator.class.getName()) {
 				param1 = "'" + Integer.toString(((TermalActuator)dvc).getSubType()) + "'";
 			}
 			return "INSERT INTO dispositivos VALUES (" +id + "," + type + "," + name + "," + 
@@ -147,7 +147,7 @@ public final class C {
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
 			String param1 = "NULL";
 			String param2 = "NULL";
-			if(dvc.getClass().toString() == TermalActuator.class.getName()) {
+			if(dvc.getClass().getName() == TermalActuator.class.getName()) {
 				param1 = "'" + Integer.toString(((TermalActuator)dvc).getSubType()) + "'";
 			}
 			return "UPDATE dispositivos SET Tipo=" + type + ",Ambiente=" + name + 
