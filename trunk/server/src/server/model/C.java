@@ -12,6 +12,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 
 import server.model.devices.Device;
+import server.model.devices.TermalActuator;
 //import server.model.devices.TermalActuator;
 
 public final class C {
@@ -128,9 +129,9 @@ public final class C {
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
 			String param1 = "NULL";
 			String param2 = "NULL";
-			/*if(dvc.getClass().toString() == "TermalActuator") {
-				param1 = ((TermalActuator)dvc).getSubType();
-			}*/
+			if(dvc.getClass().toString() == TermalActuator.class.getName()) {
+				param1 = "'" + Integer.toString(((TermalActuator)dvc).getSubType()) + "'";
+			}
 			return "INSERT INTO dispositivos VALUES (" +id + "," + type + "," + name + "," + 
 				   vid + "," + state + "," + pin1 + "," + pin2 + "," + pin3 + "," + param1 + "," + param2 +")";
 		}
@@ -146,9 +147,9 @@ public final class C {
 			String pin3 = (dvc.getPin(2) >= 0)?Integer.toString(dvc.getPin(2)):"NULL";
 			String param1 = "NULL";
 			String param2 = "NULL";
-			/*if(dvc.getClass().toString() == "TermalActuator") {
-				param1 = ((TermalActuator)dvc).getSubType();
-			}*/
+			if(dvc.getClass().toString() == TermalActuator.class.getName()) {
+				param1 = "'" + Integer.toString(((TermalActuator)dvc).getSubType()) + "'";
+			}
 			return "UPDATE dispositivos SET Tipo=" + type + ",Ambiente=" + name + 
 				   ",Descripcion_Ejec_Voz=" + vid + ",Estado=" + state + 
 				   ",Pin1=" + pin1 + ",Pin2=" + pin2 + ",Pin3=" + pin3 +
