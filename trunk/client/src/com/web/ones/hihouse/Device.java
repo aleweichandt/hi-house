@@ -12,12 +12,14 @@ public class Device {
 	private String name;
 	private String voice;
 	private boolean state;
+	private int type;
 	
-	public Device(String id, String name, String voice, boolean estado) {
+	public Device(String id, String name, String voice, boolean estado, int type) {
 		this.id = id;
 		this.name = name;
 		this.voice = voice;
 		this.state = estado;
+		this.type = type;
 	}
 	public String getId() {
 		return id;

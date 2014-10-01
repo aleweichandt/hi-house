@@ -359,7 +359,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         @Override
         public void onReceive(Context context, Intent intent) {
         	int rc;
-        	switch(intent.getIntExtra("type",0)){
+        	switch(intent.getIntExtra("type",-1)){
         	case Request.SET_DEVICE_STATE:
         		rc = intent.getIntExtra("responseCode", 0);
         		if(rc==200){
@@ -382,7 +382,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		break;
         	case Request.GET_USER_DEVICES:
         		rc = intent.getIntExtra("responseCode", 0);
-        		if(rc==401){
+        		if(rc==500){
         			Toast.makeText(context, "Error al recuperar los dispositivos", Toast.LENGTH_SHORT).show();
         			//TODO manejar el error, permitir traer nuevamente (ej refresh btn)
         		}
@@ -391,10 +391,19 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 		        		mainLoadingBar.setVisibility(View.GONE);
 		    			selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
         			}
+        			else Toast.makeText(context, "Error al procesar los dispositivos", Toast.LENGTH_SHORT).show();
+        		}
+        		else if(rc==401){
+        			//se vencio el token. Cerramos actividad y mandamos al login.
+        			Toast.makeText(context, "Sesión expirada. Vuelva a ingresar.", Toast.LENGTH_SHORT).show();
+        			Intent activityIntent = new Intent(context, LoginActivity.class);
+        			startActivity(activityIntent);
+        	    	finish();
         		}
         		break;
         	case Request.ERROR:
         		Toast.makeText(context, "Hubo un error en el request", Toast.LENGTH_SHORT).show();
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	}
         }

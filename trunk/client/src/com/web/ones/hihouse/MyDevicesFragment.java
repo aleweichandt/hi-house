@@ -148,10 +148,21 @@ public class MyDevicesFragment extends Fragment{
             	String request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=" + !dvc.getEstado();
             	((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
             	((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
-            	((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(dvc.getId());
+            	((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(dvc.getId(), true);
             	return true;
             }
         });
+		
+		expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+			
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPos, long id) {
+				User usr = ((HiHouse)getActivity()).getUser();
+        		Profile prf = usr.getProfiles().get(groupPos);
+        		((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(prf.getName(), false);
+				return false;
+			}
+		});
 	}
 	
 	private BroadcastReceiver mUpdatesReceiver = new BroadcastReceiver() {
