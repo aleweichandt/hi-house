@@ -91,9 +91,10 @@ public class LoginActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-        	if(intent.getIntExtra("type",-1)==Request.LOGIN_USER){
-        		int responseCode = intent.getIntExtra("responseCode",0);
-        		if(responseCode==200){
+        	switch(intent.getIntExtra("type",-1)){
+        	case Request.LOGIN_USER:
+        		int rc = intent.getIntExtra("responseCode",0);
+        		if(rc==200){
         			String in = intent.getCharSequenceExtra("data").toString();
         			JSONObject reader;
         			
@@ -119,9 +120,10 @@ public class LoginActivity extends Activity {
         		else{
         			Toast.makeText(context, "Error de Login", Toast.LENGTH_LONG).show();
         		}
-        	}
-        	else if(intent.getIntExtra("type",-1)==Request.ERROR){
+        		break;
+        	case Request.ERROR:
         		Toast.makeText(context, "Error de Login", Toast.LENGTH_LONG).show();
+        		break;
         	}
         }
 	};

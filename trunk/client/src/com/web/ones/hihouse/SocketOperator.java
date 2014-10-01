@@ -117,6 +117,10 @@ public class SocketOperator {
 				hiHouseMessage.putExtra("responseCode", responseCode);
 				return hiHouseMessage;
 			}
+			if(responseCode!=200){
+				hiHouseMessage.putExtra("responseCode", responseCode);
+				return hiHouseMessage;
+			}
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
 			

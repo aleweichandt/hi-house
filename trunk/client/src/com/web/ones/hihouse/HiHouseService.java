@@ -68,6 +68,7 @@ public class HiHouseService extends Service{
 	}
 	 
 	public class HiHouseTask {
+		public static final String LOGIN= "hihouse_task.login";
 		public static final String NEW_RESPONSE = "hihouse_task.new_response";
 		public static final String UPDATE_EXP_LIST = "hihouse_task.update_exp_list";
 	}
