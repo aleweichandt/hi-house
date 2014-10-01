@@ -115,7 +115,7 @@ public class ArduinoHandler {
 		int pins = (int)((header>>2) & 0x03);
 		int values[] = new int[pins];
 		for(int i=0;i<pins; i++) {
-			values[i] = (int)(msg[(i+1)*2] & 0xFF);
+			values[i] = (msg[(i+1)*2] & 0xFF);
 		}
 		Device caller = mCallbackList.get(0);
 		mCallbackList.remove(0);
