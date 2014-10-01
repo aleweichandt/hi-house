@@ -2,6 +2,7 @@ package server.services;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -50,7 +51,7 @@ public class SecurityService {
 				.build();
 		} else {
 			ret = Json.createObjectBuilder()
-				.add("id", "not found")
+				.add("id", JsonValue.NULL)
 				.build();
 		}
 		return Response.status(200).entity(ret.toString()).build();
