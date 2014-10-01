@@ -89,6 +89,7 @@ public class AmbientMgr {
 	
 	public void setTemperature(float desired) {
 		mDesiredTemp = desired;
+		mTime = C.Config.AMBIENT_UPDATE_TIME; //force update
 	}
 	
 	public float getTemperature() {
