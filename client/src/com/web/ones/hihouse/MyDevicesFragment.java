@@ -99,9 +99,9 @@ public class MyDevicesFragment extends Fragment{
 		btn_open_close.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				btn_open_close.setImageResource(toggle_open_close?R.drawable.ic_action_secure:R.drawable.ic_action_not_secure);
-				toggle_open_close=!toggle_open_close;
-				((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
+				deviceState=!deviceState;
+				btn_open_close.setImageResource(deviceState?R.drawable.ic_action_not_secure:R.drawable.ic_action_secure);
+				((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request+deviceState,""));
             	((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
 			}
 		});
@@ -111,8 +111,7 @@ public class MyDevicesFragment extends Fragment{
 			public void onClick(View v){
 				btn_start_stop.setImageResource(toggle_start_stop?R.drawable.ic_action_play_over_video:R.drawable.ic_action_pause_over_video);
 				toggle_start_stop=!toggle_start_stop;
-				((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
-            	((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
+				//TODO arrancar/detener simulador
 			}
 		});
 		
@@ -180,7 +179,7 @@ public class MyDevicesFragment extends Fragment{
             		btn_start_stop.setVisibility(View.GONE);
             		break;
             	case Device.DEVICE_TYPE_AC_DOOR:
-            		btn_open_close.setImageResource(!deviceState?R.drawable.ic_action_secure:R.drawable.ic_action_not_secure);
+            		btn_open_close.setImageResource(deviceState?R.drawable.ic_action_not_secure:R.drawable.ic_action_secure);
             		onOffSwitch.setVisibility(View.GONE);
             		btn_open_close.setVisibility(View.VISIBLE);
             		btn_start_stop.setVisibility(View.GONE);
