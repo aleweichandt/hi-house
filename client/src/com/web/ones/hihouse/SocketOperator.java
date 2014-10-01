@@ -77,7 +77,9 @@ public class SocketOperator {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(Intent hiHouseMessage) {
-        	hiHouseMessage.putExtra("type", type);
+        	if(hiHouseMessage.getIntExtra("type", -1)==-1){
+        		hiHouseMessage.putExtra("type", type);
+        	}
             context.sendBroadcast(hiHouseMessage);
        }
     }

@@ -73,7 +73,7 @@ public class User {
 				prof = reader.getJSONArray(perfil_name);
 				for(int i=0; i<prof.length(); i++){//itero sobre los dispositivos
 					device = prof.getJSONObject(i);
-					Device d = new Device(device.getString("id"), device.getString("name"), device.getString("voice_id"), device.getBoolean("state"));
+					Device d = new Device(device.getString("id"), device.getString("name"), device.getString("voice_id"), device.getBoolean("state"), device.getInt("type"));
 					p.addDevice(d);
 				}
 				this.addProfile(p);
