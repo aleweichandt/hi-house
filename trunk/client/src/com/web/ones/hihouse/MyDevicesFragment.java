@@ -14,7 +14,9 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +34,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MyDevicesFragment extends Fragment{
@@ -41,6 +44,7 @@ public class MyDevicesFragment extends Fragment{
 	private ArrayAdapter<String> mAdapter;
 	private Switch onOffSwitch;
 	private ImageButton btn_open_close, btn_start_stop;
+	private TextView txt_select;
 	private Boolean toggle_open_close=false, toggle_start_stop=false;
 	//private List<String> listDataHeader;
 	//private HashMap<String, List<String>> listDataChild;
@@ -48,6 +52,8 @@ public class MyDevicesFragment extends Fragment{
 	private ExpandableListAdapter myExpListAdapter;
 	private EditText temp_input;
 	private SeekBar temp_seekBar;
+	private String request;
+	private boolean deviceState;
 	
 	public MyDevicesFragment() {
         // Empty constructor required for fragment subclasses
@@ -62,6 +68,7 @@ public class MyDevicesFragment extends Fragment{
 		onOffSwitch = (Switch) mRootView.findViewById(R.id.on_off_switch);
 		btn_open_close = (ImageButton) mRootView.findViewById(R.id.open_close_button);
 		btn_start_stop = (ImageButton) mRootView.findViewById(R.id.start_stop_button);
+		txt_select = (TextView) mRootView.findViewById(R.id.select_item_text);
 		
 		temp_input = (EditText) mRootView.findViewById(R.id.temp_input);
 		temp_seekBar = (SeekBar) mRootView.findViewById(R.id.seekBar);
@@ -94,6 +101,8 @@ public class MyDevicesFragment extends Fragment{
 			public void onClick(View v){
 				btn_open_close.setImageResource(toggle_open_close?R.drawable.ic_action_secure:R.drawable.ic_action_not_secure);
 				toggle_open_close=!toggle_open_close;
+				((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
+            	((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
 			}
 		});
 		
@@ -102,17 +111,18 @@ public class MyDevicesFragment extends Fragment{
 			public void onClick(View v){
 				btn_start_stop.setImageResource(toggle_start_stop?R.drawable.ic_action_play_over_video:R.drawable.ic_action_pause_over_video);
 				toggle_start_stop=!toggle_start_stop;
+				((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
+            	((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
 			}
 		});
 		
 		onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		        if (isChecked) {
-		            // The toggle is enabled
-		        } else {
-		            // The toggle is disabled
-		        }
-		        //Toast.makeText(getActivity(), "Monitored switch is " + (isChecked ? "on" : "off"),Toast.LENGTH_SHORT).show();
+		    	if(deviceState!=isChecked){
+			    	((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request+isChecked,""));
+			        ((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
+			    	deviceState=!deviceState;
+		    	}
 		    }
 		});
 		
@@ -145,10 +155,37 @@ public class MyDevicesFragment extends Fragment{
         		Profile prf = usr.getProfiles().get(groupPos);
             	Device dvc = prf.getDevices().get(childPos);
             	String tkn = usr.getToken();
-            	String request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=" + !dvc.getEstado();
-            	((HiHouse)getActivity()).mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request,""));
-            	((HiHouse)getActivity()).setLoadingBarVisibility(View.VISIBLE);
+            	request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=";
+            	
             	((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(dvc.getId(), true);
+            	txt_select.setVisibility(View.GONE);
+            	deviceState = dvc.getState();
+            	switch(dvc.getType()){
+            	case Device.DEVICE_TYPE_AC_LIGHT:
+            		onOffSwitch.setChecked(deviceState);
+            		onOffSwitch.setVisibility(View.VISIBLE);
+            		btn_open_close.setVisibility(View.GONE);
+            		btn_start_stop.setVisibility(View.GONE);
+            		break;
+            	case Device.DEVICE_TYPE_AC_TERMAL:
+            		onOffSwitch.setChecked(deviceState);
+            		onOffSwitch.setVisibility(View.VISIBLE);
+            		btn_open_close.setVisibility(View.GONE);
+            		btn_start_stop.setVisibility(View.GONE);
+            		break;
+            	case Device.DEVICE_TYPE_SN_TERMAL:
+            		onOffSwitch.setChecked(deviceState);
+            		onOffSwitch.setVisibility(View.VISIBLE);
+            		btn_open_close.setVisibility(View.GONE);
+            		btn_start_stop.setVisibility(View.GONE);
+            		break;
+            	case Device.DEVICE_TYPE_AC_DOOR:
+            		btn_open_close.setImageResource(!deviceState?R.drawable.ic_action_secure:R.drawable.ic_action_not_secure);
+            		onOffSwitch.setVisibility(View.GONE);
+            		btn_open_close.setVisibility(View.VISIBLE);
+            		btn_start_stop.setVisibility(View.GONE);
+            		break;
+            	}
             	return true;
             }
         });
@@ -160,6 +197,10 @@ public class MyDevicesFragment extends Fragment{
 				User usr = ((HiHouse)getActivity()).getUser();
         		Profile prf = usr.getProfiles().get(groupPos);
         		((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(prf.getName(), false);
+        		txt_select.setVisibility(View.GONE);
+        		onOffSwitch.setVisibility(View.GONE);
+        		btn_open_close.setVisibility(View.GONE);
+        		btn_start_stop.setVisibility(View.VISIBLE);
 				return false;
 			}
 		});
