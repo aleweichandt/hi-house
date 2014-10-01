@@ -137,6 +137,7 @@ public class UserService {
 						dvbuild.add("name", dv.getName());
 						if(addVoice) dvbuild.add("voice_id", dv.getVoiceId());
 						if(addState) dvbuild.add("state", dv.getState());
+						dvbuild.add("type", dv.getClassType());
 						abuild.add(dvbuild.build());
 					}
 				}
