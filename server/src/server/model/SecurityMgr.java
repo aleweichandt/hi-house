@@ -55,7 +55,10 @@ public class SecurityMgr {
 	}
 	
 	private void sendAlert() {
-		//TODO send alert to dest user
+		User dest = getAlertDestination();
+		if(dest != null) {
+			//TODO send alert to dest
+		}
 	}
 	
 	public void setState(boolean enabled) {
@@ -66,12 +69,16 @@ public class SecurityMgr {
 		return mEnabled;
 	}
 	
-	public void setAlertDestination(User usr) {
-		//TODO update users alert destination to true, disable others
+	public boolean setAlertDestination(User usr) {
+		User dest = getAlertDestination();
+		if(dest != null) {
+			if(!dest.unsetReceptor())
+				return false;
+		}
+		return usr.setAsReceptor();
 	}
 	
 	public User getAlertDestination() {
-		//TODO return alert destination user if someone
-		return null;
+		return User.getAlertReceiver();
 	}
 }
