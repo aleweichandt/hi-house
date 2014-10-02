@@ -86,13 +86,11 @@ public class MyDevicesFragment extends Fragment{
 	
 	@Override
 	public void onResume(){
-		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdatesReceiver, new IntentFilter(HiHouseTask.UPDATE_EXP_LIST));
         super.onResume();
 	}
 	
 	@Override 
 	public void onPause(){
-		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdatesReceiver);
 		super.onPause();
 	}
 	
@@ -206,12 +204,8 @@ public class MyDevicesFragment extends Fragment{
 		});
 	}
 	
-	private BroadcastReceiver mUpdatesReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        	((BaseExpandableListAdapter) myExpListAdapter).notifyDataSetChanged();
-        }
-	};
+	public void updateExpList(){
+		((BaseExpandableListAdapter) myExpListAdapter).notifyDataSetChanged();
+	}
 	
 }

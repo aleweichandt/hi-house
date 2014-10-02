@@ -75,4 +75,8 @@ public class UserAdminFragment extends ListFragment implements
 		ft.addToBackStack(UserInfoFragment.class.toString());
 		ft.commit();
 	}
+	
+	public void mostrarDatos(String str){
+		Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+	}
 }
