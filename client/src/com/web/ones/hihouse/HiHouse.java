@@ -49,6 +49,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	private static final int DRAWER_MENU_INDEX_DEVICES = 7;
 	private static final int DRAWER_MENU_INDEX_SIMULATOR = 8;
 	
+	private Fragment fragment = null;//fragment actual
 	private String[] menuItems;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -238,7 +239,6 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
-    	Fragment fragment = null;
     	Bundle args = new Bundle();
     	boolean addToBackStack = false;
     	String backStackTag = "";
@@ -373,8 +373,12 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		rc = intent.getIntExtra("responseCode", 0);
         		if(rc==200){
         			if(user.updateDevice(intent.getCharSequenceExtra("data").toString())){
-        				Intent updateExpList = new Intent(HiHouseTask.UPDATE_EXP_LIST);
-        				LocalBroadcastManager.getInstance(context).sendBroadcast(updateExpList);
+        				try{
+        					((MyDevicesFragment)fragment).updateExpList();        				
+        				}
+        				catch(ClassCastException e){
+        					//esta bien xq el fragmento activo es de otro tipo y no actualizamos nada
+        				}
         			}
         		}
         		else if(rc==401){
@@ -415,10 +419,14 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.GET_LIST_USERS:
-        		Toast.makeText(context, intent.getCharSequenceExtra("data").toString(), Toast.LENGTH_SHORT).show();
+        		try{
+        			((UserAdminFragment)fragment).mostrarDatos(intent.getCharSequenceExtra("data").toString());
+        		}
+        		catch(ClassCastException e){
+					//esta bien xq el fragmento activo es de otro tipo no y actualizamos nada
+				}
         		//mainLoadingBar.setVisibility(View.GONE);
         		break;
-        	
         	}
         }
 	};
