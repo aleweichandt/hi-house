@@ -156,10 +156,19 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         // Bind to HiHouseService
         Intent intent = new Intent(this, HiHouseService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        
-        // Message handling - from service:
+	}
+	
+	@Override
+	protected void onResume(){
+		// Message handling - from service:
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(HiHouseTask.NEW_RESPONSE));
-             
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause(){
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+		super.onPause();
 	}
 	
 	@Override

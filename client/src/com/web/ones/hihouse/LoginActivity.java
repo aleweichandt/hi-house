@@ -63,8 +63,19 @@ public class LoginActivity extends Activity {
 			}
 		});
 		
+	}
+	
+	@Override
+	protected void onResume(){
 		// Register broadcast receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(HiHouseTask.NEW_RESPONSE));
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause(){
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+		super.onPause();
 	}
 
 	@Override
