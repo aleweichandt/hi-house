@@ -16,6 +16,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,13 +86,13 @@ public class MyDevicesFragment extends Fragment{
 	
 	@Override
 	public void onResume(){
-        getActivity().registerReceiver(mUpdatesReceiver, new IntentFilter(HiHouseTask.UPDATE_EXP_LIST));
+		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdatesReceiver, new IntentFilter(HiHouseTask.UPDATE_EXP_LIST));
         super.onResume();
 	}
 	
 	@Override 
 	public void onPause(){
-		getActivity().unregisterReceiver(mUpdatesReceiver);
+		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdatesReceiver);
 		super.onPause();
 	}
 	

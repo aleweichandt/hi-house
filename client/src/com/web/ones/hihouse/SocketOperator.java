@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -80,7 +81,7 @@ public class SocketOperator {
         	if(hiHouseMessage.getIntExtra("type", -1)==-1){
         		hiHouseMessage.putExtra("type", type);
         	}
-            context.sendBroadcast(hiHouseMessage);
+        	LocalBroadcastManager.getInstance(context).sendBroadcast(hiHouseMessage);
        }
     }
 	

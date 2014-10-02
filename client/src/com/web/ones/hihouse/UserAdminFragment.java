@@ -4,7 +4,12 @@ import java.util.ArrayList;
 
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class UserAdminFragment extends ListFragment implements 
 	OnItemClickListener{
@@ -50,14 +56,14 @@ public class UserAdminFragment extends ListFragment implements
 	
 	@Override
 	public void onPause() {
-		super.onPause();
 		mList.setOnItemClickListener(null);
+		super.onPause();
 	}
 	
 	@Override
 	public void onResume() {
-		super.onResume();
 		mList.setOnItemClickListener(this);
+		super.onResume();
 	}
 
 	@Override
