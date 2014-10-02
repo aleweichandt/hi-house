@@ -33,6 +33,10 @@ public class UserAdminFragment extends ListFragment implements
 		//TODO load real users
 		String[] values = new String[] { "Jose", "Ines", "Juancito",
 		        "Pedro", "Betina" };
+		
+		User user = ((HiHouse)getActivity()).getUser(); 
+		Command command = new Command(Request.GET_LIST_USERS, true, "users/all?token="+user.getToken(), "");
+		((HiHouse)getActivity()).mHiHouseService.sendCommand(command);
 
 	    final ArrayList<String> list = new ArrayList<String>();
 	    for (int i = 0; i < values.length; ++i) {
