@@ -25,6 +25,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -157,8 +158,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         
         // Message handling - from service:
-        final IntentFilter myFilter = new IntentFilter(HiHouseTask.NEW_RESPONSE);
-        registerReceiver(mReceiver, myFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(HiHouseTask.NEW_RESPONSE));
              
 	}
 	
@@ -365,7 +365,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		if(rc==200){
         			if(user.updateDevice(intent.getCharSequenceExtra("data").toString())){
         				Intent updateExpList = new Intent(HiHouseTask.UPDATE_EXP_LIST);
-        				context.sendBroadcast(updateExpList);
+        				LocalBroadcastManager.getInstance(context).sendBroadcast(updateExpList);
         			}
         		}
         		else if(rc==401){

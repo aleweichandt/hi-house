@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,9 +63,8 @@ public class LoginActivity extends Activity {
 			}
 		});
 		
-		// Message handling
-        final IntentFilter myFilter = new IntentFilter(HiHouseTask.NEW_RESPONSE);
-        registerReceiver(mReceiver, myFilter);
+		// Register broadcast receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(HiHouseTask.NEW_RESPONSE));
 	}
 
 	@Override
