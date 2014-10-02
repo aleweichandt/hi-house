@@ -405,6 +405,11 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		Toast.makeText(context, "Hubo un error en el request", Toast.LENGTH_SHORT).show();
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
+        	case Request.GET_LIST_USERS:
+        		Toast.makeText(context, intent.getCharSequenceExtra("data").toString(), Toast.LENGTH_SHORT).show();
+        		//mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	
         	}
         }
 	};
