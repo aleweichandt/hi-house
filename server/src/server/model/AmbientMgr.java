@@ -93,7 +93,6 @@ public class AmbientMgr {
 	}
 	
 	public float getTemperature() {
-		getRealTemperature();
-		return mRealTemp;
+		return mDesiredTemp;
 	}
 }
