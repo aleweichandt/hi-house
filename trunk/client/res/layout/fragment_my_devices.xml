@@ -58,14 +58,17 @@
 		<LinearLayout
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-		    android:orientation="horizontal" >
+		    android:orientation="horizontal"
+		    android:background="#999" >
 
 		    <TextView 
 		        android:layout_width="0dp"
-		    	android:layout_height="wrap_content"
+		    	android:layout_height="match_parent"
 		    	android:layout_weight="2"
 		    	android:layout_marginLeft="2dp"
-		    	android:text="@string/temp"/>
+		    	android:text="@string/temp"
+		    	android:textSize="20sp"
+		    	android:gravity="center"/>
 
 			<SeekBar
 			    android:id="@+id/seekBar"
@@ -73,14 +76,26 @@
 			    android:layout_height="wrap_content"
 			    android:layout_marginTop="5dp"
 			    android:layout_weight="6"
-			    android:max="15" />
+			    android:max="16" />
 
-			<EditText 
-			    android:layout_height="wrap_content"
+			<RelativeLayout
+			    android:layout_height="match_parent"
 			    android:layout_width="0dp"
-			    android:layout_weight="2"
-			    android:inputType="number"
-			    android:id="@+id/temp_input"/>
+				android:layout_weight="2" >
+				<TextView 
+				    android:layout_height="match_parent"
+				    android:layout_width="match_parent"
+				    android:id="@+id/temp_txt"
+				    android:textSize="20sp"
+				    android:gravity="center"
+				    android:visibility="gone"/>
+				<ProgressBar
+			        android:id="@+id/temp_loading_bar"
+			        style="?android:attr/progressBarStyle"
+			        android:layout_height="match_parent"
+			        android:layout_width="match_parent"
+			        android:visibility="visible"/>
+			</RelativeLayout>
 		</LinearLayout>
 	</LinearLayout>
 	<ExpandableListView
