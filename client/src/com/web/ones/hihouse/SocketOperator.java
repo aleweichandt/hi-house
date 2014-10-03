@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -70,7 +71,8 @@ public class SocketOperator {
             	return downloadUrl(method, url, params);
             } catch (IOException e) {
             	Intent hiHouseMessage = new Intent(HiHouseTask.NEW_RESPONSE);
-            	hiHouseMessage.putExtra("type", Request.ERROR);
+            	//comento el Request de tipo ERROR para que cada tipo de request maneje sus propios errores.
+            	//hiHouseMessage.putExtra("type", Request.ERROR);
             	//hiHouseMessage.putExtra("data","Unable to retrieve web page. URL may be invalid.");
             	return hiHouseMessage;
             }
@@ -78,9 +80,9 @@ public class SocketOperator {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(Intent hiHouseMessage) {
-        	if(hiHouseMessage.getIntExtra("type", -1)==-1){
+        	//if(hiHouseMessage.getIntExtra("type", -1)==-1){
         		hiHouseMessage.putExtra("type", type);
-        	}
+        	//}
         	LocalBroadcastManager.getInstance(context).sendBroadcast(hiHouseMessage);
        }
     }
@@ -112,6 +114,9 @@ public class SocketOperator {
 
 			try{
 				responseCode = connection.getResponseCode();
+			}
+			catch(SocketTimeoutException e){
+				return hiHouseMessage;
 			}
 			catch(IOException e){
 				responseCode = connection.getResponseCode();

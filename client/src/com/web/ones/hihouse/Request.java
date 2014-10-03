@@ -6,4 +6,6 @@ public class Request {
 	public static final int SET_DEVICE_STATE = 2;
 	public static final int GET_USER_DEVICES = 3;
 	public static final int GET_LIST_USERS = 4;
+	public static final int GET_DESIRED_TEMP = 5;
+	public static final int SET_DESIRED_TEMP = 6;
 }

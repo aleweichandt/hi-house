@@ -16,7 +16,8 @@ import android.widget.TextView;
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
  
     private Context _context;
-    private List<Profile> _listDataHeader;
+    private HiHouse hiHouse;
+    //private List<Profile> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
     private String selectedItem = "";
     private boolean isDevice = false;
@@ -27,14 +28,19 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     	this.notifyDataSetChanged();
     }
  
-    public MyExpandableListAdapter(Context context, List<Profile> listDataHeader) {
+    /*public MyExpandableListAdapter(Context context, List<Profile> listDataHeader) {
         this._context = context;
         this._listDataHeader = listDataHeader;
+    }*/
+    public MyExpandableListAdapter(HiHouse activity) {
+        this._context = (Context)activity;
+        this.hiHouse = activity;
     }
- 
-    @Override
+
+	@Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
+		return this._listDataChild.get(hiHouse.getUser().getProfiles().get(groupPosition)).get(childPosititon);
+		//return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
     }
  
     @Override
@@ -46,7 +52,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
  
-    	final Profile prof = _listDataHeader.get(groupPosition);
+    	final Profile prof = hiHouse.getUser().getProfiles().get(groupPosition);
         final Device device = prof.getDevices().get(childPosition);
  
         if (convertView == null) {
@@ -69,17 +75,17 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
  
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataHeader.get(groupPosition).getDevices().size();
+        return this.hiHouse.getUser().getProfiles().get(groupPosition).getDevices().size();
     }
  
     @Override
     public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
+        return this.hiHouse.getUser().getProfiles().get(groupPosition);
     }
  
     @Override
     public int getGroupCount() {
-        return this._listDataHeader.size();
+        return this.hiHouse.getUser().getProfiles().size();
     }
  
     @Override

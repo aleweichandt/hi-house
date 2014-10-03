@@ -51,6 +51,10 @@ public class User {
 	private void addProfile(Profile p){
 		profiles.add(p);
 	}
+	
+	private void setProfiles(ArrayList<Profile> p){
+		profiles = p;
+	}
 
 	public String getDeviceByVoiceDesc(String voice_desc){
 		for(Profile p : profiles){
@@ -61,6 +65,7 @@ public class User {
 	}
 	
 	public boolean setProfilesAndDevices(String jsonStr){
+		ArrayList<Profile> profiles = new ArrayList<Profile>();
 		JSONObject reader, device;
     	JSONArray prof;
     	String perfil_name;
@@ -76,8 +81,9 @@ public class User {
 					Device d = new Device(device.getString("id"), device.getString("name"), device.getString("voice_id"), device.getBoolean("state"), device.getInt("type"));
 					p.addDevice(d);
 				}
-				this.addProfile(p);
+				profiles.add(p);
 			}
+			this.setProfiles(profiles);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return false;

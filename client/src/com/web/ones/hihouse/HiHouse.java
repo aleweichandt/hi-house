@@ -56,6 +56,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     private CharSequence mTitle,mDrawerTitle;
     private ActionBarDrawerToggle mDrawerToggle;
     private ProgressBar mainLoadingBar;
+    private int menuLastPosition = -1;
     
     public void setLoadingBarVisibility(int v){
     	mainLoadingBar.setVisibility(v);
@@ -82,8 +83,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             mBound = true;
             
             //una vez que el se hace bind del servicio cargo mis dispositivos
-            mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token="+user.getToken()+"&add_voice_id=true&add_state=true", ""));
-            //mHiHouseService.testMethod();
+            selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
         }
 
         @Override
@@ -239,6 +239,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
+    	if(position==menuLastPosition) return;
+    	menuLastPosition = position;
     	Bundle args = new Bundle();
     	boolean addToBackStack = false;
     	String backStackTag = "";
@@ -367,26 +369,23 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 
         @Override
         public void onReceive(Context context, Intent intent) {
-        	int rc;
+        	int rc = intent.getIntExtra("responseCode", 0);
+        	if(rc==401){
+    			//se vencio el token. Cerramos actividad y mandamos al login.
+    			Toast.makeText(context, "Sesión expirada. Vuelva a ingresar.", Toast.LENGTH_SHORT).show();
+    			Intent activityIntent = new Intent(context, LoginActivity.class);
+    			startActivity(activityIntent);
+    	    	finish();
+    		} else
         	switch(intent.getIntExtra("type",-1)){
         	case Request.SET_DEVICE_STATE:
-        		rc = intent.getIntExtra("responseCode", 0);
         		if(rc==200){
         			if(user.updateDevice(intent.getCharSequenceExtra("data").toString())){
         				try{
         					((MyDevicesFragment)fragment).updateExpList();        				
         				}
-        				catch(ClassCastException e){
-        					//esta bien xq el fragmento activo es de otro tipo y no actualizamos nada
-        				}
+        				catch(ClassCastException e){}//esta bien xq el fragmento activo es de otro tipo y no actualizamos nada
         			}
-        		}
-        		else if(rc==401){
-        			//se vencio el token. Cerramos actividad y mandamos al login.
-        			Toast.makeText(context, "Sesión expirada. Vuelva a ingresar.", Toast.LENGTH_SHORT).show();
-        			Intent activityIntent = new Intent(context, LoginActivity.class);
-        			startActivity(activityIntent);
-        	    	finish();
         		}
         		else{
         			Toast.makeText(context, "Error al actualizar estado", Toast.LENGTH_SHORT).show();
@@ -394,24 +393,19 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.GET_USER_DEVICES:
-        		rc = intent.getIntExtra("responseCode", 0);
         		if(rc==500){
         			Toast.makeText(context, "Error al recuperar los dispositivos", Toast.LENGTH_SHORT).show();
         			//TODO manejar el error, permitir traer nuevamente (ej refresh btn)
         		}
         		else if(rc==200){
         			if(user.setProfilesAndDevices(intent.getCharSequenceExtra("data").toString())){
+        				try{
+        					((MyDevicesFragment)fragment).updateExpList();        				
+        				}
+        				catch(ClassCastException e){}
 		        		mainLoadingBar.setVisibility(View.GONE);
-		    			selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
         			}
         			else Toast.makeText(context, "Error al procesar los dispositivos", Toast.LENGTH_SHORT).show();
-        		}
-        		else if(rc==401){
-        			//se vencio el token. Cerramos actividad y mandamos al login.
-        			Toast.makeText(context, "Sesión expirada. Vuelva a ingresar.", Toast.LENGTH_SHORT).show();
-        			Intent activityIntent = new Intent(context, LoginActivity.class);
-        			startActivity(activityIntent);
-        	    	finish();
         		}
         		break;
         	case Request.ERROR:
@@ -426,6 +420,18 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 					//esta bien xq el fragmento activo es de otro tipo no y actualizamos nada
 				}
         		//mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.GET_DESIRED_TEMP:
+    			try{
+        			((MyDevicesFragment)fragment).updateTemp(rc==200?intent.getCharSequenceExtra("data").toString():"");
+        		}
+        		catch(ClassCastException e){}
+        		break;
+        	case Request.SET_DESIRED_TEMP:
+    			try{
+        			((MyDevicesFragment)fragment).setLastTemp(rc==200?true:false);
+        		}
+        		catch(ClassCastException e){}
         		break;
         	}
         }
