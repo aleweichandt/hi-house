@@ -52,8 +52,6 @@ public class MyDevicesFragment extends Fragment{
 	private ImageButton btn_open_close, btn_start_stop;
 	private TextView txt_select;
 	private Boolean toggle_open_close=false, toggle_start_stop=false;
-	//private List<String> listDataHeader;
-	//private HashMap<String, List<String>> listDataChild;
 	private ExpandableListView expListView;
 	private ExpandableListAdapter myExpListAdapter;
 	private TextView temp_txt;
@@ -75,7 +73,6 @@ public class MyDevicesFragment extends Fragment{
 		
 		hiHouseAct = (HiHouse)getActivity();
 		
-		//myExpListAdapter = new MyExpandableListAdapter(this.getActivity(), listDataHeader, listDataChild);
         //myExpListAdapter = new MyExpandableListAdapter(hiHouseAct, hiHouseAct.getUser().getProfiles());
 		myExpListAdapter = new MyExpandableListAdapter(hiHouseAct);
 	}

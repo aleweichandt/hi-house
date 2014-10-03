@@ -49,7 +49,6 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	private static final int DRAWER_MENU_INDEX_DEVICES = 7;
 	private static final int DRAWER_MENU_INDEX_SIMULATOR = 8;
 	
-	private Fragment fragment = null;//fragment actual
 	private String[] menuItems;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -239,6 +238,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
+    	Fragment fragment = null;
+    	String fragmentTag = null;//para hacer FragmentManager.findFragmentByTag(String)
     	if(position==menuLastPosition) return;
     	menuLastPosition = position;
     	Bundle args = new Bundle();
@@ -250,17 +251,21 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		break;
     	case DRAWER_MENU_INDEX_MY_DEVICES:
     		fragment = new MyDevicesFragment();
+    		fragmentTag = MyDevicesFragment.class.getName();
     		break;
     	case DRAWER_MENU_INDEX_ADD_USER:
     		fragment = new UserInfoFragment("Nuevo", true);
+    		fragmentTag = UserInfoFragment.class.getName();
     		addToBackStack = true;
     		backStackTag = UserInfoFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_USERS:
     		if(this.user.isAdmin()) {
     			fragment = new UserAdminFragment();
+    			fragmentTag = UserAdminFragment.class.getName();
     		} else {
     			fragment = new UserInfoFragment("yo", true);
+    			fragmentTag = UserInfoFragment.class.getName();
     		}
     		break;
     	case DRAWER_MENU_INDEX_ADD_PROFILE: 
@@ -292,12 +297,12 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	        FragmentManager fragmentManager = getFragmentManager();
 	        if(addToBackStack) {
 		        fragmentManager.beginTransaction()
-		        			   .add(R.id.content_frame, fragment)
+		        			   .add(R.id.content_frame, fragment, fragmentTag)
 		        			   .addToBackStack(backStackTag)
 		                       .commit();
 	        } else {
 	        	fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(R.id.content_frame, fragment, fragmentTag)
                 .commit();
 	        }
 	        mDrawerList.setItemChecked(position, true);
@@ -370,6 +375,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         @Override
         public void onReceive(Context context, Intent intent) {
         	int rc = intent.getIntExtra("responseCode", 0);
+        	Fragment frag = null;
         	if(rc==401){
     			//se vencio el token. Cerramos actividad y mandamos al login.
     			Toast.makeText(context, "Sesión expirada. Vuelva a ingresar.", Toast.LENGTH_SHORT).show();
@@ -381,10 +387,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         	case Request.SET_DEVICE_STATE:
         		if(rc==200){
         			if(user.updateDevice(intent.getCharSequenceExtra("data").toString())){
-        				try{
-        					((MyDevicesFragment)fragment).updateExpList();        				
-        				}
-        				catch(ClassCastException e){}//esta bien xq el fragmento activo es de otro tipo y no actualizamos nada
+        				frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
+        				try{((MyDevicesFragment)frag).updateExpList();}catch(ClassCastException e){}
         			}
         		}
         		else{
@@ -399,10 +403,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		}
         		else if(rc==200){
         			if(user.setProfilesAndDevices(intent.getCharSequenceExtra("data").toString())){
-        				try{
-        					((MyDevicesFragment)fragment).updateExpList();        				
-        				}
-        				catch(ClassCastException e){}
+        				frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
+                		if(frag!=null) try{((MyDevicesFragment)frag).updateExpList();}catch(ClassCastException e){}
 		        		mainLoadingBar.setVisibility(View.GONE);
         			}
         			else Toast.makeText(context, "Error al procesar los dispositivos", Toast.LENGTH_SHORT).show();
@@ -413,25 +415,26 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.GET_LIST_USERS:
-        		try{
-        			((UserAdminFragment)fragment).mostrarDatos(intent.getCharSequenceExtra("data").toString());
+        		frag = getFragmentManager().findFragmentByTag(UserAdminFragment.class.getName());
+        		if(frag!=null){
+	        		try{
+	        			((UserAdminFragment)frag).mostrarDatos(intent.getCharSequenceExtra("data").toString());
+	        		}
+	        		catch(ClassCastException e){} //esta bien xq el fragmento activo es de otro tipo no y actualizamos nada
         		}
-        		catch(ClassCastException e){
-					//esta bien xq el fragmento activo es de otro tipo no y actualizamos nada
-				}
         		//mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.GET_DESIRED_TEMP:
-    			try{
-        			((MyDevicesFragment)fragment).updateTemp(rc==200?intent.getCharSequenceExtra("data").toString():"");
+        		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
+        		if(frag!=null){
+        			try{((MyDevicesFragment)frag).updateTemp(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
         		}
-        		catch(ClassCastException e){}
         		break;
         	case Request.SET_DESIRED_TEMP:
-    			try{
-        			((MyDevicesFragment)fragment).setLastTemp(rc==200?true:false);
+        		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
+        		if(frag!=null){
+        			try{((MyDevicesFragment)frag).setLastTemp(rc==200?true:false);}catch(ClassCastException e){}
         		}
-        		catch(ClassCastException e){}
         		break;
         	}
         }
