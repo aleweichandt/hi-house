@@ -269,7 +269,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		}
     		break;
     	case DRAWER_MENU_INDEX_ADD_PROFILE: 
-    		fragment = new ProfileInfoFragment("Nuevo", true);
+    		fragment = new ProfileInfoFragment();
+    		args.putBoolean(ProfileInfoFragment.ARG_IS_ADD, true);
+    		fragmentTag = ProfileInfoFragment.class.getName();
     		addToBackStack = true;
     		backStackTag = ProfileInfoFragment.class.toString();
     		break;
@@ -435,6 +437,25 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		if(frag!=null){
         			try{((MyDevicesFragment)frag).setLastTemp(rc==200?true:false);}catch(ClassCastException e){}
         		}
+        		break;
+        	case Request.GET_ALL_DEVICES:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((ProfileInfoFragment)frag).loadDevices(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.ADD_PROFILE:
+        		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{((ProfileInfoFragment)frag).addProfileResult(rc==200?true:false);}catch(ClassCastException e){}
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	}
         }

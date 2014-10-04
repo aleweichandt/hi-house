@@ -8,4 +8,6 @@ public class Request {
 	public static final int GET_LIST_USERS = 4;
 	public static final int GET_DESIRED_TEMP = 5;
 	public static final int SET_DESIRED_TEMP = 6;
+	public static final int GET_ALL_DEVICES = 7;
+	public static final int ADD_PROFILE = 9;
 }
