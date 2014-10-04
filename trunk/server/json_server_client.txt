@@ -1,8 +1,14 @@
-user params
+Cliente ---> Server
+- user params
 {"name":"<string>","pwd":"<string>","email":"<string>","admin":<bool>,"alert_receptor":<bool>,"profiles":["<string>",...]}
 
-profile params
+- profile params
 {"name":"<string>","description":"<string>","devices":["<string>",...]}
 
-device params
-{"name":"<string>","type":<int>,"voice_id":"<string>","pin1":<int>,"pin2":<int>,"pin3":<int>,,"subtype":<int>"}
+- device params
+{"name":"<string>","type":<int>,"voice_id":"<string>","pin1":<int>,"pin2":<int>,"pin3":<int>,"subtype":<int>"}
+
+- simulator params
+{"devices":["<string>",...]}
+
+Server ---> Cliente

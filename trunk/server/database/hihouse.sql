@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-09-2014 a las 20:43:09
+-- Tiempo de generación: 04-10-2014 a las 05:13:24
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -56,7 +56,10 @@ INSERT INTO `dispositivos` (`ID_Dispositivo`, `Tipo`, `Ambiente`, `Descripcion_E
 DROP TRIGGER IF EXISTS `delete_device_trigger`;
 DELIMITER //
 CREATE TRIGGER `delete_device_trigger` BEFORE DELETE ON `dispositivos`
- FOR EACH ROW DELETE FROM perfil_dispositivo WHERE ID_Dispositivo=OLD.ID_Dispositivo
+ FOR EACH ROW BEGIN
+DELETE FROM perfil_dispositivo WHERE ID_Dispositivo=OLD.ID_Dispositivo;
+DELETE FROM simulaciones WHERE ID_Dispositivo=OLD.ID_Dispositivo;
+END
 //
 DELIMITER ;
 
@@ -91,13 +94,16 @@ CREATE TRIGGER `delete_profile_trigger` BEFORE DELETE ON `perfiles`
  FOR EACH ROW BEGIN
 DELETE FROM usuario_perfil WHERE ID_Perfil=OLD.ID_Perfil;
 DELETE FROM perfil_dispositivo WHERE ID_Perfil=OLD.ID_Perfil;
+DELETE FROM simulaciones WHERE ID_Perfil=OLD.ID_Perfil;
 END
 //
 DELIMITER ;
 DROP TRIGGER IF EXISTS `update_profile_trigger`;
 DELIMITER //
 CREATE TRIGGER `update_profile_trigger` BEFORE UPDATE ON `perfiles`
- FOR EACH ROW DELETE FROM perfil_dispositivo WHERE ID_Perfil=OLD.ID_Perfil
+ FOR EACH ROW BEGIN
+DELETE FROM perfil_dispositivo WHERE ID_Perfil=OLD.ID_Perfil;
+END
 //
 DELIMITER ;
 
@@ -121,6 +127,21 @@ CREATE TABLE IF NOT EXISTS `perfil_dispositivo` (
 
 INSERT INTO `perfil_dispositivo` (`ID_Perfil`, `ID_Dispositivo`) VALUES
 ('default', 'test');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `simulaciones`
+--
+
+DROP TABLE IF EXISTS `simulaciones`;
+CREATE TABLE IF NOT EXISTS `simulaciones` (
+  `ID_Perfil` char(20) NOT NULL,
+  `ID_Dispositivo` char(20) NOT NULL,
+  PRIMARY KEY (`ID_Perfil`,`ID_Dispositivo`),
+  KEY `remove_pd_simulador_disp` (`ID_Dispositivo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
@@ -193,6 +214,13 @@ INSERT INTO `usuario_perfil` (`ID_Usuario`, `ID_Perfil`) VALUES
 ALTER TABLE `perfil_dispositivo`
   ADD CONSTRAINT `remove_pd_device` FOREIGN KEY (`ID_Dispositivo`) REFERENCES `dispositivos` (`ID_Dispositivo`),
   ADD CONSTRAINT `remove_pd_profile` FOREIGN KEY (`ID_Perfil`) REFERENCES `perfiles` (`ID_Perfil`);
+
+--
+-- Filtros para la tabla `simulaciones`
+--
+ALTER TABLE `simulaciones`
+  ADD CONSTRAINT `remove_pd_simulador_disp` FOREIGN KEY (`ID_Dispositivo`) REFERENCES `dispositivos` (`ID_Dispositivo`),
+  ADD CONSTRAINT `remove_pd_simulador_perf` FOREIGN KEY (`ID_Perfil`) REFERENCES `perfiles` (`ID_Perfil`);
 
 --
 -- Filtros para la tabla `usuario_perfil`

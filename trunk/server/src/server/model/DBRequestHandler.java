@@ -193,4 +193,25 @@ public class DBRequestHandler {
 		}
 		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICE_IDS_WITH_TYPES(stypes));
 	}
+	
+//simuladores
+	public List<Object> listAllSimulators() {
+		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_ALL_SIMULATOR_IDS);
+	}
+	public List<Object> getSimulatorDevices(String simulatorid) {
+		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_SIMULATOR_WITH_ID(simulatorid));
+	}
+
+	public boolean addSimulator(SimulationRoutine sr) {
+		return runUpdate(C.Queries.INSERT_SIMULATOR(sr));
+	}
+	public boolean updateSimulator(SimulationRoutine sr) {
+		if(runUpdate(C.Queries.DELETE_SIMULATOR(sr))) {
+			return runUpdate(C.Queries.INSERT_SIMULATOR(sr));
+		}
+		return false;
+	}
+	public boolean deleteSimulator(SimulationRoutine sr) {
+		return runUpdate(C.Queries.DELETE_SIMULATOR(sr));
+	}
 }

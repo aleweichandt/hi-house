@@ -194,6 +194,17 @@ public class User {
 			return null;
 		}
 		
+		public SimulationRoutine getSimulator(String simulatorid) {
+			if(mProfiles.contains(simulatorid)) {
+				SimulationRoutine sr = SimulationMgr.getInstance().getSimulationWithId(simulatorid);
+				if(sr != null) {
+					return sr;
+				}
+				return SimulationRoutine.getFromDB(simulatorid);
+			}
+			return null;
+		}
+		
 		public boolean isAdmin(){
 			return mAdmin;
 		}
