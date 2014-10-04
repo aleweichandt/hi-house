@@ -2,8 +2,13 @@ package com.web.ones.hihouse;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,37 +16,54 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class ProfileAdminFragment extends ListFragment implements 
-	OnItemClickListener{
+public class ProfileAdminFragment extends ListFragment implements OnItemClickListener{
 	
 	private ProfileInfoFragment mProfileFragment = null;
 	private View mRootView;
 	private ListView mList = null;
-	private ArrayAdapter<String> mAdapter;
+	private ProfileListAdapter mAdapter;
+	private HiHouse hiHouseAct;
+	private ArrayList<Profile> profiles;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		hiHouseAct = (HiHouse)getActivity();
+		profiles = new ArrayList<Profile>();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_profiles, container, false);
-		loadProfilesList();
+
+		//Cargamos lista vacia mientras vuelve el request
+		mList = (ListView) mRootView.findViewById(android.R.id.list);
+		mAdapter = new ProfileListAdapter(getActivity());
+		mList.setAdapter(mAdapter);
 		
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_PROFILES, true, "profiles/all", "token="+hiHouseAct.getUser().getToken()));
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 		return mRootView;
 	}
 	
-	private void loadProfilesList() {
-		//TODO load real users
-		String[] values = new String[] { "Cocina", "Baño", "Cochera",
-									"Habitacion 1", "Living" };
+	public void loadProfilesList(String str) {
+		JSONArray profArray;
+		JSONObject profInfo;
+		try{
+			profArray = new JSONArray(str);
+			for(int i=0; i<profArray.length(); i++){
+    			profInfo = profArray.getJSONObject(i);
+    			Profile p = new Profile(profInfo.getString("id"), profInfo.getString("name"));
+    			profiles.add(p);
+    		}
+		}
+		catch(JSONException e){e.printStackTrace();}
 
-	    final ArrayList<String> list = new ArrayList<String>();
-	    for (int i = 0; i < values.length; ++i) {
-	      list.add(values[i]);
-	    }
-	    mAdapter = new ArrayAdapter<String>(getActivity(), R.layout.simple_row, list);
-	    
-	    mList = (ListView) mRootView.findViewById(android.R.id.list);
-	    mList.setAdapter(mAdapter);
+		mAdapter.notifyDataSetChanged();
 	}
 	
 	@Override
@@ -58,11 +80,30 @@ public class ProfileAdminFragment extends ListFragment implements
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-		String name = mAdapter.getItem(pos);
+		//String name = mAdapter.getItem(pos);
 		/*mProfileFragment = new ProfileInfoFragment(name, false);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		ft.add(R.id.userinfo_container, mProfileFragment);
 		ft.addToBackStack(ProfileInfoFragment.class.toString());
 		ft.commit();*/
 	}
+	
+	//adapter for list
+		private class ProfileListAdapter extends ArrayAdapter<Profile> {
+			private Context mContext;
+			
+			public ProfileListAdapter(Context context) {
+				super(context, R.layout.simple_row, profiles);
+				mContext = context;
+			}
+				
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View rowView = inflater.inflate(R.layout.simple_row, parent, false);
+				TextView tv = (TextView)rowView.findViewById(R.id.row_name);
+				tv.setText(profiles.get(position).getName());
+				return rowView;
+			}
+		}
 }

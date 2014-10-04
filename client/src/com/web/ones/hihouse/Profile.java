@@ -3,10 +3,16 @@ package com.web.ones.hihouse;
 import java.util.ArrayList;
 
 public class Profile {
+	private String id;
 	private String name;
 	private ArrayList<Device> devices;
 	
 	public Profile(String name){
+		this.name = name;
+		devices = new ArrayList<Device>();
+	}
+	public Profile(String id, String name){
+		this.id = id;
 		this.name = name;
 		devices = new ArrayList<Device>();
 	}
@@ -21,6 +27,9 @@ public class Profile {
 
 	public String getName() {
 		return name;
+	}
+	public String getId(){
+		return id;
 	}
 	
 	public String getDeviceByVoiceDesc(String voice_desc){
