@@ -59,10 +59,10 @@ public class ProfileAdminFragment extends ListFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 		String name = mAdapter.getItem(pos);
-		mProfileFragment = new ProfileInfoFragment(name, false);
+		/*mProfileFragment = new ProfileInfoFragment(name, false);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		ft.add(R.id.userinfo_container, mProfileFragment);
 		ft.addToBackStack(ProfileInfoFragment.class.toString());
-		ft.commit();
+		ft.commit();*/
 	}
 }

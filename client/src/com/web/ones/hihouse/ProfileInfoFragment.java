@@ -2,6 +2,11 @@ package com.web.ones.hihouse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -20,57 +25,74 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@SuppressLint("ValidFragment") /* Este supress es para que no haya que hacer clean a cada rato por el constructor con args */
 public class ProfileInfoFragment extends Fragment implements
 OnClickListener,
 OnItemClickListener{
+	final static String ARG_NAME = "name";
+	final static String ARG_IS_ADD = "isAddOperation";
 	private boolean mIsAddOperation = false;
 	private boolean mState = false;
 	private String mName;
 	private View mMainView;
+	private HiHouse hiHouseAct;
+	ListView lv;
+	private ArrayList<Device> devices;
+	private EditText prof_name;
 
-	public ProfileInfoFragment(String name, boolean isAddOperation) {
-	//TODO: tira error a veces y hay que hacer clean del proj porque no recomienda usar constructores con parametros, sino usar los ARG
-	// "Avoid non-default constructors in fragments: use a default constructor plus Fragment#setArguments(Bundle) instead"
-		mName = name;
-		mIsAddOperation = isAddOperation;
-		mState = mIsAddOperation;
+	public ProfileInfoFragment() {
+
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		hiHouseAct = (HiHouse)getActivity();
+		
+		Bundle args = getArguments();
+		if (args != null){
+			mName = args.getString(ARG_NAME, "Nuevo");
+			mIsAddOperation = args.getBoolean(ARG_IS_ADD);
+			mState = mIsAddOperation;
+		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mMainView = inflater.inflate(R.layout.fragment_profile_info, container, false);
-		loadProfileInfo();
+		
+		lv = (ListView) mMainView.findViewById(R.id.profileinfo_devices);
+		prof_name = (EditText)mMainView.findViewById(R.id.profileinfo_name);
+		prof_name.setText(mName);
+		
 		setEditMode(mIsAddOperation || mState);
+		
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_DEVICES, true, "devices/all", "token="+hiHouseAct.getUser().getToken()));
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+		
 		return mMainView;
 	}
 	
-	private void loadProfileInfo() {
-		
-		((EditText)mMainView.findViewById(R.id.profileinfo_name)).setText(mName);
-		ListView lv = (ListView) mMainView.findViewById(R.id.profileinfo_devices);
-		final ArrayList<String> list = getDevices();
-		ProfileInfoAdapter adapter = new ProfileInfoAdapter(getActivity(), list);
-		lv.setAdapter(adapter);
-	}
-	
-	private ArrayList<String> getDevices() {
-		//TODO get device list
-		String[] values = new String[] { "Luz cocina 1", "Luz cocina 2", "Puerta Cochera",
-				"A/C Habitacion 1", "Luz Living", "Luz Jardin Trasero", "A/C Living" };
-
+	public void loadDevices(String str) {
+		devices = new ArrayList<Device>();
 		final ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0; i < values.length; ++i) {
-			list.add(values[i]);
-		}
-		return list;
+		JSONArray devArray;
+		JSONObject deviceInfo;
+    	try{
+    		devArray = new JSONArray(str);
+    		for(int i=0; i<devArray.length(); i++){
+    			deviceInfo = devArray.getJSONObject(i);
+    			Device d = new Device(deviceInfo.getString("id"), deviceInfo.getString("name"));
+    			d.setState(false); //estado del checkbox
+    			devices.add(d);
+    		}
+    	}
+    	catch(JSONException e){
+    		e.printStackTrace();
+    	}
+    	
+		ProfileInfoAdapter adapter = new ProfileInfoAdapter(getActivity());
+		lv.setAdapter(adapter);
 	}
 	
 	@Override
@@ -90,7 +112,6 @@ OnItemClickListener{
 		mMainView.findViewById(R.id.profileinfo_cancel).setOnClickListener(listener);
 		mMainView.findViewById(R.id.profileinfo_edit).setOnClickListener(listener);
 		mMainView.findViewById(R.id.profileinfo_delete).setOnClickListener(listener);
-		ListView lv = (ListView)mMainView.findViewById(R.id.profileinfo_devices);
 		lv.setOnItemClickListener((OnItemClickListener) listener);
 	}
 
@@ -120,12 +141,24 @@ OnItemClickListener{
 	}
 	
 	private void onConfirmPressed() {
-		//TODO save changes
-		if(mIsAddOperation) {
-			getActivity().getFragmentManager().popBackStack();
-			return;
+		String profName = prof_name.getText().toString();
+		JSONObject builder = new JSONObject();
+		JSONArray devArray = new JSONArray();
+		try{
+			builder.put("name", profName);
+			builder.put("description", "blabla");//TODO desc de donde? agregar campo?
+			for(Device d : devices){
+				if(d.getState())
+					devArray.put(d.getId());
+			}
+			builder.put("devices", devArray);
 		}
-		setEditMode(false);
+		catch (JSONException e){}
+		
+		//TODO revisar ID
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_PROFILE, false, "profiles/"+profName.toLowerCase().replace(" ", "")+"?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+		
 	}
 	
 	private void onCancelPressed() {
@@ -155,27 +188,42 @@ OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> ad, View v, int pos, long id) {
 		CheckBox r = (CheckBox)v.findViewById(R.id.dev_row_check);
-		r.setChecked(!r.isChecked());
+		boolean b = !r.isChecked();
+		r.setChecked(b);
+		devices.get(pos).setState(b);
 	}
-//adapter for list
-	private class ProfileInfoAdapter extends ArrayAdapter<String> {
-		private ArrayList<String> mData;
+	
+	//adapter for list
+	private class ProfileInfoAdapter extends ArrayAdapter<Device> {
 		private Context mContext;
 		
-		public ProfileInfoAdapter(Context context, List<String> objects) {
-			super(context, R.layout.profileinfo_device_row, objects);
-			mData = (ArrayList<String>) objects;
+		public ProfileInfoAdapter(Context context) {
+			super(context, R.layout.profileinfo_device_row, devices);
 			mContext = context;
 		}
 			
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = (LayoutInflater) mContext
-										.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(R.layout.profileinfo_device_row, parent, false);
 			TextView tv = (TextView)rowView.findViewById(R.id.dev_row_name);
-			tv.setText(mData.get(position));
+			tv.setText(devices.get(position).getName());
+			CheckBox cb = (CheckBox)rowView.findViewById(R.id.dev_row_check);
+			cb.setChecked(devices.get(position).getState());
 			return rowView;
 		}
+	}
+
+	public void addProfileResult(boolean b) {
+		if(!b) {
+			Toast.makeText(getActivity(), "Un perfil con ese nombre ya existe.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if(mIsAddOperation) {
+			Toast.makeText(getActivity(), "Perfil agregado exitosamente.", Toast.LENGTH_LONG).show();
+			getActivity().getFragmentManager().popBackStack();
+			return;
+		}
+		setEditMode(false);
 	}
 }
