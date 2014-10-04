@@ -277,6 +277,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		break;
     	case DRAWER_MENU_INDEX_PROFILES: 
     		fragment = new ProfileAdminFragment();
+    		fragmentTag = ProfileAdminFragment.class.getName();
+    		addToBackStack = true;
+    		backStackTag = ProfileAdminFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_ADD_DEVICE:
     		fragment = new DeviceInfoFragment("Nuevo", true);
@@ -454,6 +457,18 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
         		if(frag!=null){
         			try{((ProfileInfoFragment)frag).addProfileResult(rc==200?true:false);}catch(ClassCastException e){}
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.GET_ALL_PROFILES:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(ProfileAdminFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((ProfileAdminFragment)frag).loadProfilesList(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar perfiles", Toast.LENGTH_SHORT).show();
         		}
         		mainLoadingBar.setVisibility(View.GONE);
         		break;

@@ -25,9 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ProfileInfoFragment extends Fragment implements
-OnClickListener,
-OnItemClickListener{
+public class ProfileInfoFragment extends Fragment implements OnClickListener, OnItemClickListener{
 	final static String ARG_NAME = "name";
 	final static String ARG_IS_ADD = "isAddOperation";
 	private boolean mIsAddOperation = false;
@@ -75,7 +73,6 @@ OnItemClickListener{
 	
 	public void loadDevices(String str) {
 		devices = new ArrayList<Device>();
-		final ArrayList<String> list = new ArrayList<String>();
 		JSONArray devArray;
 		JSONObject deviceInfo;
     	try{
