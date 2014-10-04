@@ -207,7 +207,7 @@ public class UserService {
 	@POST
 	@Path("{id}/delete")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response deleteUser(@PathParam("id") String userid, @QueryParam("token") String tkn) {
+	public Response deleteUser(@PathParam("id") String userid, @QueryParam("token") String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();

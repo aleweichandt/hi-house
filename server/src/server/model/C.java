@@ -4,6 +4,7 @@ import java.io.StringReader;
 //import java.util.Iterator;
 //import java.util.List;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public final class C {
 		public static final int SECURITY_UPDATE_TIME = 10000;
 		public static final float SECURITY_SN_LIGHT_LIMIT = 100;
 		public static final float SECURITY_SN_TERMAL_LIMIT = 40;
+	//Simulation Manager
+		public static final int SIMULATION_MIN_UPDATE_TIME = 1000;
+		public static final int SIMULATION_MAX_UPDATE_TIME = 10000;
 	}
 
 	//MySQL Queries
@@ -46,6 +50,9 @@ public final class C {
 		
 		public static final String GET_ALL_DEVICE_IDS = 
 				"SELECT distinct ID_Dispositivo from dispositivos";
+		
+		public static final String GET_ALL_SIMULATOR_IDS = 
+				"SELECT distinct ID_Perfil from simulaciones";
 		
 		public static final String GET_USER_WITH_ID(String userid){
 			return "SELECT * from usuarios where ID_Usuario = '" + userid + "'";
@@ -69,6 +76,10 @@ public final class C {
 		public static final String GET_DEVICE_IDS_WITH_TYPES(List<String> types) {
 			String ts = getStringList(types);
 			return "SELECT distinct ID_Dispositivo from dispositivos where Tipo in " + ts;
+		}
+		
+		public static final String GET_SIMULATOR_WITH_ID(String simulatorid) {
+			return "SELECT * from simulaciones where ID_Perfil = '" + simulatorid + "'";
 		}
 		
 		public static final String INSERT_USER(User user){
@@ -157,11 +168,21 @@ public final class C {
 		}
 		
 		public static final String INSERT_USER_PROFILE(List<String> users, List<String> profiles) {
-			return "INSERT INTO usuario_perfil VALUES" + getPairStringList(users, profiles);
+			return "INSERT INTO usuario_perfil VALUES " + getPairStringList(users, profiles);
 		}
 		
 		public static final String INSERT_PROFILE_DEVICE(List<String> profiles, List<String> devices) {
-			return "INSERT INTO perfil_dispositivo VALUES" + getPairStringList(profiles, devices);
+			return "INSERT INTO perfil_dispositivo VALUES " + getPairStringList(profiles, devices);
+		}
+		
+		public static final String INSERT_SIMULATOR(SimulationRoutine sr) {
+			List<String> idlist = new ArrayList<String>();
+			idlist.add(sr.getId());
+			return "INSERT INTO simulaciones VALUES" + getPairStringList(idlist, sr.getDevices());
+		}
+		
+		public static final String DELETE_SIMULATOR(SimulationRoutine sr) {
+			return "DELETE FROM simulaciones WHERE ID_Perfil='" + sr.getId() + "'";
 		}
 		
 		private static final String getPairStringList( List<String> values1, List<String> values2) {

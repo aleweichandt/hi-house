@@ -9,10 +9,10 @@ public class TermalSensor extends Sensor {
 		super(id, name, voiceid, state, pin1, pin2, pin3);
 	}
 
-	@Override
+	/*@Override
 	public float getValue() {
 		return (float) (((super.getValue() * 0.004882814)  - 0.5) * 100.0);
-	}
+	}*/
 
 	@Override
 	public int getValueType() {

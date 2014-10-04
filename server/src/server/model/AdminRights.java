@@ -125,4 +125,51 @@ public class AdminRights {
 		}
 		return dv.deleteFromDB();
 	}
+	
+//Simulator
+	public List<String> listAllSimulators() {
+		List<String> ret = new ArrayList<String>();
+		DBRequestHandler request = new DBRequestHandler();
+		List<Object> ids = request.listAllSimulators();
+		if(!ids.isEmpty()) {
+			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
+				ret.add((String)it.next());
+			}
+		}
+		return ret;
+	}
+	
+	public SimulationRoutine getSimulator(String simulatorid) {
+		SimulationRoutine sr = SimulationMgr.getInstance().getSimulationWithId(simulatorid);
+		if(sr == null){
+			return SimulationRoutine.getFromDB(simulatorid);
+		}
+		return sr;
+	}
+	
+	public boolean addSimulator(String simulatorid, JsonObject params) {
+		SimulationRoutine sr = SimulationRoutine.getFromDB(simulatorid);
+		if(sr != null){
+			return false;
+		}
+		sr = SimulationRoutine.getFromJson(simulatorid, params);
+		if(sr == null) {
+			return false;
+		}
+		return sr.commitToDB();
+	}
+	
+	public boolean deleteSimulator(String simulatorid) {
+		SimulationRoutine sr = SimulationMgr.getInstance().getSimulationWithId(simulatorid);
+		if(sr == null){
+			sr = SimulationRoutine.getFromDB(simulatorid);
+			if(sr == null) {
+				return false;
+			}
+		} else {
+			SimulationMgr.getInstance().removeSimulation(sr);
+		}
+		return sr.deleteFromDB();
+	}
+	
 }

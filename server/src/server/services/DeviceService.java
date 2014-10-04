@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 
 import server.model.C;
 import server.model.SessionHandler;
+import server.model.SimulationMgr;
+import server.model.SimulationRoutine;
 import server.model.UserSession;
 import server.model.devices.Device;
 
@@ -137,7 +139,7 @@ public class DeviceService {
 	@POST
 	@Path("{id}/delete")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response deleteDevice(@PathParam("id") String deviceid, @QueryParam("token")String tkn) {
+	public Response deleteDevice(@PathParam("id") String deviceid, @QueryParam("token")String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
@@ -148,13 +150,17 @@ public class DeviceService {
 		if(!newSession.getAdmin().deleteDevice(deviceid)) {
 			return Response.status(500).entity("not found").build();
 		}
+		List<SimulationRoutine> lsr = SimulationMgr.getInstance().getSimulationsWithDevice(deviceid);
+		for(Iterator<SimulationRoutine> it = lsr.iterator();it.hasNext();) {
+			it.next().removeDeviceWithId(deviceid);
+		}
 		return Response.status(200).entity(deviceid + " removed").build();
 	}
 	
 	@POST
 	@Path("{id}/state")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response setDeviceState(@PathParam("id") String deviceid, @QueryParam("enabled")boolean enabled, @QueryParam("token")String tkn) {
+	public Response setDeviceState(@PathParam("id") String deviceid, @QueryParam("enabled")boolean enabled, @QueryParam("token")String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
