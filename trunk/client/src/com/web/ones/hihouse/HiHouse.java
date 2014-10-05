@@ -450,15 +450,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		}
         		else{
         			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
+        			mainLoadingBar.setVisibility(View.GONE);
         		}
-        		mainLoadingBar.setVisibility(View.GONE);
-        		break;
-        	case Request.ADD_PROFILE:
-        		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
-        		if(frag!=null){
-        			try{((ProfileInfoFragment)frag).addProfileResult(rc==200?true:false);}catch(ClassCastException e){}
-        		}
-        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.GET_ALL_PROFILES:
         		if(rc==200){
@@ -471,6 +464,45 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			Toast.makeText(context, "Error al cargar perfiles", Toast.LENGTH_SHORT).show();
         		}
         		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.GET_PROFILE_DEVICES:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((ProfileInfoFragment)frag).checkDevices(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.ADD_PROFILE:
+        		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{((ProfileInfoFragment)frag).addProfileResult(rc==200?true:false);}catch(ClassCastException e){}
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.UPDATE_PROFILE:
+        		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{
+        				((ProfileInfoFragment)frag).updateProfileResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(ProfileAdminFragment.class.getName());
+        				((ProfileAdminFragment)frag).refreshProfiles();
+    				}catch(ClassCastException e){}
+        		}
+        		break;
+        	case Request.DELETE_PROFILE:
+        		frag = getFragmentManager().findFragmentByTag(ProfileInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{
+        				((ProfileInfoFragment)frag).deleteProfileResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(ProfileAdminFragment.class.getName());
+        				((ProfileAdminFragment)frag).refreshProfiles();
+        			}catch(ClassCastException e){}
+        		}
         		break;
         	}
         }

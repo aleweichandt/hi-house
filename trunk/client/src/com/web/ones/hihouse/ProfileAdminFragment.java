@@ -40,14 +40,22 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_profiles, container, false);
 
-		//Cargamos lista vacia mientras vuelve el request
 		mList = (ListView) mRootView.findViewById(android.R.id.list);
+		
+		//Cargamos lista vacia mientras vuelve el request
 		mAdapter = new ProfileListAdapter(getActivity());
 		mList.setAdapter(mAdapter);
 		
 		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_PROFILES, true, "profiles/all", "token="+hiHouseAct.getUser().getToken()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+		
 		return mRootView;
+	}
+
+	public void refreshProfiles() {
+		profiles = new ArrayList<Profile>();
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_PROFILES, true, "profiles/all", "token="+hiHouseAct.getUser().getToken()));
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 	}
 	
 	public void loadProfilesList(String str) {
@@ -80,12 +88,16 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-		//String name = mAdapter.getItem(pos);
-		/*mProfileFragment = new ProfileInfoFragment(name, false);
+		mProfileFragment = new ProfileInfoFragment();
+		Bundle args = new Bundle();
+		args.putBoolean(ProfileInfoFragment.ARG_IS_ADD, false);
+		args.putString(ProfileInfoFragment.ARG_PROFILE_NAME, profiles.get(pos).getName());
+		args.putString(ProfileInfoFragment.ARG_PROFILE_ID, profiles.get(pos).getId());
+		mProfileFragment.setArguments(args);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-		ft.add(R.id.userinfo_container, mProfileFragment);
+		ft.add(R.id.userinfo_container, mProfileFragment, ProfileInfoFragment.class.getName());
 		ft.addToBackStack(ProfileInfoFragment.class.toString());
-		ft.commit();*/
+		ft.commit();
 	}
 	
 	//adapter for list
@@ -104,6 +116,11 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 				TextView tv = (TextView)rowView.findViewById(R.id.row_name);
 				tv.setText(profiles.get(position).getName());
 				return rowView;
+			}
+			
+			@Override
+			public int getCount(){
+				return profiles.size();
 			}
 		}
 }
