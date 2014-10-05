@@ -11,4 +11,7 @@ public class Request {
 	public static final int GET_ALL_DEVICES = 7;
 	public static final int ADD_PROFILE = 8;
 	public static final int GET_ALL_PROFILES = 9;
+	public static final int GET_PROFILE_DEVICES = 10;
+	public static final int DELETE_PROFILE = 11;
+	public static final int UPDATE_PROFILE = 12;
 }

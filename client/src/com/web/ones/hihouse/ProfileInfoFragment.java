@@ -10,8 +10,10 @@ import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,11 +28,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ProfileInfoFragment extends Fragment implements OnClickListener, OnItemClickListener{
-	final static String ARG_NAME = "name";
+	final static String ARG_PROFILE_NAME = "name";
+	final static String ARG_PROFILE_ID = "id";
 	final static String ARG_IS_ADD = "isAddOperation";
 	private boolean mIsAddOperation = false;
 	private boolean mState = false;
 	private String mName;
+	private String id;
 	private View mMainView;
 	private HiHouse hiHouseAct;
 	ListView lv;
@@ -40,7 +44,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	public ProfileInfoFragment() {
 
 	}
-
+//TODO Falta Edit (ya se marcan los devices)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,7 +53,8 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		
 		Bundle args = getArguments();
 		if (args != null){
-			mName = args.getString(ARG_NAME, "Nuevo");
+			mName = args.getString(ARG_PROFILE_NAME, "Nuevo");
+			id = args.getString(ARG_PROFILE_ID, "");
 			mIsAddOperation = args.getBoolean(ARG_IS_ADD);
 			mState = mIsAddOperation;
 		}
@@ -88,6 +93,31 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
     		e.printStackTrace();
     	}
     	
+    	if(!mIsAddOperation){
+    		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_PROFILE_DEVICES, true, "profiles/"+id+"/devices", "token="+hiHouseAct.getUser().getToken()));
+    	}
+    	else{
+    		ProfileInfoAdapter adapter = new ProfileInfoAdapter(getActivity());
+    		lv.setAdapter(adapter);
+    		hiHouseAct.setLoadingBarVisibility(View.GONE);
+    	}
+	}
+	
+	public void checkDevices(String str){
+		JSONArray devArray;
+		JSONObject deviceInfo;
+		try{
+    		devArray = new JSONArray(str);
+    		for(int i=0; i<devArray.length(); i++){
+    			deviceInfo = devArray.getJSONObject(i);
+    			for(Device d : devices){
+    				if(d.getId().equals(deviceInfo.getString("id"))) d.setState(true);
+    			}
+    		}
+    	}
+    	catch(JSONException e){
+    		e.printStackTrace();
+    	}
 		ProfileInfoAdapter adapter = new ProfileInfoAdapter(getActivity());
 		lv.setAdapter(adapter);
 	}
@@ -152,10 +182,12 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		}
 		catch (JSONException e){}
 		
-		//TODO revisar ID
-		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_PROFILE, false, "profiles/"+profName.toLowerCase().replace(" ", "")+"?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+		//TODO revisar ID (puse el name por ahora)
+		if(mIsAddOperation)
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_PROFILE, false, "profiles/"+profName.toLowerCase().replace(" ", "")+"?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+		else
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_PROFILE, false, "profiles/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
-		
 	}
 	
 	private void onCancelPressed() {
@@ -168,9 +200,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	}
 	
 	private void onDeletePressed() {
-		//TODO ask before
-		//TODO remove user
-		getActivity().getFragmentManager().popBackStack();
+		confirmDelete();
 	}
 	
 	private void setEditMode(boolean on) {
@@ -211,8 +241,8 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		}
 	}
 
-	public void addProfileResult(boolean b) {
-		if(!b) {
+	public void addProfileResult(boolean added) {
+		if(!added) {
 			Toast.makeText(getActivity(), "Un perfil con ese nombre ya existe.", Toast.LENGTH_LONG).show();
 			return;
 		}
@@ -223,4 +253,50 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		}
 		setEditMode(false);
 	}
+	
+	public void updateProfileResult(boolean updated) {
+		if(!updated) {
+			Toast.makeText(getActivity(), "El perfil no pudo ser actualizado.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		Toast.makeText(getActivity(), "Perfil actualizado exitosamente.", Toast.LENGTH_LONG).show();
+		getActivity().getFragmentManager().popBackStack();
+		return;
+	}
+	
+	public void confirmDelete() {
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				 switch (which) {
+				 case DialogInterface.BUTTON_POSITIVE:
+					 	hiHouseAct.mHiHouseService.sendCommand(new Command(Request.DELETE_PROFILE, false, "profiles/"+id+"/delete?token="+hiHouseAct.getUser().getToken(), ""));
+					 	hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+				        break;
+				
+				 case DialogInterface.BUTTON_NEGATIVE:
+				        // No button clicked do nothing
+					 	//Toast.makeText(getActivity(), "No Clicked",Toast.LENGTH_LONG).show();
+				        break;
+				 }
+			}
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("¿Está seguro que desea eliminar el perfil \""+prof_name.getText().toString()+"\"?")
+                     .setPositiveButton("Si", dialogClickListener)
+                     .setNegativeButton("No", dialogClickListener).show();
+	}
+	
+	public void deleteProfileResult(boolean deleted) {
+		if(deleted){
+			Toast.makeText(getActivity(), "Perfil eliminado exitosamente.", Toast.LENGTH_LONG).show();
+			getActivity().getFragmentManager().popBackStack();
+		}
+		else {
+			Toast.makeText(getActivity(), "El Perfil no pudo ser eliminado.", Toast.LENGTH_LONG).show();
+			hiHouseAct.setLoadingBarVisibility(View.GONE);
+		}
+		
+	}
+
 }
