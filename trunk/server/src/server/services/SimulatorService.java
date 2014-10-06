@@ -126,7 +126,7 @@ public class SimulatorService {
 		return Response.status(200).entity(ret.toString()).build();
 	}
 	
-	@POST
+	/*@POST
 	@Path("{id}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response addRoutine(@PathParam("id") String routineid, @QueryParam("token") String tkn, String body) {
@@ -142,32 +142,34 @@ public class SimulatorService {
 			Response.status(200).entity("routine:"+ routineid + " already exist").build();
 		}
 		return Response.status(200).entity("routine:"+ routineid).build();
-	}
+	}*/
 	
 	@POST
-	@Path("{id}/update")
+	//@Path("{id}/update")
+	@Path("{id}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response updateRoutine(@PathParam("id") String routineid, @QueryParam("token") String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
 		}
-		SimulationRoutine sr = newSession.getUser().getSimulator(routineid);
-		if(sr == null) {
-			if(newSession.getAdmin() == null) {
-				return Response.status(403).entity("no admin rights").build();
-			}
-			sr = newSession.getAdmin().getSimulator(routineid);
-			if(sr == null) {
-				return Response.status(500).entity("not found").build();
-			}
+		if(newSession.getAdmin() == null) {
+			return Response.status(403).entity("no admin rights").build();
 		}
 		JsonObject params = C.getJsonFromString(body);
+		SimulationRoutine sr = newSession.getAdmin().getSimulator(routineid);
+		if(sr == null) {
+			//then add it
+			if(!newSession.getAdmin().addSimulator(routineid, params)) {
+				Response.status(200).entity("server error").build();
+			}
+			return Response.status(200).entity("routine:"+ routineid).build();
+		}
 		sr.updateWithJson(params, true);
 		return Response.status(200).entity("routine:"+ routineid).build();
 	}
 	
-	@POST
+	/*@POST
 	@Path("{id}/delete")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response deleteRoutine(@PathParam("id") String routineid, @QueryParam("token") String tkn, String body) {
@@ -182,5 +184,5 @@ public class SimulatorService {
 			Response.status(500).entity("not found").build();
 		}
 		return Response.status(200).entity("routine:"+ routineid + " deleted").build();
-	}
+	}*/
 }
