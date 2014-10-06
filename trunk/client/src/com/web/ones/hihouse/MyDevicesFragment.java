@@ -46,18 +46,15 @@ import android.widget.Toast;
 public class MyDevicesFragment extends Fragment{
 
 	private View mRootView;
-	private ListView mList = null;
-	private ArrayAdapter<String> mAdapter;
 	private ImageButton btn_start_stop;
 	private TextView txt_select;
-	private Boolean toggle_open_close=false, toggle_start_stop=false;
+	private boolean toggle_start_stop=false;
 	private ExpandableListView expListView;
 	private ExpandableListAdapter myExpListAdapter;
 	private TextView temp_txt;
 	private SeekBar temp_seekBar;
 	private ProgressBar temp_loading_bar;
 	private String request;
-	private boolean deviceState;
 	private int seekBar_temp_corrector = 14;
 	private int actual_temp = -1;
 	private HiHouse hiHouseAct;
@@ -72,7 +69,6 @@ public class MyDevicesFragment extends Fragment{
 		
 		hiHouseAct = (HiHouse)getActivity();
 		
-        //myExpListAdapter = new MyExpandableListAdapter(hiHouseAct, hiHouseAct.getUser().getProfiles());
 		myExpListAdapter = new MyExpandableListAdapter(hiHouseAct);
 	}
 	
