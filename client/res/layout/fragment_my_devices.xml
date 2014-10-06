@@ -13,47 +13,27 @@
 	    android:orientation="vertical"
 	    android:background="#666" >
 
-		<RelativeLayout
+		<LinearLayout
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
-		    android:orientation="vertical" >
+		    android:orientation="horizontal"
+		    android:gravity="center" >
 
-		    <Switch
-		        android:id="@+id/on_off_switch"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
-		        android:switchTextAppearance="@style/SwitchTextAppearance"
-		        android:textOff="@string/off_switch"
-		        android:textOn="@string/on_switch"
-		        android:visibility="gone" />
-
-		    <ImageButton
-		        android:id="@+id/open_close_button"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
-		        android:contentDescription="@string/open_close_btn_desc"
-		        android:src="@drawable/ic_action_secure"
-		        android:visibility="gone" />
-
-		    <ImageButton
-		        android:id="@+id/start_stop_button"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
-		        android:contentDescription="@string/start_stop_btn_desc"
-		        android:src="@drawable/ic_action_play_over_video"
-		        android:visibility="gone" />
-		    
 		    <TextView 
 		        android:id="@+id/select_item_text"
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
 		    	android:text="@string/select_item"
-		    	android:textStyle="bold"
-		    	android:layout_centerInParent="true"/>
-		</RelativeLayout>
+		    	android:textStyle="bold"/>
+		    <ImageButton
+		        android:id="@+id/start_stop_button"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:contentDescription="@string/start_stop_btn_desc"
+		        android:src="@drawable/ic_action_play_over_video"
+		        android:visibility="gone" />
+		    
+		</LinearLayout>
 
 		<LinearLayout
 		    android:layout_width="match_parent"

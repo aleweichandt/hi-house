@@ -93,13 +93,15 @@ public class User {
 	
 	public boolean updateDevice(String jsonStr) {
 		JSONObject device;
+		boolean result = false;
 		try{
 			device = new JSONObject(jsonStr);
 			String id = device.getString("id");
 			boolean state = device.getBoolean("state");
 			for(Profile p : profiles){
-				if(p.setDeviceState(id, state)) return true;
+				if(p.setDeviceState(id, state)) result = true;
 			}
+			return result;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

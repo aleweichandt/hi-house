@@ -48,8 +48,7 @@ public class MyDevicesFragment extends Fragment{
 	private View mRootView;
 	private ListView mList = null;
 	private ArrayAdapter<String> mAdapter;
-	private Switch onOffSwitch;
-	private ImageButton btn_open_close, btn_start_stop;
+	private ImageButton btn_start_stop;
 	private TextView txt_select;
 	private Boolean toggle_open_close=false, toggle_start_stop=false;
 	private ExpandableListView expListView;
@@ -83,8 +82,6 @@ public class MyDevicesFragment extends Fragment{
 		
 		expListView = (ExpandableListView) mRootView.findViewById(R.id.profiles_explist);
         
-		onOffSwitch = (Switch) mRootView.findViewById(R.id.on_off_switch);
-		btn_open_close = (ImageButton) mRootView.findViewById(R.id.open_close_button);
 		btn_start_stop = (ImageButton) mRootView.findViewById(R.id.start_stop_button);
 		txt_select = (TextView) mRootView.findViewById(R.id.select_item_text);
 		
@@ -114,17 +111,7 @@ public class MyDevicesFragment extends Fragment{
 		super.onPause();
 	}
 	
-	private void setEventsListeners() {
-		btn_open_close.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v){
-				deviceState=!deviceState;
-				btn_open_close.setImageResource(deviceState?R.drawable.ic_action_not_secure:R.drawable.ic_action_secure);
-				hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request+deviceState,""));
-				hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
-			}
-		});
-		
+	private void setEventsListeners() {		
 		btn_start_stop.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
@@ -132,16 +119,6 @@ public class MyDevicesFragment extends Fragment{
 				toggle_start_stop=!toggle_start_stop;
 				//TODO arrancar/detener simulador
 			}
-		});
-		
-		onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		    	if(deviceState!=isChecked){
-		    		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false,request+isChecked,""));
-		    		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
-			    	deviceState=!deviceState;
-		    	}
-		    }
 		});
 		
 		temp_seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -179,36 +156,10 @@ public class MyDevicesFragment extends Fragment{
             	Device dvc = prf.getDevices().get(childPos);
             	String tkn = usr.getToken();
             	request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=";
-            	
-            	((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(dvc.getId(), true);
-            	txt_select.setVisibility(View.GONE);
-            	deviceState = dvc.getState();
-            	switch(dvc.getType()){
-            	case Device.DEVICE_TYPE_AC_LIGHT:
-            		onOffSwitch.setChecked(deviceState);
-            		onOffSwitch.setVisibility(View.VISIBLE);
-            		btn_open_close.setVisibility(View.GONE);
-            		btn_start_stop.setVisibility(View.GONE);
-            		break;
-            	case Device.DEVICE_TYPE_AC_TERMAL:
-            		onOffSwitch.setChecked(deviceState);
-            		onOffSwitch.setVisibility(View.VISIBLE);
-            		btn_open_close.setVisibility(View.GONE);
-            		btn_start_stop.setVisibility(View.GONE);
-            		break;
-            	case Device.DEVICE_TYPE_SN_TERMAL:
-            		onOffSwitch.setChecked(deviceState);
-            		onOffSwitch.setVisibility(View.VISIBLE);
-            		btn_open_close.setVisibility(View.GONE);
-            		btn_start_stop.setVisibility(View.GONE);
-            		break;
-            	case Device.DEVICE_TYPE_AC_DOOR:
-            		btn_open_close.setImageResource(deviceState?R.drawable.ic_action_not_secure:R.drawable.ic_action_secure);
-            		onOffSwitch.setVisibility(View.GONE);
-            		btn_open_close.setVisibility(View.VISIBLE);
-            		btn_start_stop.setVisibility(View.GONE);
-            		break;
-            	}
+
+            	hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false, request+!dvc.getState(),""));
+	    		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+	    		
             	return true;
             }
         });
@@ -219,10 +170,8 @@ public class MyDevicesFragment extends Fragment{
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPos, long id) {
 				User usr = hiHouseAct.getUser();
         		Profile prf = usr.getProfiles().get(groupPos);
-        		((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(prf.getName(), false);
-        		txt_select.setVisibility(View.GONE);
-        		onOffSwitch.setVisibility(View.GONE);
-        		btn_open_close.setVisibility(View.GONE);
+        		((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(prf.getName());
+        		txt_select.setText("Simulador Perfil \""+prf.getName()+"\":");
         		btn_start_stop.setVisibility(View.VISIBLE);
 				return false;
 			}
