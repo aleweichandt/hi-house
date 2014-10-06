@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-10-2014 a las 05:13:24
+-- Tiempo de generación: 06-10-2014 a las 16:09:11
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -157,6 +157,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `Email` varchar(50) DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
   `Receptor_Alerta` tinyint(1) NOT NULL DEFAULT '0',
+  `ID_Notificacion` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`ID_Usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -164,8 +165,8 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Password`, `Email`, `Admin`, `Receptor_Alerta`) VALUES
-('admin', 'administrador', '1234', NULL, 1, 0);
+INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Password`, `Email`, `Admin`, `Receptor_Alerta`, `ID_Notificacion`) VALUES
+('admin', 'administrador', '1234', NULL, 1, 0, NULL);
 
 --
 -- Disparadores `usuarios`

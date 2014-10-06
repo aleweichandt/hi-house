@@ -34,6 +34,7 @@ public final class C {
 		public static final int SECURITY_UPDATE_TIME = 10000;
 		public static final float SECURITY_SN_LIGHT_LIMIT = 100;
 		public static final float SECURITY_SN_TERMAL_LIMIT = 40;
+		public static final int SECURITY_ALERT_TIME_OFFSET = 120000;
 	//Simulation Manager
 		public static final int SIMULATION_MIN_UPDATE_TIME = 1000;
 		public static final int SIMULATION_MAX_UPDATE_TIME = 10000;
@@ -89,8 +90,10 @@ public final class C {
 			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
 			String adm = user.isAdmin()?"1":"0";
 			String recv = user.isReceptor()?"1":"0";
+			String notifid = (user.getNotificationID().isEmpty())?"NULL":("'" + user.getNotificationID() + "'");
 			return "INSERT INTO usuarios VALUES (" +id + "," + name + "," + pwd +
-												 "," + email + "," + adm + "," + recv + ")";
+												 "," + email + "," + adm + "," + recv +
+												 "," + notifid + ")";
 		}
 		
 		public static final String UPDATE_USER(User user){
@@ -100,9 +103,10 @@ public final class C {
 			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
 			String adm = user.isAdmin()?"1":"0";
 			String recv = user.isReceptor()?"1":"0";
+			String notifid = (user.getNotificationID().isEmpty())?"NULL":("'" + user.getNotificationID() + "'");
 			return "UPDATE usuarios SET Nombre=" + name + ",Password=" + pwd +
 				   ",Email=" + email + ",Admin=" + adm + ",Receptor_Alerta=" + recv +
-				   " WHERE ID_Usuario="+id;
+				   ",ID_Notificacion=" + notifid + " WHERE ID_Usuario="+id;
 		}
 		
 		public static final String DELETE_USER(String userid) {

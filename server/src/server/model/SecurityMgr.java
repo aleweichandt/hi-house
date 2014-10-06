@@ -3,6 +3,9 @@ package server.model;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 import server.model.devices.Device;
 import server.model.devices.Sensor;
 
@@ -21,13 +24,18 @@ public class SecurityMgr {
 	
 	private int mTime;
 	private boolean mEnabled;
+	private int mTimeToSendAlert;
 	public SecurityMgr() {
 		mTime = 0;
 		mEnabled = false;
+		mTimeToSendAlert = 0;
 	}
 	
 	public void update(int dt) {
 		mTime += dt;
+		if(mTimeToSendAlert > 0) {
+			mTimeToSendAlert -= dt;
+		}
 		if(mTime > C.Config.SECURITY_UPDATE_TIME) {
 			mTime -= C.Config.SECURITY_UPDATE_TIME;
 			if(mEnabled) {
@@ -55,9 +63,21 @@ public class SecurityMgr {
 	}
 	
 	private void sendAlert() {
-		User dest = getAlertDestination();
-		if(dest != null) {
-			//TODO send alert to dest
+		if(mTimeToSendAlert <= 0) {
+			User dest = getAlertDestination();
+			if(dest != null) {
+				String notificationId = dest.getNotificationID();
+				if(notificationId != null && !notificationId.isEmpty()) {
+					//send alert to dest
+					JsonObject data = Json.createObjectBuilder()
+										  .add("message_id", "security_alert")
+										  .build();
+					AndroidNotification an = new AndroidNotification();
+					if(an.send(notificationId, data)){
+						mTimeToSendAlert += C.Config.SECURITY_ALERT_TIME_OFFSET;
+					}
+				}
+			}
 		}
 	}
 	
