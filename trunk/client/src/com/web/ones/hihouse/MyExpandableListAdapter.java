@@ -17,14 +17,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
  
     private Context _context;
     private HiHouse hiHouse;
-    //private List<Profile> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
     private String selectedItem = "";
-    private boolean isDevice = false;
     
-    public void setSelectedItem(String item, boolean isDevice){
+    public void setSelectedItem(String item){
     	this.selectedItem = item;
-    	this.isDevice = isDevice;
     	this.notifyDataSetChanged();
     }
  
@@ -61,10 +58,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         }
  
         LinearLayout deviceLine = (LinearLayout) convertView.findViewById(R.id.device_line);
-        if(isDevice && device.getId().equals(selectedItem)){
-        	deviceLine.setBackgroundResource(device.getState()?R.drawable.item_selected_border_enabled:R.drawable.item_selected_border_disabled);
-        }
-        else deviceLine.setBackgroundResource(device.getState()?R.color.enabled:R.color.disabled);
+        deviceLine.setBackgroundResource(device.getState()?R.color.enabled:R.color.disabled);
         TextView txtDeviceId = (TextView) convertView.findViewById(R.id.device_id);
         txtDeviceId.setText(device.getId());
         TextView txtDeviceName = (TextView) convertView.findViewById(R.id.device_name);
@@ -102,7 +96,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         }
         
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.profile_name);
-        if(!isDevice && profile.getName().equals(selectedItem)){
+        if(profile.getName().equals(selectedItem)){
         	lblListHeader.setBackgroundResource(R.drawable.item_selected_border_profile);
         }
         else lblListHeader.setBackgroundResource(R.color.profile_item_bkgr);
