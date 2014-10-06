@@ -21,7 +21,8 @@ public class User {
 								(String)values.get("Password"),
 								(String)values.get("Email"),
 								((Boolean)values.get("Admin")).booleanValue(),
-								((Boolean)values.get("Receptor_Alerta")).booleanValue()).tagDB();
+								((Boolean)values.get("Receptor_Alerta")).booleanValue(),
+								(String)values.get("ID_Notificacion")).tagDB();
 					
 			}
 			return null;
@@ -46,12 +47,16 @@ public class User {
 				String mail = null;
 				if(params.containsKey("email"))
 					mail = params.getString("email");
+				String notifid = null;
+				if(params.containsKey("notification_id"))
+					mail = params.getString("notification_id");
 				
 				User ret = new User(userid, params.getString("name"),
 								params.getString("pwd"),
 								mail,
 								params.getBoolean("admin"),
-								params.getBoolean("alert_receptor"));
+								params.getBoolean("alert_receptor"),
+								notifid);
 				if(params.containsKey("profiles")) {
 					List<JsonValue> prfparam = params.getJsonArray("profiles");
 					List<String> profiles = new ArrayList<String>();
@@ -74,15 +79,17 @@ public class User {
 		private String mEmail = "";
 		private boolean mAdmin = false;
 		private boolean mAlertReceptor = false;
+		private String mNotificationId = null;
 		private List<String> mProfiles = null;
 		
-		public User(String id, String name, String pwd, String email, boolean admin, boolean receptor) {
+		public User(String id, String name, String pwd, String email, boolean admin, boolean receptor, String notifid) {
 			mId = id;
 			mName = name;
 			mPassword = pwd;
 			mEmail = (email!=null)?email:"";
 			mAdmin = admin;
 			mAlertReceptor = receptor;
+			mNotificationId = (notifid!=null)?notifid:"";
 			mProfiles = new ArrayList<String>();
 			
 			DBRequestHandler request = new DBRequestHandler();
@@ -251,5 +258,12 @@ public class User {
 		
 		public void setProfiles(List<String> l) {
 			mProfiles = l;
+		}
+		
+		public String getNotificationID() {
+			return mNotificationId;
+		}
+		public void setNotificationID(String notifid) {
+			mNotificationId = notifid;
 		}
 }

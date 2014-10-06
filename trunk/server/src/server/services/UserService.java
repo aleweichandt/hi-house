@@ -220,4 +220,29 @@ public class UserService {
 		}
 		return Response.status(200).entity(userid + " removed").build();
 	}
+	
+	@POST
+	@Path("{id}/notification")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response setNotificationId(@PathParam("id") String userid, @QueryParam("token") String tkn, String body) {
+		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
+		if(newSession == null) {
+			return Response.status(401).entity("invalid token").build();
+		}
+		User user = newSession.getUser(userid);
+		if(user == null) {
+			if(newSession.getAdmin() == null) {
+				return Response.status(403).entity("no admin rights").build();
+			}
+			user = newSession.getAdmin().getUser(userid);
+			if(user == null) {
+				return Response.status(500).entity("not found").build();
+			}
+		}
+		user.setNotificationID(body);
+		if(!user.commitToDB()) {
+			return Response.status(500).entity("server error").build();
+		}
+		return Response.status(200).entity(userid + " removed").build();
+	}
 }
