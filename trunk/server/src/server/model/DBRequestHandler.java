@@ -120,13 +120,14 @@ public class DBRequestHandler {
 		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_PROFILE_IDS_FOR_USER_WITH_ID(userid));
 	}
 	public boolean addUser(User usr) {
-		int ret = runInsert(C.Queries.INSERT_USER(usr));
-		if(ret > 0) {
+		int id = runInsert(C.Queries.INSERT_USER(usr));
+		usr.setId(Integer.toString(id));
+		if(id > 0) {
 			List<String> users = new ArrayList<String>();
-			users.add(Integer.toString(ret));
+			users.add(usr.getId());
 			runUpdate(C.Queries.INSERT_USER_PROFILE(users, usr.getProfiles()));
 		}
-		return ret > 0;
+		return id > 0;
 	}
 	public boolean updateUser(User usr) {
 		boolean ret = runUpdate(C.Queries.UPDATE_USER(usr));
@@ -160,13 +161,14 @@ public class DBRequestHandler {
 		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICES_IDS_FOR_PROFILE_WITH_ID(profileid));
 	}
 	public boolean addProfile(Profile prf) {
-		int ret = runInsert(C.Queries.INSERT_PROFILE(prf));
-		if(ret > 0) {
+		int id = runInsert(C.Queries.INSERT_PROFILE(prf));
+		prf.setId(Integer.toString(id));
+		if(id > 0) {
 			List<String> profiles = new ArrayList<String>();
-			profiles.add(Integer.toString(ret));
+			profiles.add(prf.getId());
 			runUpdate(C.Queries.INSERT_PROFILE_DEVICE(profiles, prf.getDevices()));
 		}
-		return ret > 0;
+		return (id > 0);
 	}
 	public boolean updateProfile(Profile prf) {
 		boolean ret = runUpdate(C.Queries.UPDATE_PROFILE(prf));
@@ -189,7 +191,9 @@ public class DBRequestHandler {
 		return getFirstFromQuery(C.Queries.GET_DEVICE_WITH_ID(deviceid));
 	}
 	public boolean addDevice(Device dvc) {
-		return runUpdate(C.Queries.INSERT_DEVICE(dvc));
+		int id = runInsert(C.Queries.INSERT_DEVICE(dvc));
+		dvc.setId(Integer.toString(id));
+		return (id > 0);
 	}
 	public boolean updateDevice(Device dvc) {
 		return runUpdate(C.Queries.UPDATE_DEVICE(dvc));

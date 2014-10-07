@@ -46,7 +46,7 @@ public class User {
 			return createFromDBEntry(values);
 		}
 		
-		public static User getFromJson(String userid, JsonObject params) {
+		public static User getFromJson(JsonObject params) {
 			if(params.containsKey("name") && params.containsKey("pwd") && 
 			   params.containsKey("admin") && params.containsKey("alert_receptor")) {
 				
@@ -57,7 +57,7 @@ public class User {
 				if(params.containsKey("notification_id"))
 					mail = params.getString("notification_id");
 				
-				User ret = new User(userid, params.getString("name"),
+				User ret = new User("", params.getString("name"),
 								params.getString("pwd"),
 								mail,
 								params.getBoolean("admin"),
@@ -232,6 +232,10 @@ public class User {
 		
 		public String getId() {
 			return mId;
+		}
+		
+		public void setId(String id){
+			mId = id;
 		}
 		
 		public String getName() {

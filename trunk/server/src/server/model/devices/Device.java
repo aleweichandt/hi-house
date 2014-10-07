@@ -66,7 +66,7 @@ public abstract class Device {
 		return null;
 	}
 	
-	public static Device getFromJson(String deviceid, JsonObject params) {
+	public static Device getFromJson(JsonObject params) {
 		if(params.containsKey("name") && params.containsKey("type") && 
 		   params.containsKey("voice_id")) {
 			
@@ -85,7 +85,7 @@ public abstract class Device {
 				subtype = params.getString("subtype");
 			}
 			
-			return Device.createFromType(deviceid, params.getString("name"), params.getInt("type"),
+			return Device.createFromType("", params.getString("name"), params.getInt("type"),
 										 params.getString("voice_id"), false, pin1, pin2, pin3, 
 										 subtype, null);
 		}
@@ -209,6 +209,10 @@ public abstract class Device {
 	
 	public String getId() {
 		return mId;
+	}
+	
+	public void setId(String id) {
+		mId = id;
 	}
 	
 	public String getName() {

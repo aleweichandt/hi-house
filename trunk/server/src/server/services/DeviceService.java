@@ -98,9 +98,9 @@ public class DeviceService {
 	}
 	
 	@POST
-	@Path("/{id}")
+	@Path("/add")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response addDevice(@PathParam("id") String deviceid, @QueryParam("token")String tkn, String body) {
+	public Response addDevice(@QueryParam("token")String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
@@ -110,10 +110,11 @@ public class DeviceService {
 		}
 		
 		JsonObject params = C.getJsonFromString(body);
-		if(!newSession.getAdmin().addDevice(deviceid, params)){
-			return Response.status(500).entity(deviceid + " already exist").build();
+		Device dvc = newSession.getAdmin().addDevice(params);
+		if(dvc == null){
+			return Response.status(500).entity("device already exist").build();
 		}
-		return Response.status(200).entity(deviceid + " added").build();
+		return Response.status(200).entity(dvc.asJson().toString()).build();
 	}
 	
 	@POST

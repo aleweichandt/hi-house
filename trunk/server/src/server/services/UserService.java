@@ -163,9 +163,9 @@ public class UserService {
 	}
 	
 	@POST
-	@Path("{id}")
+	@Path("/add")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response addUser(@PathParam("id") String userid, @QueryParam("token") String tkn, String body) {
+	public Response addUser(@QueryParam("token") String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
@@ -175,10 +175,11 @@ public class UserService {
 		}
 		
 		JsonObject params = C.getJsonFromString(body);
-		if(!newSession.getAdmin().addUser(userid, params)){
-			return Response.status(500).entity(userid + " already exist").build();
+		User usr = newSession.getAdmin().addUser(params);
+		if(usr == null){
+			return Response.status(500).entity("user already exist").build();
 		}
-		return Response.status(200).entity(userid + " added").build();
+		return Response.status(200).entity(usr.asJson().toString()).build();
 	}
 	
 	@POST

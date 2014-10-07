@@ -26,14 +26,14 @@ public class Profile {
 		return null;
 	}
 	
-	public static Profile getFromJson(String profileid, JsonObject params) {
+	public static Profile getFromJson(JsonObject params) {
 		if(params.containsKey("name") && params.containsKey("description")) {
 			
 			String desc = null;
 			if(params.containsKey("description"))
 				desc = params.getString("description");
 			
-			Profile ret = new Profile(profileid, params.getString("name"), desc);
+			Profile ret = new Profile("", params.getString("name"), desc);
 			if(params.containsKey("devices")) {
 				List<JsonValue> dvsparam = params.getJsonArray("devices");
 				List<String> devices = new ArrayList<String>();
@@ -133,6 +133,10 @@ public class Profile {
 	
 	public String getId() {
 		return mId;
+	}
+	
+	public void setId(String id) {
+		mId = id;
 	}
 	
 	public String getName() {
