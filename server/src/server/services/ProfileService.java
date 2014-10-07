@@ -100,9 +100,9 @@ public class ProfileService {
 	}
 	
 	@POST
-	@Path("/{id}")
+	@Path("/add")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response addProfile(@PathParam("id") String profileid, @QueryParam("token")String tkn, String body) {
+	public Response addProfile(@QueryParam("token")String tkn, String body) {
 		UserSession newSession = SessionHandler.getInstance().getSession(tkn);
 		if(newSession == null) {
 			return Response.status(401).entity("invalid token").build();
@@ -112,10 +112,11 @@ public class ProfileService {
 		}
 		
 		JsonObject params = C.getJsonFromString(body);
-		if(!newSession.getAdmin().addProfile(profileid, params)){
-			return Response.status(500).entity(profileid + " already exist").build();
+		Profile prf = newSession.getAdmin().addProfile(params);
+		if(prf == null){
+			return Response.status(500).entity("profile already exist").build();
 		}
-		return Response.status(200).entity(profileid + " added").build();
+		return Response.status(200).entity(prf.asJson().toString()).build();
 	}
 	
 	@POST

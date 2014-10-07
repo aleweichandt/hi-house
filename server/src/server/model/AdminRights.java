@@ -30,16 +30,14 @@ public class AdminRights {
 		return User.getFromDB(userid);
 	}
 	
-	public boolean addUser(String userid, JsonObject params) {
-		User usr = User.getFromDB(userid);
-		if(usr != null){
-			return false;
+	public User addUser(JsonObject params) {
+		User usr = User.getFromJson(params);
+		if(usr != null) {
+			if(!usr.commitToDB()) {
+				usr = null;
+			}
 		}
-		usr = User.getFromJson(userid, params);
-		if(usr == null) {
-			return false;
-		}
-		return usr.commitToDB();
+		return usr;
 	}
 	
 	public boolean deleteUser(String userid) {
@@ -67,16 +65,14 @@ public class AdminRights {
 		return Profile.getFromDB(profileid);
 	}
 	
-	public boolean addProfile(String profileid, JsonObject params) {
-		Profile prf = Profile.getFromDB(profileid);
-		if(prf != null){
-			return false;
+	public Profile addProfile(JsonObject params) {
+		Profile prf = Profile.getFromJson(params);
+		if(prf != null) {
+			if(!prf.commitToDB()) {
+				prf = null;
+			}
 		}
-		prf = Profile.getFromJson(profileid, params);
-		if(prf == null) {
-			return false;
-		}
-		return prf.commitToDB();
+		return prf;
 	}
 	
 	public boolean deleteProfile(String profileid) {
@@ -106,16 +102,14 @@ public class AdminRights {
 		return Device.getFromDB(deviceid);
 	}
 	
-	public boolean addDevice(String deviceid, JsonObject params) {
-		Device dv = Device.getFromDB(deviceid);
-		if(dv != null){
-			return false;
+	public Device addDevice(JsonObject params) {
+		Device dv = Device.getFromJson(params);
+		if(dv != null) {
+			if(!dv.commitToDB()){
+				dv = null;
+			}
 		}
-		dv = Device.getFromJson(deviceid, params);
-		if(dv == null) {
-			return false;
-		}
-		return dv.commitToDB();
+		return dv;
 	}
 	
 	public boolean deleteDevice(String deviceid) {

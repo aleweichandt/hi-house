@@ -39,15 +39,17 @@ public class ArduinoHandler {
 	
 	public void serialRead() {
 		try {
-			if(mSerial.getInputBufferBytesCount() >= 2 || mReadLen > 0) {
-				//Read data, if 2 bytes available 
-			    byte lenMsg[] = mSerial.readBytes(2);
-			    mReadLen = (lenMsg[1] << 8) + lenMsg[0];
-		        if(mSerial.getInputBufferBytesCount() >= mReadLen) {
-			        byte msg[] = mSerial.readBytes(mReadLen);
-			        mReadLen = 0;
-			        execResponse(msg);
-		        }
+			if(mSerial.isOpened()) {
+				if(mSerial.getInputBufferBytesCount() >= 2 || mReadLen > 0) {
+					//Read data, if 2 bytes available 
+				    byte lenMsg[] = mSerial.readBytes(2);
+				    mReadLen = (lenMsg[1] << 8) + lenMsg[0];
+			        if(mSerial.getInputBufferBytesCount() >= mReadLen) {
+				        byte msg[] = mSerial.readBytes(mReadLen);
+				        mReadLen = 0;
+				        execResponse(msg);
+			        }
+				}
 			}
 		} catch (SerialPortException e) {
 			e.printStackTrace();
