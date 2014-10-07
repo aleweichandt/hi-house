@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.json.Json;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonString;
@@ -39,8 +40,8 @@ public class Profile {
 				List<String> devices = new ArrayList<String>();
 				Iterator<JsonValue> it = dvsparam.iterator();
 				while(it.hasNext()) {
-					JsonString value = (JsonString) it.next();
-					devices.add(value.getString());
+					JsonNumber value = (JsonNumber) it.next();
+					devices.add(value.toString());
 				}
 				ret.setDevices(devices);
 			}
@@ -114,8 +115,8 @@ public class Profile {
 			List<String> devices = new ArrayList<String>();
 			Iterator<JsonValue> it = dvsparam.iterator();
 			while(it.hasNext()) {
-				JsonString value = (JsonString) it.next();
-				devices.add(value.getString());
+				JsonNumber value = (JsonNumber) it.next();
+				devices.add(value.toString());
 			}
 			setDevices(devices);
 		}
