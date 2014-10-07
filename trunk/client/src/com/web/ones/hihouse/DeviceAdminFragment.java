@@ -59,9 +59,17 @@ public class DeviceAdminFragment extends ListFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 		String name = mAdapter.getItem(pos);
-		mDeviceFragment = new DeviceInfoFragment(name, false);
+		Bundle args = new Bundle();
+		args.putBoolean(DeviceInfoFragment.ARG_IS_ADD, false);
+		args.putString(DeviceInfoFragment.ARG_DEVICE_NAME, "test");
+		args.putString(DeviceInfoFragment.ARG_DEVICE_ID, "test");
+		args.putInt(DeviceInfoFragment.ARG_DEVICE_TYPE, 3);
+		args.putInt("pin1", 5);
+		args.putInt("pin3", 12);
+		mDeviceFragment = new DeviceInfoFragment();
+		mDeviceFragment.setArguments(args);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-		ft.add(R.id.userinfo_container, mDeviceFragment);
+		ft.add(R.id.userinfo_container, mDeviceFragment, DeviceInfoFragment.class.getName());
 		ft.addToBackStack(DeviceInfoFragment.class.toString());
 		ft.commit();
 	}

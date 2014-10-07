@@ -9,9 +9,12 @@ public class Request {
 	public static final int GET_DESIRED_TEMP = 5;
 	public static final int SET_DESIRED_TEMP = 6;
 	public static final int GET_ALL_DEVICES = 7;
-	public static final int ADD_PROFILE = 8;
-	public static final int GET_ALL_PROFILES = 9;
-	public static final int GET_PROFILE_DEVICES = 10;
-	public static final int DELETE_PROFILE = 11;
-	public static final int UPDATE_PROFILE = 12;
+	public static final int GET_ALL_PROFILES = 8;
+	public static final int GET_PROFILE_DEVICES = 9;
+	public static final int ADD_PROFILE = 10;
+	public static final int UPDATE_PROFILE = 11;
+	public static final int DELETE_PROFILE = 12;
+	public static final int ADD_DEVICE = 13;
+	public static final int UPDATE_DEVICE = 14;
+	public static final int DELETE_DEVICE = 15;
 }

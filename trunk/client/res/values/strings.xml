@@ -58,13 +58,13 @@
         <item>Mis Dispositivos</item>
         <item>Editar Usuario</item>
     </string-array>
-    <!-- Device type Items -->
+    <!-- Device type Items ¡¡¡OJO ESTAN EN ORDEN SEGUN LOS TIPOS DE DEVICES!!! -->
     <string-array name="device_type_items">
-        <item>Luz</item>
-        <item>Puerta</item>
-        <item>A/C</item>
         <item>Sensor Termico</item>
         <item>Sensor Luminico</item>
+        <item>Luz</item>
+        <item>A/C</item>
+        <item>Puerta</item>
     </string-array>
     <!-- Device Subtypes Items -->
     <string-array name="device_term_subtype_items">

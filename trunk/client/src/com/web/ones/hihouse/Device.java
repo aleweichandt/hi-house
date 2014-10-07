@@ -8,25 +8,25 @@ public class Device {
 	public static final int DEVICE_TYPE_AC_TERMAL = 3;
 	public static final int DEVICE_TYPE_AC_DOOR = 4;
 	
-	private String id;
+	private int id;
 	private String name;
 	private String voice;
 	private boolean state;
 	private int type;
 	
-	public Device(String id, String name, String voice, boolean estado, int type) {
+	public Device(int id, String name, String voice, boolean estado, int type) {
 		this.id = id;
 		this.name = name;
 		this.voice = voice;
 		this.state = estado;
 		this.type = type;
 	}
-	public Device(String id, String name) {
+	public Device(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	public String getName() {
@@ -46,8 +46,8 @@ public class Device {
 		this.state = state;
 	}
 	
-	public boolean setDeviceState(String id, boolean state) {
-		if(this.id.equals(id)){
+	public boolean setDeviceState(int id, boolean state) {
+		if(this.id==id){
 			this.state = state;
 			return true;
 		}

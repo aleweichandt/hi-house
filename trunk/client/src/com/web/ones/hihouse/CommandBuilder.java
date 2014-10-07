@@ -27,8 +27,6 @@ public class CommandBuilder {
 		String command="", device="", com, dev;
 		boolean command_set=false, device_set=false;
 		
-		//TODO traer el token del User
-		
 		//primero obtengo el comando
 		for (String s : matches){
 			if((i = s.indexOf(' '))<=0) return null;
@@ -36,15 +34,15 @@ public class CommandBuilder {
 			
 			if("prender".equals(com) || "encender".equals(com) || "abrir".equals(com)){
 				command = com;
-				String deviceId = getDeviceId(matches);
-				if(deviceId!=null)
+				int deviceId = getDeviceId(matches);
+				if(deviceId!=-1)
 					return new Command(Request.SET_DEVICE_STATE,false, "devices/"+deviceId+"/state?enabled=true&token="+hiHouse.getUser().getToken(), "");
 				return null;
 			}
 			if("apagar".equals(com) || "cerrar".equals(com)){
 				command = com;
-				String deviceId = getDeviceId(matches);
-				if(deviceId!=null)
+				int deviceId = getDeviceId(matches);
+				if(deviceId!=-1)
 					return new Command(Request.SET_DEVICE_STATE,false, "devices/"+deviceId+"/state?enabled=false&token="+hiHouse.getUser().getToken(), "");
 				return null;
 			}
@@ -53,15 +51,14 @@ public class CommandBuilder {
 		return null;
 	}
 
-	private String getDeviceId(ArrayList<String> matches) {		
-		
+	private int getDeviceId(ArrayList<String> matches) {		
 		int i;
 		for (String s : matches){
-			if((i = s.indexOf(' '))<=0) return null;
-			String deviceId = hiHouse.getUser().getDeviceByVoiceDesc(s.substring(i+1));
-			if(deviceId!=null) return deviceId;
+			if((i = s.indexOf(' '))<=0) return -1;
+			int deviceId = hiHouse.getUser().getDeviceByVoiceDesc(s.substring(i+1));
+			if(deviceId!=-1) return deviceId;
 		}
-		return null;
+		return -1;
 	}
 
 }

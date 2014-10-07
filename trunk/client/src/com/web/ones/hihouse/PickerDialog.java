@@ -26,6 +26,7 @@ public class PickerDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstance) {
 		int minValue=0, maxValue=0, currentValue=0;
+		setCancelable(false);
 		if(savedInstance == null) {
 			savedInstance = mBundle;
 		}

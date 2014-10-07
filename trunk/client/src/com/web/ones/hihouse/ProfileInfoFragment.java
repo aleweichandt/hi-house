@@ -34,7 +34,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	private boolean mIsAddOperation = false;
 	private boolean mState = false;
 	private String mName;
-	private String id;
+	private int id;
 	private View mMainView;
 	private HiHouse hiHouseAct;
 	ListView lv;
@@ -44,7 +44,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	public ProfileInfoFragment() {
 
 	}
-//TODO Falta Edit (ya se marcan los devices)
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,7 +54,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		Bundle args = getArguments();
 		if (args != null){
 			mName = args.getString(ARG_PROFILE_NAME, "Nuevo");
-			id = args.getString(ARG_PROFILE_ID, "");
+			id = args.getInt(ARG_PROFILE_ID, -1);
 			mIsAddOperation = args.getBoolean(ARG_IS_ADD);
 			mState = mIsAddOperation;
 		}
@@ -84,7 +84,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
     		devArray = new JSONArray(str);
     		for(int i=0; i<devArray.length(); i++){
     			deviceInfo = devArray.getJSONObject(i);
-    			Device d = new Device(deviceInfo.getString("id"), deviceInfo.getString("name"));
+    			Device d = new Device(deviceInfo.getInt("id"), deviceInfo.getString("name"));
     			d.setState(false); //estado del checkbox
     			devices.add(d);
     		}
@@ -111,7 +111,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
     		for(int i=0; i<devArray.length(); i++){
     			deviceInfo = devArray.getJSONObject(i);
     			for(Device d : devices){
-    				if(d.getId().equals(deviceInfo.getString("id"))) d.setState(true);
+    				if(d.getId()==deviceInfo.getInt("id")) d.setState(true);
     			}
     		}
     	}
@@ -182,16 +182,14 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		}
 		catch (JSONException e){}
 		
-		//TODO revisar ID (puse el name por ahora)
 		if(mIsAddOperation)
-			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_PROFILE, false, "profiles/"+profName.toLowerCase().replace(" ", "")+"?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_PROFILE, false, "profiles/blabla?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		else
 			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_PROFILE, false, "profiles/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 	}
 	
 	private void onCancelPressed() {
-		//TODO rollback changes
 		if(mIsAddOperation) {
 			getActivity().getFragmentManager().popBackStack();
 			return;

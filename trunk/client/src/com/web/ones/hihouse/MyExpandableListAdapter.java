@@ -59,8 +59,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
  
         LinearLayout deviceLine = (LinearLayout) convertView.findViewById(R.id.device_line);
         deviceLine.setBackgroundResource(device.getState()?R.color.enabled:R.color.disabled);
-        TextView txtDeviceId = (TextView) convertView.findViewById(R.id.device_id);
-        txtDeviceId.setText(device.getId());
         TextView txtDeviceName = (TextView) convertView.findViewById(R.id.device_name);
         txtDeviceName.setText(device.getName());
 

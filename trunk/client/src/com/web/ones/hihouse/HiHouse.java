@@ -282,7 +282,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		backStackTag = ProfileAdminFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_ADD_DEVICE:
-    		fragment = new DeviceInfoFragment("Nuevo", true);
+    		fragment = new DeviceInfoFragment();
+    		args.putBoolean(DeviceInfoFragment.ARG_IS_ADD, true);
+    		fragmentTag = DeviceInfoFragment.class.getName();
     		addToBackStack = true;
     		backStackTag = DeviceInfoFragment.class.toString();
     		break;
@@ -503,6 +505,13 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         				((ProfileAdminFragment)frag).refreshProfiles();
         			}catch(ClassCastException e){}
         		}
+        		break;
+        	case Request.ADD_DEVICE:
+        		frag = getFragmentManager().findFragmentByTag(DeviceInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{((DeviceInfoFragment)frag).addDeviceResult(rc==200?true:false);}catch(ClassCastException e){}
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	}
         }
