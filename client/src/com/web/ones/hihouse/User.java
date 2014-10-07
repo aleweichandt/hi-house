@@ -56,12 +56,12 @@ public class User {
 		profiles = p;
 	}
 
-	public String getDeviceByVoiceDesc(String voice_desc){
+	public int getDeviceByVoiceDesc(String voice_desc){
 		for(Profile p : profiles){
-			String id = p.getDeviceByVoiceDesc(voice_desc);
-			if(id!=null) return id;
+			int id = p.getDeviceByVoiceDesc(voice_desc);
+			if(id!=-1) return id;
 		}
-		return null;
+		return -1;
 	}
 	
 	public boolean setProfilesAndDevices(String jsonStr){
@@ -78,7 +78,7 @@ public class User {
 				prof = reader.getJSONArray(perfil_name);
 				for(int i=0; i<prof.length(); i++){//itero sobre los dispositivos
 					device = prof.getJSONObject(i);
-					Device d = new Device(device.getString("id"), device.getString("name"), device.getString("voice_id"), device.getBoolean("state"), device.getInt("type"));
+					Device d = new Device(device.getInt("id"), device.getString("name"), device.getString("voice_id"), device.getBoolean("state"), device.getInt("type"));
 					p.addDevice(d);
 				}
 				profiles.add(p);
@@ -96,7 +96,7 @@ public class User {
 		boolean result = false;
 		try{
 			device = new JSONObject(jsonStr);
-			String id = device.getString("id");
+			int id = device.getInt("id");
 			boolean state = device.getBoolean("state");
 			for(Profile p : profiles){
 				if(p.setDeviceState(id, state)) result = true;

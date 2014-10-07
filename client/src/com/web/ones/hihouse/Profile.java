@@ -3,7 +3,7 @@ package com.web.ones.hihouse;
 import java.util.ArrayList;
 
 public class Profile {
-	private String id;
+	private int id;
 	private String name;
 	private ArrayList<Device> devices;
 	
@@ -11,7 +11,7 @@ public class Profile {
 		this.name = name;
 		devices = new ArrayList<Device>();
 	}
-	public Profile(String id, String name){
+	public Profile(int id, String name){
 		this.id = id;
 		this.name = name;
 		devices = new ArrayList<Device>();
@@ -28,18 +28,18 @@ public class Profile {
 	public String getName() {
 		return name;
 	}
-	public String getId(){
+	public int getId(){
 		return id;
 	}
 	
-	public String getDeviceByVoiceDesc(String voice_desc){
+	public int getDeviceByVoiceDesc(String voice_desc){
 		for(Device d : devices){
 			if(d.getVoice().equals(voice_desc)) return d.getId();
 		}
-		return null;
+		return -1;
 	}
 
-	public boolean setDeviceState(String id, boolean state) {
+	public boolean setDeviceState(int id, boolean state) {
 		for(Device d : devices){
 			if(d.setDeviceState(id, state)) return true;
 		}
