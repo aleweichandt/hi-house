@@ -41,7 +41,7 @@ public abstract class Device {
 		DBRequestHandler request = new DBRequestHandler();
 		Map<String, Object> values = request.getDevice(deviceid);
 		if(!values.isEmpty()){
-			String id = (String)values.get("ID_Dispositivo");
+			String id = values.get("ID_Dispositivo").toString();
 			String ambient = (String)values.get("Ambiente");
 			int type = Integer.parseInt((String)values.get("Tipo"));
 			String voiceid = (String)values.get("Descripcion_Ejec_Voz");

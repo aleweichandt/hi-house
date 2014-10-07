@@ -21,8 +21,8 @@ public class SessionHandler {
 		mTknSessionMap = new HashMap<String,UserSession>();
 	}
 	
-	public UserSession createSessionForUser(String userid, String password) {
-		User user = User.getFromDB(userid);
+	public UserSession createSessionForUser(String username, String password) {
+		User user = User.getFromDBName(username);
 		if(user != null) {
 			if(user.isValidPassword(password)) {
 				UserSession session = new UserSession(user);
