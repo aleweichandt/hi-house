@@ -43,7 +43,7 @@ OnPickerDialogListener{
 	private boolean mHasSubType = false;
 	private boolean mState = false;
 	private String mName;
-	private String id;
+	private int id;
 	private View mMainView;
 	private TextView mPinTextView;
 	private CheckBox mPinCheckView;
@@ -66,7 +66,7 @@ OnPickerDialogListener{
 		Bundle args = getArguments();
 		if (args != null){
 			mName = args.getString(ARG_DEVICE_NAME, "Nuevo");
-			id = args.getString(ARG_DEVICE_ID, "");
+			id = args.getInt(ARG_DEVICE_ID, -1);
 			type = args.getInt(ARG_DEVICE_TYPE, -1);
 			for(int i=1; i<=3; i++){
 				pinList.add(args.getInt("pin"+i, -1));
@@ -179,14 +179,12 @@ OnPickerDialogListener{
 		}
 		catch (JSONException e){}
 		
-		//TODO revisar ID (puse el name por ahora)
-		if(mIsAddOperation) hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_DEVICE, false, "devices/"+deviceName.toLowerCase().replace(" ", "")+"?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+		if(mIsAddOperation) hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_DEVICE, false, "devices/add?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		else hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_PROFILE, false, "profiles/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 	}
 	
 	private void onCancelPressed() {
-		//TODO rollback changes
 		if(mIsAddOperation) {
 			getActivity().getFragmentManager().popBackStack();
 			return;

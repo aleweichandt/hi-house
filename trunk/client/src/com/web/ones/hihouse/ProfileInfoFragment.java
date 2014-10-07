@@ -183,7 +183,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		catch (JSONException e){}
 		
 		if(mIsAddOperation)
-			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_PROFILE, false, "profiles/blabla?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_PROFILE, false, "profiles/add?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		else
 			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_PROFILE, false, "profiles/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
@@ -212,10 +212,12 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 
 	@Override
 	public void onItemClick(AdapterView<?> ad, View v, int pos, long id) {
-		CheckBox r = (CheckBox)v.findViewById(R.id.dev_row_check);
-		boolean b = !r.isChecked();
-		r.setChecked(b);
-		devices.get(pos).setState(b);
+		if(mState){
+			CheckBox r = (CheckBox)v.findViewById(R.id.dev_row_check);
+			boolean b = !r.isChecked();
+			r.setChecked(b);
+			devices.get(pos).setState(b);
+		}
 	}
 	
 	//adapter for list

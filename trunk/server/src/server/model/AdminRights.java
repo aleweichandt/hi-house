@@ -20,7 +20,7 @@ public class AdminRights {
 		List<Object> ids = request.listAllUsers();
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				ret.add((String)it.next());
+				ret.add(it.next().toString());
 			}
 		}
 		return ret;
@@ -55,7 +55,7 @@ public class AdminRights {
 		List<Object> ids = request.listAllProfiles();
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				ret.add((String)it.next());
+				ret.add(it.next().toString());
 			}
 		}
 		return ret;
@@ -92,7 +92,7 @@ public class AdminRights {
 		List<Object> ids = request.listAllDevices();
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				ret.add((String)it.next());
+				ret.add(it.next().toString());
 			}
 		}
 		return ret;
@@ -127,7 +127,7 @@ public class AdminRights {
 		List<Object> ids = request.listAllSimulators();
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				ret.add((String)it.next());
+				ret.add(it.next().toString());
 			}
 		}
 		return ret;
