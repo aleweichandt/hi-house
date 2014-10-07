@@ -155,6 +155,12 @@ public abstract class Device {
 									.add("pin1", getPin(0))
 									.add("pin2", getPin(1))
 									.add("pin3", getPin(2));
+		if(!getParam1().isEmpty()) {
+			builder.add("subtype", getParam1());
+		}
+		if(!getParam2().isEmpty()) {
+			builder.add("extra2", getParam1());//rename if necessary
+		}
 		return builder.build();
 	}
 	
