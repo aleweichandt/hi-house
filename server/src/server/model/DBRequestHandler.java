@@ -41,16 +41,23 @@ public class DBRequestHandler {
 	}
 	
 	private boolean runUpdate(String query) {
-		boolean ret = true;
+		return (runInsert(query) >= 0);
+	}
+	private int runInsert(String query) {
+		int id = 0;
 		try {
 			open();
-			mStatement.executeUpdate(query);
+			mStatement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = mStatement.getGeneratedKeys();
+			if (rs.next()){
+				id=rs.getInt(1);
+			}
 		}catch(Exception e){
-			ret = false;
+			id = -1;
 		} finally {
 			close();
 		}
-		return ret;
+		return id;
 	}
 	
 	private List<List<Object>> runQuery(String query) { 
@@ -113,13 +120,13 @@ public class DBRequestHandler {
 		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_PROFILE_IDS_FOR_USER_WITH_ID(userid));
 	}
 	public boolean addUser(User usr) {
-		boolean ret = runUpdate(C.Queries.INSERT_USER(usr));
-		if(ret) {
+		int ret = runInsert(C.Queries.INSERT_USER(usr));
+		if(ret > 0) {
 			List<String> users = new ArrayList<String>();
-			users.add(usr.getId());
+			users.add(Integer.toString(ret));
 			runUpdate(C.Queries.INSERT_USER_PROFILE(users, usr.getProfiles()));
 		}
-		return ret;
+		return ret > 0;
 	}
 	public boolean updateUser(User usr) {
 		boolean ret = runUpdate(C.Queries.UPDATE_USER(usr));
@@ -138,6 +145,10 @@ public class DBRequestHandler {
 		return getFirstFromQuery(C.Queries.GET_USER_ALERT_RCV());
 	}
 	
+	public Map<String,Object> getUserWithName(String username) {
+		return getFirstFromQuery(C.Queries.GET_USER_WITH_NAME(username));
+	}
+	
 //perfiles
 	public List<Object> listAllProfiles() {
 		return getAllColumnFromQuery("ID_Perfil", C.Queries.GET_ALL_PROFILE_IDS);
@@ -149,13 +160,13 @@ public class DBRequestHandler {
 		return getAllColumnFromQuery("ID_Dispositivo", C.Queries.GET_DEVICES_IDS_FOR_PROFILE_WITH_ID(profileid));
 	}
 	public boolean addProfile(Profile prf) {
-		boolean ret = runUpdate(C.Queries.INSERT_PROFILE(prf));
-		if(ret) {
+		int ret = runInsert(C.Queries.INSERT_PROFILE(prf));
+		if(ret > 0) {
 			List<String> profiles = new ArrayList<String>();
-			profiles.add(prf.getId());
+			profiles.add(Integer.toString(ret));
 			runUpdate(C.Queries.INSERT_PROFILE_DEVICE(profiles, prf.getDevices()));
 		}
-		return ret;
+		return ret > 0;
 	}
 	public boolean updateProfile(Profile prf) {
 		boolean ret = runUpdate(C.Queries.UPDATE_PROFILE(prf));

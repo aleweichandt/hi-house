@@ -18,7 +18,7 @@ public class Profile {
 		DBRequestHandler request = new DBRequestHandler();
 		Map<String, Object> values = request.getProfile(profileid);
 		if(!values.isEmpty()){
-			return new Profile((String)values.get("ID_Perfil"),
+			return new Profile(values.get("ID_Perfil").toString(),
 							(String)values.get("Ambiente"),
 							(String)values.get("Descripcion")).tagDB();
 				
@@ -67,7 +67,7 @@ public class Profile {
 		List<Object> ids = request.getProfileDeviceIds(id);
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				mDevices.add((String)it.next());
+				mDevices.add(it.next().toString());
 			}
 		}
 	}

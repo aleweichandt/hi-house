@@ -16,7 +16,7 @@ import server.model.devices.Device;
 public class User {
 		public static User createFromDBEntry(Map<String, Object> values) {
 			if(!values.isEmpty()){
-				return new User((String)values.get("ID_Usuario"),
+				return new User(values.get("ID_Usuario").toString(),
 								(String)values.get("Nombre"),
 								(String)values.get("Password"),
 								(String)values.get("Email"),
@@ -26,6 +26,12 @@ public class User {
 					
 			}
 			return null;
+		}
+		
+		public static User getFromDBName(String username) {
+			DBRequestHandler request = new DBRequestHandler();
+			Map<String, Object> values = request.getUserWithName(username);
+			return createFromDBEntry(values);
 		}
 		
 		public static User getFromDB(String userid) {
@@ -96,7 +102,7 @@ public class User {
 			List<Object> ids = request.getUserProfileIds(id);
 			if(!ids.isEmpty()) {
 				for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-					mProfiles.add((String)it.next());
+					mProfiles.add(it.next().toString());
 				}
 			}
 		}

@@ -150,8 +150,8 @@ public class UserService {
 	@GET
 	@Path("/login")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response loginUser(@QueryParam("id") String userid, @QueryParam("pwd") String password) {
-		UserSession newSession = SessionHandler.getInstance().createSessionForUser(userid, password);
+	public Response loginUser(@QueryParam("name") String username, @QueryParam("pwd") String password) {
+		UserSession newSession = SessionHandler.getInstance().createSessionForUser(username, password);
 		if(newSession == null) {
 			return Response.status(401).entity("unautorized user or password").build();
 		}

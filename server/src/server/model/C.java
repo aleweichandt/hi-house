@@ -56,22 +56,25 @@ public final class C {
 				"SELECT distinct ID_Perfil from simulaciones";
 		
 		public static final String GET_USER_WITH_ID(String userid){
-			return "SELECT * from usuarios where ID_Usuario = '" + userid + "'";
+			return "SELECT * from usuarios where ID_Usuario = " + userid;
+		}
+		public static final String GET_USER_WITH_NAME(String username){
+			return "SELECT * from usuarios where Nombre = '" + username + "'";
 		}
 		public static final String GET_USER_ALERT_RCV(){
 			return "SELECT * from usuarios where Receptor_Alerta = 1";
 		}
 		public static final String GET_PROFILE_IDS_FOR_USER_WITH_ID(String userid){
-			return "SELECT distinct perfiles.ID_Perfil from usuarios, usuario_perfil, perfiles where usuarios.ID_Usuario = usuario_perfil.ID_Usuario and usuario_perfil.ID_Perfil = perfiles.ID_Perfil and usuarios.ID_Usuario = '" + userid + "'";
+			return "SELECT distinct perfiles.ID_Perfil from usuarios, usuario_perfil, perfiles where usuarios.ID_Usuario = usuario_perfil.ID_Usuario and usuario_perfil.ID_Perfil = perfiles.ID_Perfil and usuarios.ID_Usuario = " + userid;
 		}
 		public static final String GET_PROFILE_WITH_ID(String profileid){
 			return "SELECT * from perfiles where ID_Perfil = '" + profileid + "'";
 		}
 		public static final String GET_DEVICES_IDS_FOR_PROFILE_WITH_ID(String profileid){
-			return "SELECT distinct dispositivos.ID_Dispositivo from perfiles, perfil_dispositivo, dispositivos where perfiles.ID_Perfil = perfil_dispositivo.ID_Perfil and perfil_dispositivo.ID_Dispositivo = dispositivos.ID_Dispositivo and perfiles.ID_Perfil = '" + profileid + "'";
+			return "SELECT distinct dispositivos.ID_Dispositivo from perfiles, perfil_dispositivo, dispositivos where perfiles.ID_Perfil = perfil_dispositivo.ID_Perfil and perfil_dispositivo.ID_Dispositivo = dispositivos.ID_Dispositivo and perfiles.ID_Perfil = " + profileid;
 		}
 		public static final String GET_DEVICE_WITH_ID(String deviceid){
-			return "SELECT * from dispositivos where ID_Dispositivo = '" + deviceid + "'";
+			return "SELECT * from dispositivos where ID_Dispositivo = " + deviceid;
 		}
 		
 		public static final String GET_DEVICE_IDS_WITH_TYPES(List<String> types) {
@@ -80,11 +83,11 @@ public final class C {
 		}
 		
 		public static final String GET_SIMULATOR_WITH_ID(String simulatorid) {
-			return "SELECT * from simulaciones where ID_Perfil = '" + simulatorid + "'";
+			return "SELECT * from simulaciones where ID_Perfil = " + simulatorid;
 		}
 		
 		public static final String INSERT_USER(User user){
-			String id = "'" + user.getId() + "'";
+			String id = "NULL";
 			String name = "'" + user.getName() + "'";
 			String pwd = user.getPwd();
 			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
@@ -97,7 +100,7 @@ public final class C {
 		}
 		
 		public static final String UPDATE_USER(User user){
-			String id = "'" + user.getId() + "'";
+			String id = user.getId();
 			String name = "'" + user.getName() + "'";
 			String pwd = user.getPwd();
 			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
@@ -110,32 +113,29 @@ public final class C {
 		}
 		
 		public static final String DELETE_USER(String userid) {
-			return "DELETE FROM usuarios WHERE ID_Usuario='"+userid+"'";
+			return "DELETE FROM usuarios WHERE ID_Usuario="+userid;
 		}
 
 		public static final String INSERT_PROFILE(Profile prf){
-			String id = "'" + prf.getId() + "'";
+			String id = "NULL";
 			String name = "'" + prf.getName() + "'";
 			String desc = (prf.getDescription().isEmpty())?"NULL":("'" + prf.getDescription() + "'");
-			String simid = "'" + prf.getId() + "'";
-			return "INSERT INTO perfiles VALUES (" +id + "," + name + "," + desc + "," + simid + ")";
+			return "INSERT INTO perfiles VALUES (" +id + "," + name + "," + desc + ")";
 		}
 		
 		public static final String UPDATE_PROFILE(Profile prf){
-			String id = "'" + prf.getId() + "'";
+			String id = prf.getId();
 			String name = "'" + prf.getName() + "'";
 			String desc = (prf.getDescription().isEmpty())?"NULL":("'" + prf.getDescription() + "'");
-			String simid = "'" + prf.getId() + "'";
-			return "UPDATE perfiles SET Ambiente=" + name + ",Descripcion=" + desc +
-				   ",ID_Simulador=" + simid + " WHERE ID_Perfil="+id;
+			return "UPDATE perfiles SET Ambiente=" + name + ",Descripcion=" + desc + " WHERE ID_Perfil="+id;
 		}
 		
 		public static final String DELETE_PROFILE(String profileid) {
-			return "DELETE FROM perfiles WHERE ID_Perfil='"+profileid+"'";
+			return "DELETE FROM perfiles WHERE ID_Perfil="+profileid;
 		}
 
 		public static final String INSERT_DEVICE(Device dvc){
-			String id = "'" + dvc.getId() + "'";
+			String id = "NULL";
 			String name = "'" + dvc.getName() + "'";
 			String vid = "'" + dvc.getVoiceId() +"'";
 			String type = "'" + Integer.toString(dvc.getClassType()) + "'";
@@ -150,7 +150,7 @@ public final class C {
 		}
 		
 		public static final String UPDATE_DEVICE(Device dvc){
-			String id = "'" + dvc.getId() + "'";
+			String id = dvc.getId();
 			String name = "'" + dvc.getName() + "'";
 			String vid = "'" + dvc.getVoiceId() +"'";
 			String type = "'" + Integer.toString(dvc.getClassType()) + "'";
@@ -168,7 +168,7 @@ public final class C {
 		}
 		
 		public static final String DELETE_DEVICE(String deviceid) {
-			return "DELETE FROM dispositivos WHERE ID_Dispositivo='"+deviceid+"'";
+			return "DELETE FROM dispositivos WHERE ID_Dispositivo="+deviceid;
 		}
 		
 		public static final String INSERT_USER_PROFILE(List<String> users, List<String> profiles) {
@@ -186,7 +186,7 @@ public final class C {
 		}
 		
 		public static final String DELETE_SIMULATOR(SimulationRoutine sr) {
-			return "DELETE FROM simulaciones WHERE ID_Perfil='" + sr.getId() + "'";
+			return "DELETE FROM simulaciones WHERE ID_Perfil=" + sr.getId();
 		}
 		
 		private static final String getPairStringList( List<String> values1, List<String> values2) {
@@ -196,7 +196,7 @@ public final class C {
 				String v1 = it1.next();
 				Iterator<String> it2 = values2.iterator();
 				while(it2.hasNext()) {
-					ret += ("('" + v1 + "','" + it2.next() + "')");
+					ret += ("(" + v1 + "," + it2.next() + ")");
 					if(it1.hasNext() || it2.hasNext()) {
 						ret += ",";
 					}

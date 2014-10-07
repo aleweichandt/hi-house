@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-10-2014 a las 16:09:11
+-- Tiempo de generación: 07-10-2014 a las 05:50:41
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -30,7 +30,7 @@ USE `hihouse`;
 
 DROP TABLE IF EXISTS `dispositivos`;
 CREATE TABLE IF NOT EXISTS `dispositivos` (
-  `ID_Dispositivo` char(20) NOT NULL,
+  `ID_Dispositivo` int(11) NOT NULL AUTO_INCREMENT,
   `Tipo` char(2) NOT NULL,
   `Ambiente` varchar(20) NOT NULL,
   `Descripcion_Ejec_Voz` varchar(50) NOT NULL,
@@ -40,15 +40,22 @@ CREATE TABLE IF NOT EXISTS `dispositivos` (
   `Pin3` int(11) DEFAULT NULL,
   `Param1` varchar(10) DEFAULT NULL,
   `Param2` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`ID_Dispositivo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`ID_Dispositivo`),
+  UNIQUE KEY `Descripcion_Ejec_Voz` (`Descripcion_Ejec_Voz`),
+  UNIQUE KEY `Ambiente` (`Ambiente`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Volcado de datos para la tabla `dispositivos`
 --
 
 INSERT INTO `dispositivos` (`ID_Dispositivo`, `Tipo`, `Ambiente`, `Descripcion_Ejec_Voz`, `Estado`, `Pin1`, `Pin2`, `Pin3`, `Param1`, `Param2`) VALUES
-('test', '2', 'casa', 'test', '0', 13, -1, -1, NULL, NULL);
+(1, '3', 'aire casa', 'aire casa', '0', 13, 7, 5, '3', NULL),
+(2, '4', 'puerta cochera', 'puerta cochera', '0', 9, NULL, NULL, NULL, NULL),
+(3, '0', 'sensor cocina', 'sensor cocina', '0', 0, NULL, NULL, NULL, NULL),
+(4, '2', 'casa', 'luz uno', '0', 13, NULL, NULL, NULL, NULL),
+(5, '2', 'casa2', 'luz dos', '1', 7, NULL, NULL, NULL, NULL),
+(6, '2', 'casa3', 'luz tres', '1', 5, NULL, NULL, NULL, NULL);
 
 --
 -- Disparadores `dispositivos`
@@ -71,19 +78,20 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `perfiles`;
 CREATE TABLE IF NOT EXISTS `perfiles` (
-  `ID_Perfil` char(20) NOT NULL,
+  `ID_Perfil` int(11) NOT NULL AUTO_INCREMENT,
   `Ambiente` varchar(20) NOT NULL,
   `Descripcion` varchar(50) DEFAULT NULL,
-  `ID_Simulador` varchar(20) NOT NULL,
-  PRIMARY KEY (`ID_Perfil`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`ID_Perfil`),
+  UNIQUE KEY `Ambiente` (`Ambiente`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Volcado de datos para la tabla `perfiles`
 --
 
-INSERT INTO `perfiles` (`ID_Perfil`, `Ambiente`, `Descripcion`, `ID_Simulador`) VALUES
-('default', 'none', NULL, '0');
+INSERT INTO `perfiles` (`ID_Perfil`, `Ambiente`, `Descripcion`) VALUES
+(5, 'default', 'default'),
+(6, 'luces', 'luces de la casa');
 
 --
 -- Disparadores `perfiles`
@@ -115,8 +123,8 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `perfil_dispositivo`;
 CREATE TABLE IF NOT EXISTS `perfil_dispositivo` (
-  `ID_Perfil` char(20) NOT NULL,
-  `ID_Dispositivo` char(20) NOT NULL,
+  `ID_Perfil` int(11) NOT NULL,
+  `ID_Dispositivo` int(11) NOT NULL,
   PRIMARY KEY (`ID_Perfil`,`ID_Dispositivo`),
   KEY `remove_pd_device` (`ID_Dispositivo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -126,7 +134,12 @@ CREATE TABLE IF NOT EXISTS `perfil_dispositivo` (
 --
 
 INSERT INTO `perfil_dispositivo` (`ID_Perfil`, `ID_Dispositivo`) VALUES
-('default', 'test');
+(5, 1),
+(5, 2),
+(5, 3),
+(6, 4),
+(6, 5),
+(6, 6);
 
 -- --------------------------------------------------------
 
@@ -136,12 +149,11 @@ INSERT INTO `perfil_dispositivo` (`ID_Perfil`, `ID_Dispositivo`) VALUES
 
 DROP TABLE IF EXISTS `simulaciones`;
 CREATE TABLE IF NOT EXISTS `simulaciones` (
-  `ID_Perfil` char(20) NOT NULL,
-  `ID_Dispositivo` char(20) NOT NULL,
+  `ID_Perfil` int(11) NOT NULL,
+  `ID_Dispositivo` int(11) NOT NULL,
   PRIMARY KEY (`ID_Perfil`,`ID_Dispositivo`),
-  KEY `remove_pd_simulador_disp` (`ID_Dispositivo`)
+  KEY `remove_s_device` (`ID_Dispositivo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 -- --------------------------------------------------------
 
@@ -151,22 +163,24 @@ CREATE TABLE IF NOT EXISTS `simulaciones` (
 
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `ID_Usuario` char(12) NOT NULL,
+  `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(50) NOT NULL,
   `Password` char(4) NOT NULL,
   `Email` varchar(50) DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
   `Receptor_Alerta` tinyint(1) NOT NULL DEFAULT '0',
   `ID_Notificacion` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`ID_Usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`ID_Usuario`),
+  UNIQUE KEY `Nombre` (`Nombre`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Password`, `Email`, `Admin`, `Receptor_Alerta`, `ID_Notificacion`) VALUES
-('admin', 'administrador', '1234', NULL, 1, 0, NULL);
+(1, 'administrador', '1234', 'admin@not.com', 1, 0, NULL),
+(2, 'beto', '1233', 'a@beto.com', 0, 1, NULL);
 
 --
 -- Disparadores `usuarios`
@@ -192,8 +206,8 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `usuario_perfil`;
 CREATE TABLE IF NOT EXISTS `usuario_perfil` (
-  `ID_Usuario` char(12) NOT NULL,
-  `ID_Perfil` char(20) NOT NULL,
+  `ID_Usuario` int(11) NOT NULL,
+  `ID_Perfil` int(11) NOT NULL,
   PRIMARY KEY (`ID_Usuario`,`ID_Perfil`),
   KEY `remove_up_profile` (`ID_Perfil`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -203,7 +217,9 @@ CREATE TABLE IF NOT EXISTS `usuario_perfil` (
 --
 
 INSERT INTO `usuario_perfil` (`ID_Usuario`, `ID_Perfil`) VALUES
-('admin', 'default');
+(1, 5),
+(2, 5),
+(1, 6);
 
 --
 -- Restricciones para tablas volcadas
@@ -220,8 +236,8 @@ ALTER TABLE `perfil_dispositivo`
 -- Filtros para la tabla `simulaciones`
 --
 ALTER TABLE `simulaciones`
-  ADD CONSTRAINT `remove_pd_simulador_disp` FOREIGN KEY (`ID_Dispositivo`) REFERENCES `dispositivos` (`ID_Dispositivo`),
-  ADD CONSTRAINT `remove_pd_simulador_perf` FOREIGN KEY (`ID_Perfil`) REFERENCES `perfiles` (`ID_Perfil`);
+  ADD CONSTRAINT `remove_s_device` FOREIGN KEY (`ID_Dispositivo`) REFERENCES `dispositivos` (`ID_Dispositivo`),
+  ADD CONSTRAINT `remove_s_profile` FOREIGN KEY (`ID_Perfil`) REFERENCES `perfiles` (`ID_Perfil`);
 
 --
 -- Filtros para la tabla `usuario_perfil`
