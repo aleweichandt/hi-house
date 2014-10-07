@@ -57,7 +57,7 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v){
 				//TODO Validar datos y loguear usuario.
-				String params = "id="+user.getText()+"&pwd="+pass.getText();
+				String params = "name="+user.getText()+"&pwd="+pass.getText();
 				SocketOperator so = new SocketOperator(v.getContext());
 				so.sendRequest(Request.LOGIN_USER, true, Command.serverURL+"users/login", params);
 			}
