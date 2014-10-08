@@ -101,26 +101,26 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 	}
 	
 	//adapter for list
-		private class ProfileListAdapter extends ArrayAdapter<Profile> {
-			private Context mContext;
-			
-			public ProfileListAdapter(Context context) {
-				super(context, R.layout.simple_row, profiles);
-				mContext = context;
-			}
-				
-			@Override
-			public View getView(int position, View convertView, ViewGroup parent) {
-				LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View rowView = inflater.inflate(R.layout.simple_row, parent, false);
-				TextView tv = (TextView)rowView.findViewById(R.id.row_name);
-				tv.setText(profiles.get(position).getName());
-				return rowView;
-			}
-			
-			@Override
-			public int getCount(){
-				return profiles.size();
-			}
+	private class ProfileListAdapter extends ArrayAdapter<Profile> {
+		private Context mContext;
+		
+		public ProfileListAdapter(Context context) {
+			super(context, R.layout.simple_row, profiles);
+			mContext = context;
 		}
+			
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View rowView = inflater.inflate(R.layout.simple_row, parent, false);
+			TextView tv = (TextView)rowView.findViewById(R.id.row_name);
+			tv.setText(profiles.get(position).getName());
+			return rowView;
+		}
+		
+		@Override
+		public int getCount(){
+			return profiles.size();
+		}
+	}
 }

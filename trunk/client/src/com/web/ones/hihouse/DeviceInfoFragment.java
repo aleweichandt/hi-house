@@ -9,7 +9,9 @@ import org.json.JSONObject;
 import com.web.ones.hihouse.PickerDialog.OnPickerDialogListener;
 
 import android.os.Bundle;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,11 +32,6 @@ OnItemSelectedListener,
 OnPickerDialogListener{
 	final static String ARG_DEVICE_NAME = "name";
 	final static String ARG_DEVICE_ID = "id";
-	final static String ARG_DEVICE_TYPE = "type";
-	final static String ARG_DEVICE_PIN1 = "pin1";
-	final static String ARG_DEVICE_PIN2 = "pin2";
-	final static String ARG_DEVICE_PIN3 = "pin3";
-	//TODO add subtype para actuador termico
 	final static String ARG_IS_ADD = "isAddOperation";
 	private static final int DEVICE_PIN_MIN_VALUE = 1;
 	private static final int DEVICE_PIN_MAX_VALUE = 64;
@@ -48,7 +45,7 @@ OnPickerDialogListener{
 	private TextView mPinTextView;
 	private CheckBox mPinCheckView;
 	private HiHouse hiHouseAct;
-	private int type;
+	private int type, subtype;
 	private ArrayList<Integer> pinList;
 	private EditText device_name;
 	private Spinner typeSpinner, subtypeSpinner;
@@ -63,14 +60,15 @@ OnPickerDialogListener{
 		hiHouseAct = (HiHouse)getActivity();
 		pinList = new ArrayList<Integer>();
 		
+		//inicializamos la lista de pines
+		pinList.add(-1);
+		pinList.add(-1);
+		pinList.add(-1);
+		
 		Bundle args = getArguments();
 		if (args != null){
 			mName = args.getString(ARG_DEVICE_NAME, "Nuevo");
 			id = args.getInt(ARG_DEVICE_ID, -1);
-			type = args.getInt(ARG_DEVICE_TYPE, -1);
-			for(int i=1; i<=3; i++){
-				pinList.add(args.getInt("pin"+i, -1));
-			}
 			mIsAddOperation = args.getBoolean(ARG_IS_ADD);
 			mState = mIsAddOperation;
 			mHasSubType = false;
@@ -85,6 +83,7 @@ OnPickerDialogListener{
 		device_name = (EditText)mMainView.findViewById(R.id.deviceinfo_name);
 		device_name.setText(mName);
 		typeSpinner = (Spinner) mMainView.findViewById(R.id.deviceinfo_type);
+		subtypeSpinner = (Spinner) mMainView.findViewById(R.id.deviceinfo_subtype);
 		
 		loadDeviceInfo();
 		setEditMode(mIsAddOperation || mState);
@@ -97,15 +96,36 @@ OnPickerDialogListener{
 		        R.array.device_type_items, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		typeSpinner.setAdapter(adapter);
+		ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(),
+		        R.array.device_term_subtype_items, android.R.layout.simple_spinner_item);
+		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		subtypeSpinner.setAdapter(adapter2);
 		if(!mIsAddOperation){
-			typeSpinner.setSelection(type);
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_DEVICE, true, "devices/"+id, "token="+hiHouseAct.getUser().getToken()));
+			hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+		}
+	}
+	
+	public void updateDeviceInfo(String str){
+		JSONObject deviceInfo;
+		try{
+			deviceInfo = new JSONObject(str);
+			type = deviceInfo.getInt("type");
 			for(int i=1; i<=3; i++){
-				if(pinList.get(i-1)>-1){
-					int resId = getResources().getIdentifier("deviceinfo_pin"+i+"_enable", "id", hiHouseAct.getPackageName());
-					((CheckBox)mMainView.findViewById(resId)).setChecked(true);
-					resId = getResources().getIdentifier("deviceinfo_pin"+i+"_value", "id", hiHouseAct.getPackageName());
-					((TextView)mMainView.findViewById(resId)).setText(""+pinList.get(i-1));
-				}
+				pinList.set(i-1, deviceInfo.getInt("pin"+i));
+			}
+			if(type==Device.DEVICE_TYPE_AC_TERMAL) subtype = Integer.parseInt(deviceInfo.getString("subtype"));
+		}
+		catch(JSONException e){e.printStackTrace();}
+		
+		typeSpinner.setSelection(type);
+		if(type==Device.DEVICE_TYPE_AC_TERMAL) subtypeSpinner.setSelection(subtype-1);
+		for(int i=1; i<=3; i++){
+			if(pinList.get(i-1)>-1){
+				int resId = getResources().getIdentifier("deviceinfo_pin"+i+"_enable", "id", hiHouseAct.getPackageName());
+				((CheckBox)mMainView.findViewById(resId)).setChecked(true);
+				resId = getResources().getIdentifier("deviceinfo_pin"+i+"_value", "id", hiHouseAct.getPackageName());
+				((TextView)mMainView.findViewById(resId)).setText(""+pinList.get(i-1));
 			}
 		}
 	}
@@ -175,12 +195,12 @@ OnPickerDialogListener{
 			for(int i=1; i<=3; i++){
 				builder.put("pin"+i, pinList.get(i-1));
 			}
-			if(type==Device.DEVICE_TYPE_AC_TERMAL) builder.put("subtype", subtypeSpinner.getSelectedItemPosition());//TODO como son los sub-tipos?
+			if(type==Device.DEVICE_TYPE_AC_TERMAL) builder.put("subtype", Integer.toString(subtypeSpinner.getSelectedItemPosition()+1));
 		}
 		catch (JSONException e){}
 		
 		if(mIsAddOperation) hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_DEVICE, false, "devices/add?token="+hiHouseAct.getUser().getToken(), builder.toString()));
-		else hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_PROFILE, false, "profiles/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+		else hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_DEVICE, false, "devices/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 	}
 	
@@ -193,9 +213,7 @@ OnPickerDialogListener{
 	}
 	
 	private void onDeletePressed() {
-		//TODO ask before
-		//TODO remove user
-		getActivity().getFragmentManager().popBackStack();
+		confirmDelete();
 	}
 	
 	private void onPinPressed(int viewid, boolean enabled) {
@@ -242,14 +260,6 @@ OnPickerDialogListener{
 	public void onItemSelected(AdapterView<?> ad, View v, int pos,	long id) {
 		type = pos;
 		mHasSubType = (pos == Device.DEVICE_TYPE_AC_TERMAL);
-		if(mHasSubType) {
-			//do without check as we only have one subtype
-			subtypeSpinner = (Spinner) mMainView.findViewById(R.id.deviceinfo_subtype);
-			ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-			        R.array.device_term_subtype_items, android.R.layout.simple_spinner_item);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			subtypeSpinner.setAdapter(adapter);
-		}
 		setEditMode(mState);//update to show/hide subtype
 	}
 
@@ -282,6 +292,51 @@ OnPickerDialogListener{
 			return;
 		}
 		setEditMode(false);
+	}
+	
+	public void updateDeviceResult(boolean updated) {
+		if(!updated) {
+			Toast.makeText(getActivity(), "El dispositivo no pudo ser actualizado.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		Toast.makeText(getActivity(), "Dispositivo actualizado exitosamente.", Toast.LENGTH_SHORT).show();
+		getActivity().getFragmentManager().popBackStack();
+		return;
+	}
+	
+	public void confirmDelete() {
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				 switch (which) {
+				 case DialogInterface.BUTTON_POSITIVE:
+					 	hiHouseAct.mHiHouseService.sendCommand(new Command(Request.DELETE_DEVICE, false, "devices/"+id+"/delete?token="+hiHouseAct.getUser().getToken(), ""));
+					 	hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+				        break;
+				
+				 case DialogInterface.BUTTON_NEGATIVE:
+				        // No button clicked do nothing
+					 	//Toast.makeText(getActivity(), "No Clicked",Toast.LENGTH_LONG).show();
+				        break;
+				 }
+			}
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("¿Está seguro que desea eliminar el dispositivo \""+device_name.getText().toString()+"\"?")
+                     .setPositiveButton("Si", dialogClickListener)
+                     .setNegativeButton("No", dialogClickListener).show();
+	}
+	
+	public void deleteDeviceResult(boolean deleted) {
+		if(deleted){
+			Toast.makeText(getActivity(), "Dispositivo eliminado exitosamente.", Toast.LENGTH_LONG).show();
+			getActivity().getFragmentManager().popBackStack();
+		}
+		else {
+			Toast.makeText(getActivity(), "El Dispositivo no pudo ser eliminado.", Toast.LENGTH_LONG).show();
+			hiHouseAct.setLoadingBarVisibility(View.GONE);
+		}
+		
 	}
 
 }
