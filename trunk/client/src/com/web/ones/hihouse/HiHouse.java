@@ -8,6 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.web.ones.hihouse.HiHouseService.HiHouseTask;
 import com.web.ones.hihouse.HiHouseService.LocalBinder;
 import com.web.ones.hihouse.VoiceTranslation.OnVoiceCommand;
@@ -21,7 +24,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -48,6 +55,12 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	private static final int DRAWER_MENU_INDEX_ADD_DEVICE = 6;
 	private static final int DRAWER_MENU_INDEX_DEVICES = 7;
 	private static final int DRAWER_MENU_INDEX_SIMULATOR = 8;
+	
+//GCM Notification
+	public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final String SENDER_ID = "874005567993";
+    String mGCMRegistrationId;
 	
 	private String[] menuItems;
     private DrawerLayout mDrawerLayout;
@@ -156,6 +169,14 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         // Bind to HiHouseService
         Intent intent = new Intent(this, HiHouseService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        
+    //GCM Notification
+        if (checkPlayServices()) {
+        	mGCMRegistrationId = getRegistrationId(getApplicationContext());
+            if (mGCMRegistrationId.isEmpty()) {
+                registerInBackground();
+            }
+        }
 	}
 	
 	@Override
@@ -378,6 +399,68 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             mHiHouseService.testMethod();
         }
 
+	}
+	
+//GCM Notification
+	private boolean checkPlayServices() {
+	    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+	    if (resultCode != ConnectionResult.SUCCESS) {
+	       return false;
+	    }
+	    return true;
+	}
+	private String getRegistrationId(Context context) {
+	    final SharedPreferences prefs = getGCMPreferences(context);
+	    String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+	    if (registrationId.isEmpty()) {
+	        return "";
+	    }
+	    int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+	    int currentVersion = getAppVersion(context);
+	    if (registeredVersion != currentVersion) {
+	        return "";
+	    }
+	    return registrationId;
+	}
+	
+	private void registerInBackground() {
+	    new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+	            	GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+	            	mGCMRegistrationId = gcm.register(SENDER_ID);
+	            	storeRegistrationId(getApplicationContext(), mGCMRegistrationId);
+	            } catch (Exception ex) {
+	            	ex.printStackTrace();
+	            }
+				return null;
+			}
+	    }.execute(null, null, null);
+	}
+	
+	private void storeRegistrationId(Context context, String regId) {
+	    final SharedPreferences prefs = getGCMPreferences(context);
+	    int appVersion = getAppVersion(context);
+	    SharedPreferences.Editor editor = prefs.edit();
+	    editor.putString(PROPERTY_REG_ID, regId);
+	    editor.putInt(PROPERTY_APP_VERSION, appVersion);
+	    editor.commit();
+	}
+	
+	private SharedPreferences getGCMPreferences(Context context) {
+	    return getSharedPreferences(HiHouse.class.getSimpleName(),
+	            Context.MODE_PRIVATE);
+	}
+	
+	private static int getAppVersion(Context context) {
+	    try {
+	        PackageInfo packageInfo = context.getPackageManager()
+	                .getPackageInfo(context.getPackageName(), 0);
+	        return packageInfo.versionCode;
+	    } catch (NameNotFoundException e) {
+	        throw new RuntimeException("Could not get package name: " + e);
+	    }
 	}
 	
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
