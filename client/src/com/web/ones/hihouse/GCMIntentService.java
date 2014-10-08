@@ -13,6 +13,8 @@ import android.support.v4.app.NotificationCompat;
 public class GCMIntentService extends IntentService {
 
 	public static final int NOTIFICATION_ID = 1;
+	private static final String GCM_DATA_MSG_TITLE = "title";
+	private static final String GCM_DATA_MSG_CONTENT = "content";
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
@@ -28,7 +30,9 @@ public class GCMIntentService extends IntentService {
         if (!extras.isEmpty()) {
            if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 //TODO get data inside message
-        	   sendNotification("alerta", "alerta del sistema");
+        	   String title = intent.getExtras().getString(GCM_DATA_MSG_TITLE,"");
+        	   String content = intent.getExtras().getString(GCM_DATA_MSG_CONTENT,"");
+        	   sendNotification(title, content);
             }
         }
         GCMBroadcastReceiver.completeWakefulIntent(intent);

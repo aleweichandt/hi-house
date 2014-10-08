@@ -20,6 +20,7 @@ public class User {
 	private String token;
 	private boolean admin;
 	private ArrayList<Profile> profiles;
+	private boolean allowNotifications;
 	
 	public User(String user, String pass, String token, boolean admin){
 		profiles = new ArrayList<Profile>();
@@ -27,6 +28,7 @@ public class User {
 		this.password = pass;
 		this.token = token;
 		this.admin = admin;
+		this.allowNotifications = false;
 	}
 	
 	public String getUser() {
@@ -129,5 +131,11 @@ public class User {
 		editor.commit();	
 	}
 
+	public void setAllowNotifications(boolean enabled) {
+		allowNotifications = enabled;
+	}
 	
+	public boolean canReceiveNotifications() {
+		return allowNotifications;
+	}
 }

@@ -50,7 +50,7 @@ public class LoginActivity extends Activity {
 		Button login_btn = (Button) findViewById(R.id.login);
 		
 		//TODO Autocompleto user y pass. Luego borrar
-		user.setText("admin");
+		user.setText("administrador");
 		pass.setText("1234");
 		
 		login_btn.setOnClickListener(new OnClickListener(){
@@ -116,8 +116,8 @@ public class LoginActivity extends Activity {
         				
         				// Creamos el intento para la HiHouse activity y mandamos los parametros
             	    	Intent activityIntent = new Intent(context, HiHouse.class);
-            	    	activityIntent.putExtra(EXTRA_USER, user.getText());
-            	    	activityIntent.putExtra(EXTRA_PASS, pass.getText());
+            	    	activityIntent.putExtra(EXTRA_USER, user.getText().toString());
+            	    	activityIntent.putExtra(EXTRA_PASS, pass.getText().toString());
             	    	activityIntent.putExtra(EXTRA_SAVE, recordar.isChecked());
             	    	activityIntent.putExtra(EXTRA_TOKEN, token);
             	    	activityIntent.putExtra(EXTRA_ADMIN, admin);
