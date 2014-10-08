@@ -49,7 +49,7 @@ public class SecurityMgr {
 		List<Object> ids = request.listAllDevicesOfType(sSensorTypes);
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				String deviceid = (String)it.next();
+				String deviceid = it.next().toString();
 				Sensor sensor = (Sensor) Device.getFromDB(deviceid);
 				if(sensor.getState()) {
 					float value = sensor.getValue();
