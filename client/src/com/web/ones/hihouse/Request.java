@@ -17,4 +17,5 @@ public class Request {
 	public static final int ADD_DEVICE = 13;
 	public static final int UPDATE_DEVICE = 14;
 	public static final int DELETE_DEVICE = 15;
+	public static final int GET_DEVICE = 16;
 }

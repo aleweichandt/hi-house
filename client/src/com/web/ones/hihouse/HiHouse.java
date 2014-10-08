@@ -290,6 +290,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		break;
     	case DRAWER_MENU_INDEX_DEVICES:
     		fragment = new DeviceAdminFragment();
+    		fragmentTag = DeviceAdminFragment.class.getName();
+    		addToBackStack = true;
+    		backStackTag = DeviceAdminFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_SIMULATOR:
     		//TODO add fragment
@@ -449,6 +452,10 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	        		if(frag!=null){
 	        			try{((ProfileInfoFragment)frag).loadDevices(intent.getStringExtra("data"));}catch(ClassCastException e){}
 	        		}
+	        		frag = getFragmentManager().findFragmentByTag(DeviceAdminFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((DeviceAdminFragment)frag).loadDevicesList(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
         		}
         		else{
         			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
@@ -512,6 +519,38 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			try{((DeviceInfoFragment)frag).addDeviceResult(rc==200?true:false);}catch(ClassCastException e){}
         		}
         		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.GET_DEVICE:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(DeviceInfoFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((DeviceInfoFragment)frag).updateDeviceInfo(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar dispositivo", Toast.LENGTH_SHORT).show();
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.UPDATE_DEVICE:
+        		frag = getFragmentManager().findFragmentByTag(DeviceInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{
+        				((DeviceInfoFragment)frag).updateDeviceResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(DeviceAdminFragment.class.getName());
+        				((DeviceAdminFragment)frag).refreshDevices();
+    				}catch(ClassCastException e){}
+        		}
+        		break;
+        	case Request.DELETE_DEVICE:
+        		frag = getFragmentManager().findFragmentByTag(DeviceInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{
+        				((DeviceInfoFragment)frag).deleteDeviceResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(DeviceAdminFragment.class.getName());
+        				((DeviceAdminFragment)frag).refreshDevices();
+        			}catch(ClassCastException e){}
+        		}
         		break;
         	}
         }
