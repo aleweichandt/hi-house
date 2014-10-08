@@ -52,7 +52,7 @@ public class AmbientMgr {
 		List<Object> ids = request.listAllDevicesOfType(sSensorTypes);
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				String deviceid = (String)it.next();
+				String deviceid = it.next().toString();
 				TermalSensor sensor = (TermalSensor) Device.getFromDB(deviceid);
 				if(sensor.getState()) {
 					sum += sensor.getValue();
@@ -71,7 +71,7 @@ public class AmbientMgr {
 		List<Object> ids = request.listAllDevicesOfType(sActuatorTypes);
 		if(!ids.isEmpty()) {
 			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				String deviceid = (String)it.next();
+				String deviceid = it.next().toString();
 				TermalActuator act = (TermalActuator) Device.getFromDB(deviceid);
 				if(act.getState()) {
 					if(diff > C.Config.AMBIENT_MAX_DIFF_DEGREES && act.canHeat()){
