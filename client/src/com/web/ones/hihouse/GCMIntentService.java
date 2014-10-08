@@ -28,13 +28,13 @@ public class GCMIntentService extends IntentService {
         if (!extras.isEmpty()) {
            if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 //TODO get data inside message
-        	   sendNotification("alerta");
+        	   sendNotification("alerta", "alerta del sistema");
             }
         }
         GCMBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendNotification(String msg) {
+    private void sendNotification(String title, String msg) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -44,9 +44,10 @@ public class GCMIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.logo)
-        .setContentTitle("GCM Notification")
+        .setContentTitle(title)
         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-        .setContentText(msg);
+        .setContentText(msg)
+        .setAutoCancel(true);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
