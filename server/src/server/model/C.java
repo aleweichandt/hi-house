@@ -35,6 +35,8 @@ public final class C {
 		public static final float SECURITY_SN_LIGHT_LIMIT = 100;
 		public static final float SECURITY_SN_TERMAL_LIMIT = 40;
 		public static final int SECURITY_ALERT_TIME_OFFSET = 120000;
+		public static final String SECURITY_ALERT_MSG_TITLE = "HiHouse Alert!";
+		public static final String SECURITY_ALERT_MSG_CONTENT = "Something is happening in your home, please check it out!";
 	//Simulation Manager
 		public static final int SIMULATION_MIN_UPDATE_TIME = 1000;
 		public static final int SIMULATION_MAX_UPDATE_TIME = 10000;

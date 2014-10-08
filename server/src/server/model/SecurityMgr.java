@@ -70,7 +70,8 @@ public class SecurityMgr {
 				if(notificationId != null && !notificationId.isEmpty()) {
 					//send alert to dest
 					JsonObject data = Json.createObjectBuilder()
-										  .add("message_id", "security_alert")
+										  .add("title", C.Config.SECURITY_ALERT_MSG_TITLE)
+										  .add("content", C.Config.SECURITY_ALERT_MSG_CONTENT)
 										  .build();
 					AndroidNotification an = new AndroidNotification();
 					if(an.send(notificationId, data)){

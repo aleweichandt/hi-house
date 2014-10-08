@@ -244,6 +244,6 @@ public class UserService {
 		if(!user.commitToDB()) {
 			return Response.status(500).entity("server error").build();
 		}
-		return Response.status(200).entity(userid + " removed").build();
+		return Response.status(200).entity(userid + " notification set up").build();
 	}
 }
