@@ -96,6 +96,10 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             
             //una vez que el se hace bind del servicio cargo mis dispositivos
             selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
+           //GCM Notifications
+            if(!getUser().canReceiveNotifications()) {
+            	SendRegistrationId(mGCMRegistrationId);
+            }
         }
 
         @Override
@@ -175,6 +179,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         	mGCMRegistrationId = getRegistrationId(getApplicationContext());
             if (mGCMRegistrationId.isEmpty()) {
                 registerInBackground();
+            } else {
+            	SendRegistrationId(mGCMRegistrationId);
             }
         }
 	}
@@ -431,6 +437,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	            	GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
 	            	mGCMRegistrationId = gcm.register(SENDER_ID);
 	            	storeRegistrationId(getApplicationContext(), mGCMRegistrationId);
+	            	SendRegistrationId(mGCMRegistrationId);
 	            } catch (Exception ex) {
 	            	ex.printStackTrace();
 	            }
@@ -451,6 +458,16 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	private SharedPreferences getGCMPreferences(Context context) {
 	    return getSharedPreferences(HiHouse.class.getSimpleName(),
 	            Context.MODE_PRIVATE);
+	}
+	
+	private void SendRegistrationId(String id) {
+		if(mHiHouseService == null) {
+			return;
+		}
+		mHiHouseService.sendCommand(new Command(Request.SET_NOTIFICATION_ID,
+												false,
+												"users/me/notification?token="+getUser().getToken(),
+												id));
 	}
 	
 	private static int getAppVersion(Context context) {
@@ -633,6 +650,14 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         				frag = getFragmentManager().findFragmentByTag(DeviceAdminFragment.class.getName());
         				((DeviceAdminFragment)frag).refreshDevices();
         			}catch(ClassCastException e){}
+        		}
+        		break;
+        //GCM Notification
+        	case Request.SET_NOTIFICATION_ID:
+        		if(rc==200) {
+        			getUser().setAllowNotifications(true);
+        		} else {
+        			//TODO controlar el error, quiza reenviar, pero no lo veo necesario
         		}
         		break;
         	}
