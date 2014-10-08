@@ -62,7 +62,7 @@ public class VoiceTranslation extends Fragment implements OnClickListener, Recog
 		speech.setRecognitionListener(this);
 		recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
-		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
+		recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getApplication().getPackageName());
 		recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
 		//recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
 	}
