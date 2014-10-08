@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-10-2014 a las 05:50:41
+-- Tiempo de generación: 08-10-2014 a las 19:52:07
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `Email` varchar(50) DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
   `Receptor_Alerta` tinyint(1) NOT NULL DEFAULT '0',
-  `ID_Notificacion` varchar(20) DEFAULT NULL,
+  `ID_Notificacion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`ID_Usuario`),
   UNIQUE KEY `Nombre` (`Nombre`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
