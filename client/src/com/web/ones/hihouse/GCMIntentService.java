@@ -3,6 +3,7 @@ package com.web.ones.hihouse;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -47,6 +48,7 @@ public class GCMIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
+        .setDefaults(Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.logo)
         .setContentTitle(title)
         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
