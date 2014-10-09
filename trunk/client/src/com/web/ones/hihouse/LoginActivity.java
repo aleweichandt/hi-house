@@ -6,10 +6,13 @@ import org.json.JSONObject;
 import com.web.ones.hihouse.HiHouseService.HiHouseTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -92,7 +95,8 @@ public class LoginActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_setup_ip) {
+			showIPSetupDialog();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -138,4 +142,23 @@ public class LoginActivity extends Activity {
         	}
         }
 	};
+	
+	private void showIPSetupDialog()
+	{
+	    final AlertDialog.Builder Main_Dialog = new AlertDialog.Builder(this);
+	    final EditText input = new EditText(this);
+	    input.setPadding(10, 10, 10, 10);
+	    input.setText("http://192.168.1.102:8080");
+
+	    Main_Dialog.setView(input);
+	    Main_Dialog.setTitle(getResources().getString(R.string.action_setup_ip));
+	    Main_Dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+	    {
+	        public void onClick(DialogInterface dialog, int whichButton)
+	        {
+	        	Command.setCommandServerBase(input.getText().toString());
+	        }
+	    });
+	    Main_Dialog.show();
+	}
 }
