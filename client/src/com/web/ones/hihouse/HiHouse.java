@@ -97,7 +97,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
             //una vez que el se hace bind del servicio cargo mis dispositivos
             selectItem(DRAWER_MENU_INDEX_MY_DEVICES);
            //GCM Notifications
-            if(!getUser().canReceiveNotifications()) {
+            if(!getUser().canReceiveNotifications() && mGCMRegistrationId != null) {
             	SendRegistrationId(mGCMRegistrationId);
             }
         }
