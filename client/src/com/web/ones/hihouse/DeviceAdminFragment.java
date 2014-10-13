@@ -32,7 +32,6 @@ public class DeviceAdminFragment extends ListFragment implements OnItemClickList
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		hiHouseAct = (HiHouse)getActivity();
-		devices = new ArrayList<Device>();
 	}
 	
 	@Override
@@ -42,6 +41,7 @@ public class DeviceAdminFragment extends ListFragment implements OnItemClickList
 		mList = (ListView) mRootView.findViewById(android.R.id.list);
 		
 		//Cargamos lista vacia mientras vuelve el request
+		devices = new ArrayList<Device>();
 		mAdapter = new DeviceListAdapter(getActivity());
 		mList.setAdapter(mAdapter);
 		
