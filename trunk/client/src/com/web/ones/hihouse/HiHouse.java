@@ -1,13 +1,5 @@
 package com.web.ones.hihouse;
 
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -42,7 +34,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class HiHouse extends Activity implements OnVoiceCommand{
@@ -333,8 +324,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	    	fragment.setArguments(args);
 	        FragmentManager fragmentManager = getFragmentManager();
 	        if(addToBackStack) {
+	        	fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		        fragmentManager.beginTransaction()
-		        			   .add(R.id.content_frame, fragment, fragmentTag)
+		        			   .replace(R.id.content_frame, fragment, fragmentTag)
 		        			   .addToBackStack(backStackTag)
 		                       .commit();
 	        } else {
