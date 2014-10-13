@@ -616,7 +616,11 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         	case Request.ADD_DEVICE:
         		frag = getFragmentManager().findFragmentByTag(DeviceInfoFragment.class.getName());
         		if(frag!=null){
-        			try{((DeviceInfoFragment)frag).addDeviceResult(rc==200?true:false);}catch(ClassCastException e){}
+        			try{
+        				((DeviceInfoFragment)frag).addDeviceResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(DeviceAdminFragment.class.getName());
+        				((DeviceAdminFragment)frag).refreshDevices();
+        				}catch(ClassCastException e){}
         		}
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
