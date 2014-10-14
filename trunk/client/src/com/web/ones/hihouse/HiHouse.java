@@ -37,15 +37,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class HiHouse extends Activity implements OnVoiceCommand{
-	private static final int DRAWER_MENU_INDEX_LOGIN = 0;
-	private static final int DRAWER_MENU_INDEX_MY_DEVICES = 1;
-	private static final int DRAWER_MENU_INDEX_ADD_USER = 2;
-	private static final int DRAWER_MENU_INDEX_USERS = 3;
-	private static final int DRAWER_MENU_INDEX_ADD_PROFILE = 4;
-	private static final int DRAWER_MENU_INDEX_PROFILES = 5;
-	private static final int DRAWER_MENU_INDEX_ADD_DEVICE = 6;
-	private static final int DRAWER_MENU_INDEX_DEVICES = 7;
-	private static final int DRAWER_MENU_INDEX_SIMULATOR = 8;
+	private static final int DRAWER_MENU_INDEX_MY_DEVICES = 0;
+	private static final int DRAWER_MENU_INDEX_ADD_USER = 1;
+	private static final int DRAWER_MENU_INDEX_USERS = 2;
+	private static final int DRAWER_MENU_INDEX_ADD_PROFILE = 3;
+	private static final int DRAWER_MENU_INDEX_PROFILES = 4;
+	private static final int DRAWER_MENU_INDEX_ADD_DEVICE = 5;
+	private static final int DRAWER_MENU_INDEX_DEVICES = 6;
+	private static final int DRAWER_MENU_INDEX_SIMULATOR = 7;
 	
 //GCM Notification
 	public static final String PROPERTY_REG_ID = "registration_id";
@@ -111,8 +110,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 		String token = intentLogin.getStringExtra(LoginActivity.EXTRA_TOKEN);
 		boolean admin = intentLogin.getBooleanExtra(LoginActivity.EXTRA_ADMIN, false);
 		boolean save = intentLogin.getBooleanExtra(LoginActivity.EXTRA_SAVE, false);
+		int id = intentLogin.getIntExtra(LoginActivity.EXTRA_ID, -1);
 		
-		this.user = new User(user, pass, token, admin);
+		this.user = new User(id, user, pass, token, admin);
 		
 		mTitle = getTitle();
 		mDrawerTitle = getString(R.string.drawer_title);
@@ -264,18 +264,20 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     	boolean addToBackStack = false;
     	String backStackTag = "";
     	switch(position) {
-    	case DRAWER_MENU_INDEX_LOGIN:
-    		fragment = new LoginFragment();
-    		break;
     	case DRAWER_MENU_INDEX_MY_DEVICES:
     		fragment = new MyDevicesFragment();
     		fragmentTag = MyDevicesFragment.class.getName();
     		break;
     	case DRAWER_MENU_INDEX_ADD_USER:
-    		fragment = new UserInfoFragment("Nuevo", true);
-    		fragmentTag = UserInfoFragment.class.getName();
-    		addToBackStack = true;
-    		backStackTag = UserInfoFragment.class.toString();
+    		if(this.user.isAdmin()){
+	    		fragment = new UserInfoFragment("Nuevo", true);
+	    		fragmentTag = UserInfoFragment.class.getName();
+	    		addToBackStack = true;
+	    		backStackTag = UserInfoFragment.class.toString();
+    		}
+    		else{
+    			//TODO No es admin. Permitir modificar sus propios datos.
+    		}
     		break;
     	case DRAWER_MENU_INDEX_USERS:
     		if(this.user.isAdmin()) {

@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
+	public final static String EXTRA_ID = "hihouse.extra.id";
 	public final static String EXTRA_USER = "hihouse.extra.user";
 	public final static String EXTRA_PASS = "hihouse.extra.pass";
 	public final static String EXTRA_SAVE = "hihouse.extra.save";
@@ -114,6 +115,7 @@ public class LoginActivity extends Activity {
         			
         			try{
         				reader = new JSONObject(in);
+        				int id = Integer.parseInt(reader.getString("id"));
         				String token = reader.getString("token");
         				boolean admin = reader.getBoolean("admin");
         				
@@ -122,6 +124,7 @@ public class LoginActivity extends Activity {
             	    	activityIntent.putExtra(EXTRA_USER, user.getText().toString());
             	    	activityIntent.putExtra(EXTRA_PASS, pass.getText().toString());
             	    	activityIntent.putExtra(EXTRA_SAVE, recordar.isChecked());
+            	    	activityIntent.putExtra(EXTRA_ID, id);
             	    	activityIntent.putExtra(EXTRA_TOKEN, token);
             	    	activityIntent.putExtra(EXTRA_ADMIN, admin);
             	    	startActivity(activityIntent);

@@ -90,7 +90,7 @@ public class MyDevicesFragment extends Fragment{
         // setting list adapter
         expListView.setAdapter(myExpListAdapter);
 
-        hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/admin/devices?token="+hiHouseAct.getUser().getToken()+"&add_voice_id=true&add_state=true", ""));
+        hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/"+hiHouseAct.getUser().getId()+"/devices?token="+hiHouseAct.getUser().getToken()+"&add_voice_id=true&add_state=true", ""));
         //mHiHouseService.testMethod();
         
         return mRootView;
