@@ -59,7 +59,6 @@ public class LoginActivity extends Activity {
 		login_btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				//TODO Validar datos y loguear usuario.
 				String params = "name="+user.getText()+"&pwd="+pass.getText();
 				SocketOperator so = new SocketOperator(v.getContext());
 				so.sendRequest(Request.LOGIN_USER, true, Command.serverURL+"users/login", params);
@@ -148,7 +147,7 @@ public class LoginActivity extends Activity {
 	    final AlertDialog.Builder Main_Dialog = new AlertDialog.Builder(this);
 	    final EditText input = new EditText(this);
 	    input.setPadding(10, 10, 10, 10);
-	    input.setText("http://192.168.1.102:8080");
+	    input.setText("http://192.168.1.110:8080");
 
 	    Main_Dialog.setView(input);
 	    Main_Dialog.setTitle(getResources().getString(R.string.action_setup_ip));

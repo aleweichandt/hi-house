@@ -33,7 +33,6 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		hiHouseAct = (HiHouse)getActivity();
-		profiles = new ArrayList<Profile>();
 	}
 	
 	@Override
@@ -43,6 +42,7 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 		mList = (ListView) mRootView.findViewById(android.R.id.list);
 		
 		//Cargamos lista vacia mientras vuelve el request
+		profiles = new ArrayList<Profile>();
 		mAdapter = new ProfileListAdapter(getActivity());
 		mList.setAdapter(mAdapter);
 		
