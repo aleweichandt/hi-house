@@ -2,6 +2,10 @@ package com.web.ones.hihouse;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.BroadcastReceiver;
@@ -17,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserAdminFragment extends ListFragment implements 
@@ -25,33 +30,61 @@ public class UserAdminFragment extends ListFragment implements
 	private UserInfoFragment mUserFragment = null;
 	private View mRootView;
 	private ListView mList = null;
-	private ArrayAdapter<String> mAdapter;
+	private UserListAdapter mAdapter;
+	private HiHouse hiHouseAct;
+	private ArrayList<User> users;
+	private User user;
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		hiHouseAct = (HiHouse)getActivity();
+		users = new ArrayList<User>();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_users, container, false);
-		loadUsersList();
+		
+		mList = (ListView) mRootView.findViewById(android.R.id.list);
+		
+		//Cargamos lista vacia mientras vuelve el request
+		mAdapter = new UserListAdapter(getActivity());
+		mList.setAdapter(mAdapter);
+		
+		user = ((HiHouse)getActivity()).getUser(); 
+		Command command = new Command(Request.GET_LIST_USERS, true, "users/all?token="+user.getToken(), "");
+		hiHouseAct.mHiHouseService.sendCommand(command);
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 		
 		return mRootView;
 	}
 	
-	private void loadUsersList() {
-		//TODO load real users
-		String[] values = new String[] { "Jose", "Ines", "Juancito",
-		        "Pedro", "Betina" };
-		
-		User user = ((HiHouse)getActivity()).getUser(); 
+	public void loadUsersList(String str) {		
+		JSONArray devArray;
+		JSONObject userInfo;
+    	try{
+    		devArray = new JSONArray(str);
+    		for(int i=0; i<devArray.length(); i++){
+    			userInfo = devArray.getJSONObject(i);
+    			String b = userInfo.getString("name");
+    			int a = userInfo.getInt("id");
+    			User d = new User(userInfo.getInt("id"), userInfo.getString("name"));
+    			users.add(d);
+    		}
+    	}
+    	catch(JSONException e){e.printStackTrace();}
+    	
+    	mAdapter.notifyDataSetChanged();
+    	hiHouseAct.setLoadingBarVisibility(View.GONE);
+	}
+	
+	public void refreshDevices() {
+		users = new ArrayList<User>();
 		Command command = new Command(Request.GET_LIST_USERS, true, "users/all?token="+user.getToken(), "");
-		((HiHouse)getActivity()).mHiHouseService.sendCommand(command);
-
-	    final ArrayList<String> list = new ArrayList<String>();
-	    for (int i = 0; i < values.length; ++i) {
-	      list.add(values[i]);
-	    }
-	    mAdapter = new ArrayAdapter<String>(getActivity(), R.layout.simple_row, list);
-	    
-	    mList = (ListView) mRootView.findViewById(android.R.id.list);
-	    mList.setAdapter(mAdapter);
+		hiHouseAct.mHiHouseService.sendCommand(command);
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 	}
 	
 	@Override
@@ -68,8 +101,8 @@ public class UserAdminFragment extends ListFragment implements
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-		String name = mAdapter.getItem(pos);
-		mUserFragment = new UserInfoFragment(name, false);
+		User u = users.get(pos);
+		mUserFragment = new UserInfoFragment(u.getUser(), false);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		ft.add(R.id.userinfo_container, mUserFragment);
 		ft.addToBackStack(UserInfoFragment.class.toString());
@@ -78,5 +111,29 @@ public class UserAdminFragment extends ListFragment implements
 	
 	public void mostrarDatos(String str){
 		Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+	}
+	
+	//adapter for list
+	private class UserListAdapter extends ArrayAdapter<User> {
+		private Context mContext;
+		
+		public UserListAdapter(Context context) {
+			super(context, R.layout.simple_row, users);
+			mContext = context;
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View rowView = inflater.inflate(R.layout.simple_row, parent, false);
+			TextView tv = (TextView)rowView.findViewById(R.id.row_name);
+			tv.setText(users.get(position).getUser());
+			return rowView;
+		}
+		
+		@Override
+		public int getCount(){
+			return users.size();
+		}
 	}
 }

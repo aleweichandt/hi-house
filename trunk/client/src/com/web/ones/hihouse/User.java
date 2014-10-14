@@ -14,7 +14,8 @@ import android.view.View;
 
 
 public class User {
-
+	
+	private int id;
 	private String user;
 	private String password;
 	private String token;
@@ -28,6 +29,13 @@ public class User {
 		this.password = pass;
 		this.token = token;
 		this.admin = admin;
+		this.allowNotifications = false;
+	}
+	
+	public User(int id, String user){
+		profiles = new ArrayList<Profile>();
+		this.user = user;
+		this.id = id;
 		this.allowNotifications = false;
 	}
 	

@@ -517,14 +517,16 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.GET_LIST_USERS:
-        		frag = getFragmentManager().findFragmentByTag(UserAdminFragment.class.getName());
-        		if(frag!=null){
-	        		try{
-	        			((UserAdminFragment)frag).mostrarDatos(intent.getCharSequenceExtra("data").toString());
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(UserAdminFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((UserAdminFragment)frag).loadUsersList(intent.getStringExtra("data"));}catch(ClassCastException e){}
 	        		}
-	        		catch(ClassCastException e){} //esta bien xq el fragmento activo es de otro tipo no y actualizamos nada
         		}
-        		//mainLoadingBar.setVisibility(View.GONE);
+        		else{
+        			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
+        			mainLoadingBar.setVisibility(View.GONE);
+        		}
         		break;
         	case Request.GET_DESIRED_TEMP:
         		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
