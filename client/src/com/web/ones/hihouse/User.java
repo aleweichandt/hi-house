@@ -23,8 +23,9 @@ public class User {
 	private ArrayList<Profile> profiles;
 	private boolean allowNotifications;
 	
-	public User(String user, String pass, String token, boolean admin){
+	public User(int id, String user, String pass, String token, boolean admin){
 		profiles = new ArrayList<Profile>();
+		this.id = id;
 		this.user = user;
 		this.password = pass;
 		this.token = token;
@@ -39,6 +40,9 @@ public class User {
 		this.allowNotifications = false;
 	}
 	
+	public int getId(){
+		return id;
+	}
 	public String getUser() {
 		return user;
 	}

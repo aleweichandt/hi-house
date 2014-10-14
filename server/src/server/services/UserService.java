@@ -158,6 +158,7 @@ public class UserService {
 		JsonObject ret = Json.createObjectBuilder()
 							.add("token", newSession.getToken())
 							.add("admin", newSession.getAdmin() != null)
+							.add("id", newSession.getUser().getId())
 							.build();
 		return Response.status(200).entity(ret.toString()).build();
 	}
