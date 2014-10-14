@@ -40,7 +40,6 @@ public class UserAdminFragment extends ListFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		hiHouseAct = (HiHouse)getActivity();
-		users = new ArrayList<User>();
 	}
 	
 	@Override
@@ -50,6 +49,7 @@ public class UserAdminFragment extends ListFragment implements
 		mList = (ListView) mRootView.findViewById(android.R.id.list);
 		
 		//Cargamos lista vacia mientras vuelve el request
+		users = new ArrayList<User>();
 		mAdapter = new UserListAdapter(getActivity());
 		mList.setAdapter(mAdapter);
 		
