@@ -258,7 +258,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     private void selectItem(int position) {
     	Fragment fragment = null;
     	String fragmentTag = null;//para hacer FragmentManager.findFragmentByTag(String)
-    	if(position==menuLastPosition) return;
+    	//if(position==menuLastPosition) return;
     	menuLastPosition = position;
     	Bundle args = new Bundle();
     	boolean addToBackStack = false;
@@ -313,8 +313,10 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		backStackTag = DeviceAdminFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_SIMULATOR:
-    		//TODO add fragment
     		fragment = new SimulatorFragment();
+    		fragmentTag = SimulatorFragment.class.getName();
+    		addToBackStack = true;
+    		backStackTag = SimulatorFragment.class.toString();
     		break;
     	default:
     		Toast.makeText(this, "Error de indice", Toast.LENGTH_SHORT).show();
@@ -650,13 +652,45 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			}catch(ClassCastException e){}
         		}
         		break;
-        //GCM Notification
+        	//GCM Notification
         	case Request.SET_NOTIFICATION_ID:
         		if(rc==200) {
         			getUser().setAllowNotifications(true);
         		} else {
         			//TODO controlar el error, quiza reenviar, pero no lo veo necesario
         		}
+        		break;
+        	case Request.SIMULATOR_GET_PROFILES:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(SimulatorFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((SimulatorFragment)frag).setProfileSpinner(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar perfiles", Toast.LENGTH_SHORT).show();
+        			mainLoadingBar.setVisibility(View.GONE);
+        		}
+        		//mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.SIMULATOR_GET_DEVICES:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(SimulatorFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((SimulatorFragment)frag).loadDevices(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.SIMULATOR_UPDATE:
+        		frag = getFragmentManager().findFragmentByTag(SimulatorFragment.class.getName());
+        		if(frag!=null){
+        			try{((SimulatorFragment)frag).updateSimulatorResult(rc==200?true:false);}catch(ClassCastException e){}
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	}
         }

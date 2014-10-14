@@ -19,4 +19,7 @@ public class Request {
 	public static final int DELETE_DEVICE = 15;
 	public static final int GET_DEVICE = 16;
 	public static final int SET_NOTIFICATION_ID = 20;
+	public static final int SIMULATOR_GET_PROFILES = 21;
+	public static final int SIMULATOR_GET_DEVICES = 22;
+	public static final int SIMULATOR_UPDATE = 23;
 }

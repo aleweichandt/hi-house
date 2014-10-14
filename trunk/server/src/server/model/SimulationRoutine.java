@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
@@ -19,7 +20,7 @@ public class SimulationRoutine {
 		if(!result.isEmpty()) {
 			List<String> deviceList = new ArrayList<String>();
 			for(Iterator<Object> it = result.iterator();it.hasNext();) {
-				deviceList.add((String)it.next());
+				deviceList.add(it.next().toString());
 			}
 			return new SimulationRoutine(routineid, deviceList).tagDB();
 		}
@@ -42,7 +43,7 @@ public class SimulationRoutine {
 		if(prf != null) {
 			List<String> prfDevices = prf.getDevices();
 			for(Iterator<JsonValue> it = list.iterator();it.hasNext();) {
-				String id = ((JsonString)it.next()).getString();
+				String id = ((JsonNumber)it.next()).toString();
 				if(prfDevices.contains(id)) {
 					ret.add(id);
 				}
