@@ -532,6 +532,18 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			mainLoadingBar.setVisibility(View.GONE);
         		}
         		break;
+        	case Request.GET_USER:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((UserInfoFragment)frag).updateUserInfo(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar el usuario", Toast.LENGTH_SHORT).show();
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
+        		break;
         	case Request.GET_DESIRED_TEMP:
         		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
         		if(frag!=null){
