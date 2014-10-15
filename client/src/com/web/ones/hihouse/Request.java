@@ -22,4 +22,5 @@ public class Request {
 	public static final int SIMULATOR_GET_PROFILES = 21;
 	public static final int SIMULATOR_GET_DEVICES = 22;
 	public static final int SIMULATOR_UPDATE = 23;
+	public static final int GET_USER = 24;
 }

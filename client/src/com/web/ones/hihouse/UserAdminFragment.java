@@ -68,8 +68,6 @@ public class UserAdminFragment extends ListFragment implements
     		devArray = new JSONArray(str);
     		for(int i=0; i<devArray.length(); i++){
     			userInfo = devArray.getJSONObject(i);
-    			String b = userInfo.getString("name");
-    			int a = userInfo.getInt("id");
     			User d = new User(userInfo.getInt("id"), userInfo.getString("name"));
     			users.add(d);
     		}
@@ -102,9 +100,14 @@ public class UserAdminFragment extends ListFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 		User u = users.get(pos);
-		mUserFragment = new UserInfoFragment(u.getUser(), false);
+		mUserFragment = new UserInfoFragment();
+		Bundle args = new Bundle();
+		args.putBoolean(UserInfoFragment.ARG_IS_ADD, false);
+		args.putString(UserInfoFragment.ARG_USER_NAME, u.getUser());
+		args.putInt(UserInfoFragment.ARG_USER_ID, u.getId());
+		mUserFragment.setArguments(args);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-		ft.add(R.id.userinfo_container, mUserFragment);
+		ft.add(R.id.userinfo_container, mUserFragment, UserInfoFragment.class.getName());
 		ft.addToBackStack(UserInfoFragment.class.toString());
 		ft.commit();
 	}
