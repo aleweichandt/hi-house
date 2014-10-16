@@ -18,17 +18,16 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private HiHouse hiHouse;
     private HashMap<String, List<String>> _listDataChild;
-    private String selectedItem = "";
+    private int selectedItem = -1;
     
-    public void setSelectedItem(String item){
-    	this.selectedItem = item;
+    public void setSelectedProf(int id){
+    	this.selectedItem = id;
     	this.notifyDataSetChanged();
     }
- 
-    /*public MyExpandableListAdapter(Context context, List<Profile> listDataHeader) {
-        this._context = context;
-        this._listDataHeader = listDataHeader;
-    }*/
+    public int getSelectedProf(){
+    	return this.selectedItem;
+    }
+
     public MyExpandableListAdapter(HiHouse activity) {
         this._context = (Context)activity;
         this.hiHouse = activity;
@@ -94,7 +93,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         }
         
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.profile_name);
-        if(profile.getName().equals(selectedItem)){
+        if(profile.getId()==selectedItem){
         	lblListHeader.setBackgroundResource(R.drawable.item_selected_border_profile);
         }
         else lblListHeader.setBackgroundResource(R.color.profile_item_bkgr);

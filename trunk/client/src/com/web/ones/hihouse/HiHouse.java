@@ -706,6 +706,12 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		}
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
+        	case Request.SIMULATOR_STATE:
+        		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
+        		if(frag!=null){
+        			try{((MyDevicesFragment)frag).updateSimulatorState(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
+        		}
+        		break;
         	}
         }
 	};

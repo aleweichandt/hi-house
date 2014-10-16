@@ -32,6 +32,12 @@
 		        android:contentDescription="@string/start_stop_btn_desc"
 		        android:src="@drawable/ic_action_play_over_video"
 		        android:visibility="gone" />
+		    <ProgressBar
+		        android:id="@+id/simu_loading_bar"
+		        style="?android:attr/progressBarStyle"
+		        android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		        android:visibility="gone"/>
 		    
 		</LinearLayout>
 

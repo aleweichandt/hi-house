@@ -1,45 +1,21 @@
 package com.web.ones.hihouse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.web.ones.hihouse.HiHouseService.HiHouseTask;
-
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
-import android.opengl.Visibility;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,16 +24,16 @@ public class MyDevicesFragment extends Fragment{
 	private View mRootView;
 	private ImageButton btn_start_stop;
 	private TextView txt_select;
-	private boolean toggle_start_stop=false;
 	private ExpandableListView expListView;
 	private ExpandableListAdapter myExpListAdapter;
 	private TextView temp_txt;
 	private SeekBar temp_seekBar;
-	private ProgressBar temp_loading_bar;
+	private ProgressBar temp_loading_bar, simu_loading_bar;
 	private String request;
 	private int seekBar_temp_corrector = 14;
 	private int actual_temp = -1;
 	private HiHouse hiHouseAct;
+	private boolean simuState = false;
 	
 	public MyDevicesFragment() {
         // Empty constructor required for fragment subclasses
@@ -84,6 +60,7 @@ public class MyDevicesFragment extends Fragment{
 		temp_txt = (TextView) mRootView.findViewById(R.id.temp_txt);
 		temp_seekBar = (SeekBar) mRootView.findViewById(R.id.seekBar);
 		temp_loading_bar = (ProgressBar) mRootView.findViewById(R.id.temp_loading_bar);
+		simu_loading_bar = (ProgressBar) mRootView.findViewById(R.id.simu_loading_bar);
 		
 		setEventsListeners();
         
@@ -111,9 +88,9 @@ public class MyDevicesFragment extends Fragment{
 		btn_start_stop.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				btn_start_stop.setImageResource(toggle_start_stop?R.drawable.ic_action_play_over_video:R.drawable.ic_action_pause_over_video);
-				toggle_start_stop=!toggle_start_stop;
-				//TODO arrancar/detener simulador
+				btn_start_stop.setVisibility(View.GONE);
+        		simu_loading_bar.setVisibility(View.VISIBLE);
+        		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SIMULATOR_STATE, false, "simulation/"+((MyExpandableListAdapter) myExpListAdapter).getSelectedProf()+"/state?token="+hiHouseAct.getUser().getToken()+"&enabled="+!simuState, ""));
 			}
 		});
 		
@@ -166,9 +143,11 @@ public class MyDevicesFragment extends Fragment{
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPos, long id) {
 				User usr = hiHouseAct.getUser();
         		Profile prf = usr.getProfiles().get(groupPos);
-        		((MyExpandableListAdapter) myExpListAdapter).setSelectedItem(prf.getName());
+        		((MyExpandableListAdapter) myExpListAdapter).setSelectedProf(prf.getId());
         		txt_select.setText("Simulador Perfil \""+prf.getName()+"\":");
-        		btn_start_stop.setVisibility(View.VISIBLE);
+        		btn_start_stop.setVisibility(View.GONE);
+        		simu_loading_bar.setVisibility(View.VISIBLE);
+        		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SIMULATOR_STATE, true, "simulation/"+prf.getId()+"/state", "token="+hiHouseAct.getUser().getToken()));
 				return false;
 			}
 		});
@@ -204,5 +183,22 @@ public class MyDevicesFragment extends Fragment{
 			Toast.makeText(getActivity(), "No se pudo actualizar la temperatura.", Toast.LENGTH_SHORT).show();
 		}
 		temp_loading_bar.setVisibility(View.GONE);
+	}
+	
+	public void updateSimulatorState(String str){
+		if(str.equals("")){
+			simu_loading_bar.setVisibility(View.GONE);
+			txt_select.setText("Seleccione nuevamente un perfil");
+			Toast.makeText(getActivity(), "No se pudo obtener el estado del Simulador.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		try{
+			JSONObject reader = new JSONObject(str);
+			simuState = reader.getBoolean("state");
+			btn_start_stop.setImageResource(simuState?R.drawable.ic_action_pause_over_video:R.drawable.ic_action_play_over_video);
+			simu_loading_bar.setVisibility(View.GONE);
+			btn_start_stop.setVisibility(View.VISIBLE);
+		}
+		catch(JSONException e){e.printStackTrace();}
 	}
 }
