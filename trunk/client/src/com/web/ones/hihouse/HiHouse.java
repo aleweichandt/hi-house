@@ -526,9 +526,13 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	        		if(frag!=null){
 	        			try{((UserAdminFragment)frag).loadUsersList(intent.getStringExtra("data"));}catch(ClassCastException e){}
 	        		}
+	        		frag = getFragmentManager().findFragmentByTag(UserAlarmDestDialog.class.getName());
+	        		if(frag!=null){
+	        			try{((UserAlarmDestDialog)frag).loadUserList(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
         		}
         		else{
-        			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
+        			Toast.makeText(context, "Error al cargar usuarios", Toast.LENGTH_SHORT).show();
         			mainLoadingBar.setVisibility(View.GONE);
         		}
         		break;
@@ -717,6 +721,13 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		if(frag!=null){
         			try{((MyDevicesFragment)frag).updateAlarmState(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
         		}
+        		break;
+        	case Request.ALARM_DEST:
+        		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
+        		if(frag!=null){
+        			try{((MyDevicesFragment)frag).updateAlarmDest(rc==200?true:false);}catch(ClassCastException e){}
+        		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	}
         }

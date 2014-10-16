@@ -3,11 +3,14 @@ package com.web.ones.hihouse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.web.ones.hihouse.UserAlarmDestDialog.OnAlarmDestListener;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
@@ -19,7 +22,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MyDevicesFragment extends Fragment{
+public class MyDevicesFragment extends Fragment implements OnAlarmDestListener {
 
 	private View mRootView;
 	private ImageButton btn_start_stop, btn_alarm;
@@ -29,7 +32,6 @@ public class MyDevicesFragment extends Fragment{
 	private TextView temp_txt;
 	private SeekBar temp_seekBar;
 	private ProgressBar loading_bar_temp, loading_bar_simu, loading_bar_alarm;
-	private String request;
 	private int seekBar_temp_corrector = 14;
 	private int actual_temp = -1;
 	private HiHouse hiHouseAct;
@@ -105,6 +107,16 @@ public class MyDevicesFragment extends Fragment{
 			}
 		});
 		
+		btn_alarm.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				UserAlarmDestDialog ud = new UserAlarmDestDialog();
+				ud.setTargetFragment(MyDevicesFragment.this, 0);
+        		ud.show(getFragmentManager(), UserAlarmDestDialog.class.getName());
+				return true;
+			}
+		});
+		
 		temp_seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 	
 				@Override
@@ -139,7 +151,7 @@ public class MyDevicesFragment extends Fragment{
         		Profile prf = usr.getProfiles().get(groupPos);
             	Device dvc = prf.getDevices().get(childPos);
             	String tkn = usr.getToken();
-            	request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=";
+            	String request = "devices/" + dvc.getId() + "/state?token=" + tkn + "&enabled=";
 
             	hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SET_DEVICE_STATE, false, request+!dvc.getState(),""));
 	    		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
@@ -225,5 +237,16 @@ public class MyDevicesFragment extends Fragment{
 			btn_alarm.setVisibility(View.VISIBLE);
 		}
 		catch(JSONException e){e.printStackTrace();}
+	}
+	
+	@Override
+	public void OnAlarmDestConfirm(int userid){
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ALARM_DEST, false, "security/alarm_conf?token="+hiHouseAct.getUser().getToken(),""+userid));
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+	}
+	
+	public void updateAlarmDest(boolean set){
+		if(set) Toast.makeText(getActivity(), "Destinatario de alarma modificado.", Toast.LENGTH_SHORT).show();
+		else Toast.makeText(getActivity(), "No se puedo modificar el destinatario de alarma.", Toast.LENGTH_SHORT).show();;
 	}
 }
