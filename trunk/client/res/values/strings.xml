@@ -34,6 +34,7 @@
     <string name="off_switch">Off</string>
     <string name="open_close_btn_desc">Open/Close button</string>
     <string name="start_stop_btn_desc">Start/Stop button</string>
+    <string name="alarm_btn_desc">Alarm button</string>
     <string name="simulator_select">Seleccione un perfil:</string>
     <string name="temp">Temp:</string>
     <string name="popup_alarm_dest_title">Seleccione un destinatario del alerta</string>

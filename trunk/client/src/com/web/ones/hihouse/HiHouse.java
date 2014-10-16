@@ -712,6 +712,12 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			try{((MyDevicesFragment)frag).updateSimulatorState(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
         		}
         		break;
+        	case Request.ALARM_STATE:
+        		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
+        		if(frag!=null){
+        			try{((MyDevicesFragment)frag).updateAlarmState(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
+        		}
+        		break;
         	}
         }
 	};

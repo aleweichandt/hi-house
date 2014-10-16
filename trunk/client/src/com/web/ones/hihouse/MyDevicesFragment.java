@@ -22,18 +22,18 @@ import android.widget.Toast;
 public class MyDevicesFragment extends Fragment{
 
 	private View mRootView;
-	private ImageButton btn_start_stop;
+	private ImageButton btn_start_stop, btn_alarm;
 	private TextView txt_select;
 	private ExpandableListView expListView;
 	private ExpandableListAdapter myExpListAdapter;
 	private TextView temp_txt;
 	private SeekBar temp_seekBar;
-	private ProgressBar temp_loading_bar, simu_loading_bar;
+	private ProgressBar loading_bar_temp, loading_bar_simu, loading_bar_alarm;
 	private String request;
 	private int seekBar_temp_corrector = 14;
 	private int actual_temp = -1;
 	private HiHouse hiHouseAct;
-	private boolean simuState = false;
+	private boolean simuState = false, alarmState = false;
 	
 	public MyDevicesFragment() {
         // Empty constructor required for fragment subclasses
@@ -55,12 +55,14 @@ public class MyDevicesFragment extends Fragment{
 		expListView = (ExpandableListView) mRootView.findViewById(R.id.profiles_explist);
         
 		btn_start_stop = (ImageButton) mRootView.findViewById(R.id.start_stop_button);
+		btn_alarm = (ImageButton) mRootView.findViewById(R.id.alarm_button);
 		txt_select = (TextView) mRootView.findViewById(R.id.select_item_text);
 		
 		temp_txt = (TextView) mRootView.findViewById(R.id.temp_txt);
 		temp_seekBar = (SeekBar) mRootView.findViewById(R.id.seekBar);
-		temp_loading_bar = (ProgressBar) mRootView.findViewById(R.id.temp_loading_bar);
-		simu_loading_bar = (ProgressBar) mRootView.findViewById(R.id.simu_loading_bar);
+		loading_bar_temp = (ProgressBar) mRootView.findViewById(R.id.temp_loading_bar);
+		loading_bar_simu = (ProgressBar) mRootView.findViewById(R.id.simu_loading_bar);
+		loading_bar_alarm = (ProgressBar) mRootView.findViewById(R.id.alarm_loading_bar);
 		
 		setEventsListeners();
         
@@ -68,14 +70,14 @@ public class MyDevicesFragment extends Fragment{
         expListView.setAdapter(myExpListAdapter);
 
         hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_DEVICES, true, "users/"+hiHouseAct.getUser().getId()+"/devices?token="+hiHouseAct.getUser().getToken()+"&add_voice_id=true&add_state=true", ""));
-        //mHiHouseService.testMethod();
+        hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_DESIRED_TEMP, true, "temperature", "token="+hiHouseAct.getUser().getToken()));
+        hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ALARM_STATE, true, "security/state", "token="+hiHouseAct.getUser().getToken()));
         
         return mRootView;
     }
 	
 	@Override
 	public void onResume(){
-		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_DESIRED_TEMP, true, "temperature", "token="+hiHouseAct.getUser().getToken()));
         super.onResume();
 	}
 	
@@ -89,8 +91,17 @@ public class MyDevicesFragment extends Fragment{
 			@Override
 			public void onClick(View v){
 				btn_start_stop.setVisibility(View.GONE);
-        		simu_loading_bar.setVisibility(View.VISIBLE);
+        		loading_bar_simu.setVisibility(View.VISIBLE);
         		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SIMULATOR_STATE, false, "simulation/"+((MyExpandableListAdapter) myExpListAdapter).getSelectedProf()+"/state?token="+hiHouseAct.getUser().getToken()+"&enabled="+!simuState, ""));
+			}
+		});
+		
+		btn_alarm.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				btn_alarm.setVisibility(View.GONE);
+        		loading_bar_alarm.setVisibility(View.VISIBLE);
+        		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ALARM_STATE, false, "security/state?token="+hiHouseAct.getUser().getToken(), ""+!alarmState));
 			}
 		});
 		
@@ -111,7 +122,7 @@ public class MyDevicesFragment extends Fragment{
 				@Override
 				public void onStopTrackingTouch(SeekBar seekBar) {
 					// Display the value in textview
-					temp_loading_bar.setVisibility(View.VISIBLE);
+					loading_bar_temp.setVisibility(View.VISIBLE);
 					int temp = seekBar.getProgress();
 					if(temp>0) temp += seekBar_temp_corrector;
 					else temp = -1;
@@ -146,7 +157,7 @@ public class MyDevicesFragment extends Fragment{
         		((MyExpandableListAdapter) myExpListAdapter).setSelectedProf(prf.getId());
         		txt_select.setText("Simulador Perfil \""+prf.getName()+"\":");
         		btn_start_stop.setVisibility(View.GONE);
-        		simu_loading_bar.setVisibility(View.VISIBLE);
+        		loading_bar_simu.setVisibility(View.VISIBLE);
         		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.SIMULATOR_STATE, true, "simulation/"+prf.getId()+"/state", "token="+hiHouseAct.getUser().getToken()));
 				return false;
 			}
@@ -173,7 +184,7 @@ public class MyDevicesFragment extends Fragment{
 				e.printStackTrace();
 			}
 		}
-		temp_loading_bar.setVisibility(View.GONE);
+		loading_bar_temp.setVisibility(View.GONE);
 		temp_txt.setVisibility(View.VISIBLE);
 	}
 
@@ -182,12 +193,12 @@ public class MyDevicesFragment extends Fragment{
 			temp_seekBar.setProgress(actual_temp);
 			Toast.makeText(getActivity(), "No se pudo actualizar la temperatura.", Toast.LENGTH_SHORT).show();
 		}
-		temp_loading_bar.setVisibility(View.GONE);
+		loading_bar_temp.setVisibility(View.GONE);
 	}
 	
 	public void updateSimulatorState(String str){
+		loading_bar_simu.setVisibility(View.GONE);
 		if(str.equals("")){
-			simu_loading_bar.setVisibility(View.GONE);
 			txt_select.setText("Seleccione nuevamente un perfil");
 			Toast.makeText(getActivity(), "No se pudo obtener el estado del Simulador.", Toast.LENGTH_SHORT).show();
 			return;
@@ -196,8 +207,22 @@ public class MyDevicesFragment extends Fragment{
 			JSONObject reader = new JSONObject(str);
 			simuState = reader.getBoolean("state");
 			btn_start_stop.setImageResource(simuState?R.drawable.ic_action_pause_over_video:R.drawable.ic_action_play_over_video);
-			simu_loading_bar.setVisibility(View.GONE);
 			btn_start_stop.setVisibility(View.VISIBLE);
+		}
+		catch(JSONException e){e.printStackTrace();}
+	}
+	
+	public void updateAlarmState(String str){
+		loading_bar_alarm.setVisibility(View.GONE);
+		if(str.equals("")){
+			Toast.makeText(getActivity(), "No se pudo obtener el estado de la Alarma.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		try{
+			JSONObject reader = new JSONObject(str);
+			alarmState = reader.getBoolean("state");
+			btn_alarm.setImageResource(alarmState?R.drawable.ic_action_secure:R.drawable.ic_action_not_secure);
+			btn_alarm.setVisibility(View.VISIBLE);
 		}
 		catch(JSONException e){e.printStackTrace();}
 	}
