@@ -1,6 +1,7 @@
 package server.model;
 
 import java.util.Date;
+import java.util.Random;
 
 public class UserSession {
 	
@@ -10,15 +11,32 @@ public class UserSession {
 	private Date mExpirationTime;
 	
 	
-	private static int counter = 0; //For testing purpose
-	
 	public UserSession(User user) {
 		mUserId = user.getId();
 		if(user.isAdmin()) {
 			mAdmin = new AdminRights();
 		}
 		renewSessionTime();
-		mToken = String.valueOf(counter++);//for testing purpose
+		mToken = generateToken();
+	}
+	
+	private String generateToken() {
+		if(mUserId == null) 
+			return null;
+		
+		Random r = new Random();
+		String text = Integer.toString(r.nextInt()) + mUserId;
+		try {
+			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+			byte[] array = md.digest(text.getBytes());
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < array.length; ++i) {
+				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+			}
+			return sb.toString();
+		} catch (java.security.NoSuchAlgorithmException e) {
+		}
+		return null;
 	}
 	
 	public boolean isValid() {
