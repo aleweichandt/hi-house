@@ -120,6 +120,7 @@ public class UserService {
 				return Response.status(500).entity("not found").build();
 			}
 		}
+		JsonArrayBuilder builder = Json.createArrayBuilder();
 		JsonObjectBuilder obuild = Json.createObjectBuilder();
 		List<String> devices;
 		List<String> profiles = user.getProfiles();
@@ -141,10 +142,13 @@ public class UserService {
 						abuild.add(dvbuild.build());
 					}
 				}
-				obuild.add(prf.getName(), abuild);
+				obuild.add("id", prf.getId());
+				obuild.add("name", prf.getName());
+				obuild.add("devices", abuild);
+				builder.add(obuild);
 			}
 		}
-		return Response.status(200).entity(obuild.build().toString()).build();
+		return Response.status(200).entity(builder.build().toString()).build();
 	}
 	
 	@GET
