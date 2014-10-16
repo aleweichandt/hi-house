@@ -494,7 +494,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		if(rc==200){
         			if(user.updateDevice(intent.getCharSequenceExtra("data").toString())){
         				frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
-        				try{((MyDevicesFragment)frag).updateExpList();}catch(ClassCastException e){}
+        				if(frag!=null)try{((MyDevicesFragment)frag).updateExpList();}catch(ClassCastException e){};
         			}
         		}
         		else{
@@ -613,7 +613,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			try{
         				((ProfileInfoFragment)frag).updateProfileResult(rc==200?true:false);
         				frag = getFragmentManager().findFragmentByTag(ProfileAdminFragment.class.getName());
-        				((ProfileAdminFragment)frag).refreshProfiles();
+        				if(frag!=null)((ProfileAdminFragment)frag).refreshProfiles();
     				}catch(ClassCastException e){}
         		}
         		break;
@@ -623,7 +623,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			try{
         				((ProfileInfoFragment)frag).deleteProfileResult(rc==200?true:false);
         				frag = getFragmentManager().findFragmentByTag(ProfileAdminFragment.class.getName());
-        				((ProfileAdminFragment)frag).refreshProfiles();
+        				if(frag!=null)((ProfileAdminFragment)frag).refreshProfiles();
         			}catch(ClassCastException e){}
         		}
         		break;
@@ -633,7 +633,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			try{
         				((DeviceInfoFragment)frag).addDeviceResult(rc==200?true:false);
         				frag = getFragmentManager().findFragmentByTag(DeviceAdminFragment.class.getName());
-        				((DeviceAdminFragment)frag).refreshDevices();
+        				if(frag!=null)((DeviceAdminFragment)frag).refreshDevices();
         				}catch(ClassCastException e){}
         		}
         		mainLoadingBar.setVisibility(View.GONE);
@@ -666,7 +666,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			try{
         				((DeviceInfoFragment)frag).deleteDeviceResult(rc==200?true:false);
         				frag = getFragmentManager().findFragmentByTag(DeviceAdminFragment.class.getName());
-        				((DeviceAdminFragment)frag).refreshDevices();
+        				if(frag!=null)((DeviceAdminFragment)frag).refreshDevices();
         			}catch(ClassCastException e){}
         		}
         		break;
