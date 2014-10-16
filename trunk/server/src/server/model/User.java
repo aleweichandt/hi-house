@@ -131,17 +131,12 @@ public class User {
 		
 		
 		public JsonObject asJson(){
-			return asJson(true);
-		}
-		
-		public JsonObject asJson(boolean forAdm) {
 			JsonObjectBuilder builder = Json.createObjectBuilder()
 										.add("id", mId)
 										.add("name", mName)
 										.add("email", mEmail)
 										.add("admin", mAdmin)
 										.add("alert_receptor", mAlertReceptor);
-			if(forAdm) builder.add("pwd", mPassword);
 			return builder.build();
 		}
 		

@@ -91,7 +91,7 @@ public final class C {
 		public static final String INSERT_USER(User user){
 			String id = "NULL";
 			String name = "'" + user.getName() + "'";
-			String pwd = user.getPwd();
+			String pwd = "'" + user.getPwd() + "'";
 			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
 			String adm = user.isAdmin()?"1":"0";
 			String recv = user.isReceptor()?"1":"0";
@@ -104,7 +104,7 @@ public final class C {
 		public static final String UPDATE_USER(User user){
 			String id = user.getId();
 			String name = "'" + user.getName() + "'";
-			String pwd = user.getPwd();
+			String pwd = "'" + user.getPwd() + "'";
 			String email = (user.getEmail().isEmpty())?"NULL":("'" + user.getEmail() + "'");
 			String adm = user.isAdmin()?"1":"0";
 			String recv = user.isReceptor()?"1":"0";
