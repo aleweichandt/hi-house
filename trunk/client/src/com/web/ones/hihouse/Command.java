@@ -2,14 +2,18 @@ package com.web.ones.hihouse;
 
 public class Command {
 
-	public static String serverURL = "http://192.168.26.85:8080/HiHouse/";
+	public static String serverURL = "http://192.168.26.85:8080";
 	private boolean method;
 	private String requestURL;
 	private String bodyParams;
 	private int type;
 	
 	public static void setCommandServerBase(String url) {
-		serverURL = url + "/HiHouse/";
+		serverURL = url;
+	}
+	
+	public static String getServerUrl() {
+		return serverURL + "/HiHouse/";
 	}
 
 	public Command(int type, boolean method, String requestURL, String params){
@@ -28,7 +32,7 @@ public class Command {
 	}
 
 	public String getRequestURL() {
-		return serverURL + requestURL;
+		return getServerUrl() + requestURL;
 	}
 
 	public String getParams() {

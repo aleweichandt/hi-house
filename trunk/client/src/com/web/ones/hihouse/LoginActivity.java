@@ -60,12 +60,26 @@ public class LoginActivity extends Activity {
 		login_btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				String params = "name="+user.getText()+"&pwd="+pass.getText();
+				String params = "name=" + user.getText() + "&pwd=" + getMD5(pass.getText().toString());
 				SocketOperator so = new SocketOperator(v.getContext());
-				so.sendRequest(Request.LOGIN_USER, true, Command.serverURL+"users/login", params);
+				so.sendRequest(Request.LOGIN_USER, true, Command.getServerUrl()+"users/login", params);
 			}
 		});
 		
+	}
+	
+	protected String getMD5(String text) {
+		try {
+			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+			byte[] array = md.digest(text.getBytes());
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < array.length; ++i) {
+				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+			}
+			return sb.toString();
+		} catch (java.security.NoSuchAlgorithmException e) {
+		}
+		return null;
 	}
 	
 	@Override
@@ -150,7 +164,7 @@ public class LoginActivity extends Activity {
 	    final AlertDialog.Builder Main_Dialog = new AlertDialog.Builder(this);
 	    final EditText input = new EditText(this);
 	    input.setPadding(10, 10, 10, 10);
-	    input.setText("http://192.168.1.110:8080");
+	    input.setText(Command.serverURL);
 
 	    Main_Dialog.setView(input);
 	    Main_Dialog.setTitle(getResources().getString(R.string.action_setup_ip));
