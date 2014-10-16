@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-10-2014 a las 19:52:07
+-- Tiempo de generación: 16-10-2014 a las 20:11:52
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -54,8 +54,8 @@ INSERT INTO `dispositivos` (`ID_Dispositivo`, `Tipo`, `Ambiente`, `Descripcion_E
 (2, '4', 'puerta cochera', 'puerta cochera', '0', 9, NULL, NULL, NULL, NULL),
 (3, '0', 'sensor cocina', 'sensor cocina', '0', 0, NULL, NULL, NULL, NULL),
 (4, '2', 'casa', 'luz uno', '0', 13, NULL, NULL, NULL, NULL),
-(5, '2', 'casa2', 'luz dos', '1', 7, NULL, NULL, NULL, NULL),
-(6, '2', 'casa3', 'luz tres', '1', 5, NULL, NULL, NULL, NULL);
+(5, '2', 'casa2', 'luz dos', '0', 7, NULL, NULL, NULL, NULL),
+(6, '2', 'casa3', 'luz tres', '0', 5, NULL, NULL, NULL, NULL);
 
 --
 -- Disparadores `dispositivos`
@@ -165,7 +165,7 @@ DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(50) NOT NULL,
-  `Password` char(4) NOT NULL,
+  `Password` varchar(32) NOT NULL,
   `Email` varchar(50) DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
   `Receptor_Alerta` tinyint(1) NOT NULL DEFAULT '0',
@@ -179,8 +179,8 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Password`, `Email`, `Admin`, `Receptor_Alerta`, `ID_Notificacion`) VALUES
-(1, 'administrador', '1234', 'admin@not.com', 1, 0, NULL),
-(2, 'beto', '1233', 'a@beto.com', 0, 1, NULL);
+(1, 'administrador', '81dc9bdb52d04dc20036dbd8313ed055', 'admin@not.com', 1, 1, 'APA91bEmk_VLFApAuSiPfeCMP4bPqJtGBbmgh3YZR0IKX_nnB_OOlPIRugrh0rs61E3gj1IjbmKIZkRw1rcG6g5CAjARchHPPlvSGTMaKfrlNX2O9RNaddQzFX7ddyYSYRtHcXFYrhiEhniNhaL4F9NKnOcJ7axZww'),
+(2, 'beto', 'e034fb6b66aacc1d48f445ddfb08da98', 'a@beto.com', 0, 0, NULL);
 
 --
 -- Disparadores `usuarios`
