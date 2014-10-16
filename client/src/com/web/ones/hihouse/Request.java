@@ -24,4 +24,5 @@ public class Request {
 	public static final int SIMULATOR_UPDATE = 23;
 	public static final int SIMULATOR_STATE = 24;
 	public static final int GET_USER = 25;
+	public static final int ALARM_STATE = 26;
 }
