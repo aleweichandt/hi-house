@@ -548,6 +548,18 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		}
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
+        	case Request.GET_USER_PROFILES:
+        		if(rc==200){
+	        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((UserInfoFragment)frag).loadUsersProfiles(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+        		}
+        		else{
+        			Toast.makeText(context, "Error al cargar dispositivos", Toast.LENGTH_SHORT).show();
+        			mainLoadingBar.setVisibility(View.GONE);
+        		}
+        		break;
         	case Request.GET_DESIRED_TEMP:
         		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
         		if(frag!=null){
@@ -581,6 +593,10 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	        		frag = getFragmentManager().findFragmentByTag(ProfileAdminFragment.class.getName());
 	        		if(frag!=null){
 	        			try{((ProfileAdminFragment)frag).loadProfilesList(intent.getStringExtra("data"));}catch(ClassCastException e){}
+	        		}
+	        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
+	        		if(frag!=null){
+	        			try{((UserInfoFragment)frag).loadProfilesList(intent.getStringExtra("data"));}catch(ClassCastException e){}
 	        		}
         		}
         		else{

@@ -26,4 +26,5 @@ public class Request {
 	public static final int GET_USER = 25;
 	public static final int ALARM_STATE = 26;
 	public static final int ALARM_DEST = 27;
+	public static final int GET_USER_PROFILES = 25;
 }
