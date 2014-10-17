@@ -31,6 +31,9 @@
 		       android:layout_width="fill_parent"
 		       android:layout_height="wrap_content"
 		       android:textSize="20sp"
+		       android:background="#FFFFFF"
+		       android:layout_marginLeft="6dp"
+		       android:layout_marginRight="6dp"
 		       android:layout_marginBottom="20dp" />
 	    </LinearLayout>
 	    <LinearLayout 
@@ -50,6 +53,9 @@
 		       android:layout_width="fill_parent"
 		       android:layout_height="wrap_content"
 		       android:textSize="20sp"
+		       android:background="#FFFFFF"
+		       android:layout_marginLeft="6dp"
+		       android:layout_marginRight="6dp"
 		       android:layout_marginBottom="20dp" />
 	    </LinearLayout>
 	    <LinearLayout
