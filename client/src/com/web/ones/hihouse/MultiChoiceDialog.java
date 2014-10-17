@@ -21,8 +21,17 @@ public class MultiChoiceDialog extends DialogFragment {
 	
 	public MultiChoiceDialog(OnMultiChoiceDialogListener listener, Bundle b) {
 		super();
-		mListener = listener;
+		
+		mListener = null;
 		mBundle = b;
+	}
+	@Override
+	public void onCreate(Bundle savedInstance) {
+		super.onCreate(savedInstance);
+		try{
+			mListener = (OnMultiChoiceDialogListener) getTargetFragment();
+		}
+		catch (ClassCastException e){throw new ClassCastException("Calling fragment must implement OnMultiChoice");};
 	}
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstance) {
@@ -36,7 +45,7 @@ public class MultiChoiceDialog extends DialogFragment {
 			if(savedInstance.containsKey(MULTICHOICHE_ALL)) {
 				mAllItems = savedInstance.getCharSequenceArray(MULTICHOICHE_ALL);
 			}
-			if(savedInstance.containsKey(MULTICHOICHE_ALL)) {
+			if(savedInstance.containsKey(MULTICHOICHE_SELECTED)) {
 				mSelectedItems = savedInstance.getCharSequenceArrayList(MULTICHOICHE_SELECTED);
 			}
 		}
@@ -64,8 +73,9 @@ public class MultiChoiceDialog extends DialogFragment {
 	           .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
+	            	   List<CharSequence> a = mSelectedItems;
 	            	   if(mListener != null) {
-	            		   mListener.OnMultiChoiceConfirm(mSelectedItems);
+	            		   mListener.OnMultiChoiceConfirm(a);
 	            	   }
 	               }
 	           })

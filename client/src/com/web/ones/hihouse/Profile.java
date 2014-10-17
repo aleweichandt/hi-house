@@ -7,7 +7,7 @@ public class Profile {
 	private String name;
 	private ArrayList<Device> devices;
 	
-	public Profile(String name){
+	public Profile(String name) {
 		this.name = name;
 		devices = new ArrayList<Device>();
 	}
