@@ -42,15 +42,11 @@ OnMultiChoiceDialogListener{
 	private ArrayList<Profile> selectedProfiles;
 	private boolean mHasSubType;
 	
-	public UserInfoFragment() {}
-	
 	String[] values = new String[] { "Cocina", "Living", "Baño",
 	        						 "Habitacion 1", "Habitacion 2", "Garage" };
 
-	public UserInfoFragment(String name, boolean isAddOperation) {
-		mName = name;
-		mIsAddOperation = isAddOperation;
-		mState = mIsAddOperation;	
+	public UserInfoFragment() {
+		
 	}
 	
 	@Override

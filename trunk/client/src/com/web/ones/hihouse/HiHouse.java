@@ -269,24 +269,26 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		fragmentTag = MyDevicesFragment.class.getName();
     		break;
     	case DRAWER_MENU_INDEX_ADD_USER:
+    		fragment = new UserInfoFragment();
     		if(this.user.isAdmin()){
-	    		fragment = new UserInfoFragment("Nuevo", true);
-	    		fragmentTag = UserInfoFragment.class.getName();
-	    		addToBackStack = true;
-	    		backStackTag = UserInfoFragment.class.toString();
+	    		
+	    		args.putBoolean(UserInfoFragment.ARG_IS_ADD, true);
+    		} else {
+    			args.putString(UserInfoFragment.ARG_USER_NAME, user.getUser());
+    			args.putInt(UserInfoFragment.ARG_USER_ID, user.getId());
     		}
-    		else{
-    			//TODO No es admin. Permitir modificar sus propios datos.
-    		}
+    		fragmentTag = UserInfoFragment.class.getName();
+    		addToBackStack = true;
+    		backStackTag = UserInfoFragment.class.toString();
     		break;
     	case DRAWER_MENU_INDEX_USERS:
     		if(this.user.isAdmin()) {
     			fragment = new UserAdminFragment();
     			fragmentTag = UserAdminFragment.class.getName();
-    		} else {
-    			fragment = new UserInfoFragment("yo", true);
-    			fragmentTag = UserInfoFragment.class.getName();
-    		}
+        		fragmentTag = UserAdminFragment.class.getName();
+        		addToBackStack = true;
+        		backStackTag = UserAdminFragment.class.toString();
+    		} 
     		break;
     	case DRAWER_MENU_INDEX_ADD_PROFILE: 
     		fragment = new ProfileInfoFragment();
