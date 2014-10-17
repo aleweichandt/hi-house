@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.web.ones.hihouse.ProfileInfoFragment"
-   	android:background="#ffffff"
     android:orientation="vertical"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp" 
+    android:layout_marginTop="10dp" 
     android:gravity="center_horizontal" >
 	
     <LinearLayout 
