@@ -121,7 +121,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		ProfileInfoAdapter adapter = new ProfileInfoAdapter(getActivity());
 		lv.setAdapter(adapter);
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();

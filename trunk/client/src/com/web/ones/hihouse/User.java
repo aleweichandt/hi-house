@@ -70,12 +70,12 @@ public class User {
 		profiles = p;
 	}
 
-	public int getDeviceByVoiceDesc(String voice_desc){
+	public Device getDeviceByVoiceDesc(String voice_desc){
 		for(Profile p : profiles){
-			int id = p.getDeviceByVoiceDesc(voice_desc);
-			if(id!=-1) return id;
+			Device d = p.getDeviceByVoiceDesc(voice_desc);
+			if(d!=null) return d;
 		}
-		return -1;
+		return null;
 	}
 	
 	public boolean setProfilesAndDevices(String jsonStr){

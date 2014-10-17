@@ -32,11 +32,11 @@ public class Profile {
 		return id;
 	}
 	
-	public int getDeviceByVoiceDesc(String voice_desc){
+	public Device getDeviceByVoiceDesc(String voice_desc){
 		for(Device d : devices){
-			if(d.getVoice().equals(voice_desc)) return d.getId();
+			if(d.getVoice().equals(voice_desc)) return d;
 		}
-		return -1;
+		return null;
 	}
 
 	public boolean setDeviceState(int id, boolean state) {

@@ -565,6 +565,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		if(frag!=null){
         			try{((MyDevicesFragment)frag).updateTemp(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
         		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.SET_DESIRED_TEMP:
         		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
@@ -737,6 +738,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		if(frag!=null){
         			try{((MyDevicesFragment)frag).updateAlarmState(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
         		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.ALARM_DEST:
         		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());
@@ -744,6 +746,9 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         			try{((MyDevicesFragment)frag).updateAlarmDest(rc==200?true:false);}catch(ClassCastException e){}
         		}
         		mainLoadingBar.setVisibility(View.GONE);
+        		break;
+        	case Request.VOICE_SET_DESIRED_TEMP:
+        		if(rc==200)mHiHouseService.sendCommand(new Command(Request.GET_DESIRED_TEMP, true, "temperature", "token="+user.getToken()));
         		break;
         	}
         }
