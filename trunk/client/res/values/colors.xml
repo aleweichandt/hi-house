@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
     <color name="enabled">#5500ff00</color>
-    <color name="disabled">#77ff0000</color>
+    <color name="disabled">#88ff0000</color>
     <color name="profile_item_bkgr">#999</color>
 </resources>
