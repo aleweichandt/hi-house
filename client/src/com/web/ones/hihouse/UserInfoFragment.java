@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UserInfoFragment extends Fragment implements
 OnClickListener,
@@ -95,6 +96,7 @@ OnMultiChoiceDialogListener{
 			((CheckBox)mMainView.findViewById(R.id.userinfo_admin)).setChecked(userInfo.getBoolean("admin"));
 		}
 		catch(JSONException e){e.printStackTrace();}
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_PROFILES, true, "profiles/all?token="+hiHouseAct.getUser().getToken(), ""));	
 	}
 	
 	@Override
@@ -150,7 +152,13 @@ OnMultiChoiceDialogListener{
 		
 		String userName = ((EditText)mMainView.findViewById(R.id.userinfo_name)).getText().toString();
 		String mail = ((EditText)mMainView.findViewById(R.id.userinfo_mail)).getText().toString();
-		String pwd = getMD5(((EditText)mMainView.findViewById(R.id.userinfo_pwd)).getText().toString());
+		String pwd = ((EditText)mMainView.findViewById(R.id.userinfo_pwd)).getText().toString();
+		String pwdConfirm = ((EditText)mMainView.findViewById(R.id.userinfo_pwd_confirm)).getText().toString();
+		if(!pwd.isEmpty() && 
+		   (pwd.compareTo(pwdConfirm) != 0 || pwd.length() != 4)) {
+			Toast.makeText(getActivity(), "clave invalida", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		Boolean admin = ((CheckBox)mMainView.findViewById(R.id.userinfo_admin)).isChecked();
 		try{
 			for(Profile p : selectedProfiles){
@@ -159,7 +167,9 @@ OnMultiChoiceDialogListener{
 			builder.put("profiles", devArray);
 			builder.put("admin", admin);
 			builder.put("email", mail);
-			builder.put("pwd", pwd);
+			if(!pwd.isEmpty()) {
+				builder.put("pwd", getMD5(pwd));
+			}
 			builder.put("name", userName);
 		}
 		catch (JSONException e){}
@@ -197,8 +207,8 @@ OnMultiChoiceDialogListener{
 		getActivity().getFragmentManager().popBackStack();
 	}
 	
-	private void onProfilesPressed() {		
-		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_PROFILES, true, "profiles/all?token="+hiHouseAct.getUser().getToken(), ""));	
+	private void onProfilesPressed() {	
+		callMultiChoiceElement();
 	}
 	
 	public void loadProfilesList(String str)
@@ -219,10 +229,6 @@ OnMultiChoiceDialogListener{
 			if(!mIsAddOperation)
 			{
 				hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_PROFILES, true, "users/"+id+"/profiles", "token="+hiHouseAct.getUser().getToken()));
-			}
-			else
-			{
-				callMultiChoiceElement();
 			}	
 		}
 		catch(JSONException e){e.printStackTrace();}
@@ -234,12 +240,14 @@ OnMultiChoiceDialogListener{
 		JSONObject profInfo;
 		try{
 			profArray = new JSONArray(str);
+			selectedProfiles = new ArrayList<Profile>();
 			mSelectedProfiles = new ArrayList<CharSequence>();
 			for(int i=0; i<profArray.length(); i++){
     			profInfo = profArray.getJSONObject(i);
     			mSelectedProfiles.add(profInfo.getString("name"));
+    			Profile p = new Profile(profInfo.getInt("id"), profInfo.getString("name"));
+    			selectedProfiles.add(p);
     		}				
-			callMultiChoiceElement();
 		}
 		catch(JSONException e){e.printStackTrace();}
 	}
