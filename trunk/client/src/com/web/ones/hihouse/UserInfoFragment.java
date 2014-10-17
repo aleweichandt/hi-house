@@ -12,6 +12,7 @@ import com.web.ones.hihouse.MultiChoiceDialog.OnMultiChoiceDialogListener;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.app.Fragment;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,16 +31,16 @@ OnMultiChoiceDialogListener{
 
 	private boolean mIsAddOperation = false;
 	private boolean mState = false;
-	private boolean mHasSubType = false;
 	private HiHouse hiHouseAct;
 	private int id;
-	private int type, subtype;
 	private String mName;
 	private EditText user_name;
 	private List<CharSequence> mSelectedProfiles;
 	private View mMainView;
 	private String[] profiles;
 	private ArrayList<Profile> allProfileList;
+	private ArrayList<Profile> selectedProfiles;
+	private boolean mHasSubType;
 	
 	public UserInfoFragment() {}
 	
@@ -84,8 +85,7 @@ OnMultiChoiceDialogListener{
 	
 	private void loadUserInfo() {
 		((EditText)mMainView.findViewById(R.id.userinfo_name)).setText(mName);
-		
-		if(!mIsAddOperation){
+		if(!mIsAddOperation){	
 			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER, true, "users/"+id, "token="+hiHouseAct.getUser().getToken()));
 			hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 		}
@@ -95,10 +95,7 @@ OnMultiChoiceDialogListener{
 		JSONObject userInfo;
 		try{
 			userInfo = new JSONObject(str);
-	
 			((EditText)mMainView.findViewById(R.id.userinfo_mail)).setText(userInfo.getString("email"));
-			//((EditText)mMainView.findViewById(R.id.userinfo_pwd)).setText(userInfo.getString("pwd"));
-			//((EditText)mMainView.findViewById(R.id.userinfo_pwd_confirm)).setText(userInfo.getString("pwd"));
 			((CheckBox)mMainView.findViewById(R.id.userinfo_admin)).setChecked(userInfo.getBoolean("admin"));
 		}
 		catch(JSONException e){e.printStackTrace();}
@@ -145,7 +142,6 @@ OnMultiChoiceDialogListener{
 		default:
 			break;
 		}
-		
 	}
 
 	private void onEditPressed() {
@@ -153,12 +149,41 @@ OnMultiChoiceDialogListener{
 	}
 	
 	private void onConfirmPressed() {
-		//TODO save changes
-		if(mIsAddOperation) {
-			getActivity().getFragmentManager().popBackStack();
-			return;
+		JSONObject builder = new JSONObject();
+		JSONArray devArray = new JSONArray();
+		
+		String userName = ((EditText)mMainView.findViewById(R.id.userinfo_name)).getText().toString();
+		String mail = ((EditText)mMainView.findViewById(R.id.userinfo_mail)).getText().toString();
+		String pwd = getMD5(((EditText)mMainView.findViewById(R.id.userinfo_pwd)).getText().toString());
+		Boolean admin = ((CheckBox)mMainView.findViewById(R.id.userinfo_admin)).isChecked();
+		try{
+			for(Profile p : selectedProfiles){
+				devArray.put(Integer.toString(p.getId()));
+			}
+			builder.put("profiles", devArray);
+			builder.put("admin", admin);
+			builder.put("email", mail);
+			builder.put("pwd", pwd);
+			builder.put("name", userName);
 		}
+		catch (JSONException e){}
+		
+		if(mIsAddOperation)
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_USER, false, "users/add?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+		else
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_USER, false, "users/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 		setEditMode(false);
+	}
+	
+	public void loadNewUserInfo(String str)
+	{
+		
+	}
+	
+	public void loadUpdateUserInfo(String str)
+	{
+		
 	}
 	
 	private void onCancelPressed() {
@@ -193,8 +218,16 @@ OnMultiChoiceDialogListener{
     			profiles[i] = profInfo.getString("name");
     			Profile p = new Profile(profInfo.getInt("id"), profInfo.getString("name"));
     			allProfileList.add(p);
-    		}				
-			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_PROFILES, true, "users/"+id+"/profiles", "token="+hiHouseAct.getUser().getToken()));
+    		}		
+			
+			if(!mIsAddOperation)
+			{
+				hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_PROFILES, true, "users/"+id+"/profiles", "token="+hiHouseAct.getUser().getToken()));
+			}
+			else
+			{
+				callMultiChoiceElement();
+			}	
 		}
 		catch(JSONException e){e.printStackTrace();}
 	}
@@ -209,17 +242,19 @@ OnMultiChoiceDialogListener{
 			for(int i=0; i<profArray.length(); i++){
     			profInfo = profArray.getJSONObject(i);
     			mSelectedProfiles.add(profInfo.getString("name"));
-    		}		
-			
-			Bundle b = new Bundle();		
-			b.putCharSequenceArray(MultiChoiceDialog.MULTICHOICHE_ALL, profiles);
-			b.putCharSequenceArrayList(MultiChoiceDialog.MULTICHOICHE_SELECTED, (ArrayList<CharSequence>) mSelectedProfiles);
-			MultiChoiceDialog md = new MultiChoiceDialog(this, b);
-			md.setTargetFragment(UserInfoFragment.this, 0);
-			md.show(getFragmentManager(), PROFILE_TAG);
-
+    		}				
+			callMultiChoiceElement();
 		}
 		catch(JSONException e){e.printStackTrace();}
+	}
+
+	private void callMultiChoiceElement() {
+		Bundle b = new Bundle();		
+		b.putCharSequenceArray(MultiChoiceDialog.MULTICHOICHE_ALL, profiles);
+		b.putCharSequenceArrayList(MultiChoiceDialog.MULTICHOICHE_SELECTED, (ArrayList<CharSequence>) mSelectedProfiles);
+		MultiChoiceDialog md = new MultiChoiceDialog(this, b);
+		md.setTargetFragment(UserInfoFragment.this, 0);
+		md.show(getFragmentManager(), PROFILE_TAG);
 	}
 	
 	private void setEditMode(boolean on) {
@@ -238,8 +273,17 @@ OnMultiChoiceDialogListener{
 
 	@Override
 	public void OnMultiChoiceConfirm(List<CharSequence> selected) {
-		mSelectedProfiles.clear();
-		mSelectedProfiles.addAll(selected);
+		selectedProfiles = new ArrayList<Profile>();
+		for (Profile p : allProfileList)
+		{
+			for(CharSequence ch: selected)
+			{
+				if(p.getName() == ch.toString())
+				{
+					selectedProfiles.add(p);
+				}
+			}
+		}
 	}
 
 	@Override

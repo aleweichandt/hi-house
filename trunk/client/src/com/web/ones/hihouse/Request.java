@@ -28,4 +28,6 @@ public class Request {
 	public static final int ALARM_DEST = 27;
 	public static final int GET_USER_PROFILES = 28;
 	public static final int VOICE_SET_DESIRED_TEMP = 29;
+	public static final int ADD_USER = 30;
+	public static final int UPDATE_USER = 31;
 }
