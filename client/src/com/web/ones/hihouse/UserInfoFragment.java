@@ -86,6 +86,7 @@ OnMultiChoiceDialogListener{
 			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER, true, "users/"+id, "token="+hiHouseAct.getUser().getToken()));
 			hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 		}
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_PROFILES, true, "profiles/all?token="+hiHouseAct.getUser().getToken(), ""));
 	}
 	
 	public void updateUserInfo(String str){
@@ -96,7 +97,10 @@ OnMultiChoiceDialogListener{
 			((CheckBox)mMainView.findViewById(R.id.userinfo_admin)).setChecked(userInfo.getBoolean("admin"));
 		}
 		catch(JSONException e){e.printStackTrace();}
-		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_ALL_PROFILES, true, "profiles/all?token="+hiHouseAct.getUser().getToken(), ""));	
+		if(!mIsAddOperation)
+		{
+			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_PROFILES, true, "users/"+id+"/profiles", "token="+hiHouseAct.getUser().getToken()));
+		}	 	
 	}
 	
 	@Override
@@ -224,12 +228,7 @@ OnMultiChoiceDialogListener{
     			profiles[i] = profInfo.getString("name");
     			Profile p = new Profile(profInfo.getInt("id"), profInfo.getString("name"));
     			allProfileList.add(p);
-    		}		
-			
-			if(!mIsAddOperation)
-			{
-				hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_USER_PROFILES, true, "users/"+id+"/profiles", "token="+hiHouseAct.getUser().getToken()));
-			}	
+    		}
 		}
 		catch(JSONException e){e.printStackTrace();}
 	}
@@ -282,7 +281,7 @@ OnMultiChoiceDialogListener{
 		{
 			for(CharSequence ch: selected)
 			{
-				if(p.getName() == ch.toString())
+				if(p.getName().compareTo(ch.toString()) == 0)
 				{
 					selectedProfiles.add(p);
 				}
