@@ -2,6 +2,7 @@ package com.web.ones.hihouse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +43,10 @@ OnMultiChoiceDialogListener{
 	private ArrayList<Profile> allProfileList;
 	private ArrayList<Profile> selectedProfiles;
 	private boolean mHasSubType;
+    private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern
+            .compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\."
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
 	
 	String[] values = new String[] { "Cocina", "Living", "Baño",
 	        						 "Habitacion 1", "Habitacion 2", "Garage" };
@@ -158,11 +163,13 @@ OnMultiChoiceDialogListener{
 		String mail = ((EditText)mMainView.findViewById(R.id.userinfo_mail)).getText().toString();
 		String pwd = ((EditText)mMainView.findViewById(R.id.userinfo_pwd)).getText().toString();
 		String pwdConfirm = ((EditText)mMainView.findViewById(R.id.userinfo_pwd_confirm)).getText().toString();
-		if(!pwd.isEmpty() && 
-		   (pwd.compareTo(pwdConfirm) != 0 || pwd.length() != 4)) {
-			Toast.makeText(getActivity(), "clave invalida", Toast.LENGTH_SHORT).show();
+
+		Boolean validate = validateData(userName, mail, pwd, pwdConfirm);
+		if(validate)
+		{
 			return;
 		}
+				
 		Boolean admin = ((CheckBox)mMainView.findViewById(R.id.userinfo_admin)).isChecked();
 		try{
 			for(Profile p : selectedProfiles){
@@ -184,6 +191,63 @@ OnMultiChoiceDialogListener{
 			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_USER, false, "users/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 		setEditMode(false);
+	}
+
+	private Boolean validateData(String userName, String mail, String pwd,
+			String pwdConfirm) {
+		ArrayList<String> errors = new ArrayList<String>();
+		Boolean state = false;
+		if(userName.isEmpty())
+		{
+			errors.add("Ingrese un usuario");
+			state = true;
+		}
+		
+		if(mail.isEmpty())
+		{
+			errors.add("Ingrese un mail");
+			state = true;
+		}
+		else
+		{
+			if(!EMAIL_ADDRESS_PATTERN.matcher(mail).matches())
+			{
+				errors.add("Mail inválido");
+				state = true;
+			}
+		}
+		
+		if(mIsAddOperation && (pwd.isEmpty() || pwdConfirm.isEmpty()))
+		{
+			errors.add("Ingrese una clave y la confimación");
+			state = true;
+		}
+		else
+		{
+			if(pwd.length() != 4)
+			{
+				errors.add("La clave debe ser de 4 dígitos");
+				state = true;
+			}
+			
+			if (pwd.compareTo(pwdConfirm) != 0)
+			{
+				errors.add("Las claves deben ser iguales");
+				state = true;
+			}
+		}
+		
+		String cadena = "";
+		if(state)
+		{
+			for (String a : errors)
+			{
+				cadena += a + '\n';
+			}
+			
+			Toast.makeText(getActivity(), cadena.substring(0, cadena.length() - 1), Toast.LENGTH_SHORT).show();
+		}
+		return state;
 	}
 	
 	public void loadNewUserInfo(String str)
