@@ -188,6 +188,12 @@ OnPickerDialogListener{
 		String deviceName = device_name.getText().toString();
 		JSONObject builder = new JSONObject();
 		JSONArray devArray = new JSONArray();
+		
+		Boolean validate = validateData(deviceName);
+		if(validate)
+		{
+			return;
+		}
 		try{
 			builder.put("name", deviceName);
 			builder.put("type", type);
@@ -202,6 +208,28 @@ OnPickerDialogListener{
 		if(mIsAddOperation) hiHouseAct.mHiHouseService.sendCommand(new Command(Request.ADD_DEVICE, false, "devices/add?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		else hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_DEVICE, false, "devices/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+	}
+	
+	private Boolean validateData(String deviceName) {
+		ArrayList<String> errors = new ArrayList<String>();
+		Boolean state = false;
+		if(deviceName.isEmpty())
+		{
+			errors.add("Ingrese un nombre");
+			state = true;
+		}
+		
+		String cadena = "";
+		if(state)
+		{
+			for (String a : errors)
+			{
+				cadena += a + '\n';
+			}
+			
+			Toast.makeText(getActivity(), cadena.substring(0, cadena.length() - 1), Toast.LENGTH_SHORT).show();
+		}
+		return state;
 	}
 	
 	private void onCancelPressed() {
