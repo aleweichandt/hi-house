@@ -219,6 +219,20 @@ OnPickerDialogListener{
 			state = true;
 		}
 		
+		Boolean validatePin = false;
+		for(int i=1; i<=3; i++){	
+			if(pinList.get(i-1) != -1)
+			{
+				validatePin = true;
+			}
+		}
+		
+		if(!validatePin)
+		{
+			errors.add("Ingrese al menos un pin");
+			state = true;
+		}
+		
 		String cadena = "";
 		if(state)
 		{
