@@ -171,6 +171,12 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		String profName = prof_name.getText().toString();
 		JSONObject builder = new JSONObject();
 		JSONArray devArray = new JSONArray();
+		
+		Boolean validate = validateData(profName);
+		if(validate)
+		{
+			return;
+		}
 		try{
 			builder.put("name", profName);
 			builder.put("description", "blabla");//TODO desc de donde? agregar campo?
@@ -187,6 +193,28 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		else
 			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_PROFILE, false, "profiles/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+	}
+	
+	private Boolean validateData(String profName) {
+		ArrayList<String> errors = new ArrayList<String>();
+		Boolean state = false;
+		if(profName.isEmpty())
+		{
+			errors.add("Ingrese un nombre");
+			state = true;
+		}
+		
+		String cadena = "";
+		if(state)
+		{
+			for (String a : errors)
+			{
+				cadena += a + '\n';
+			}
+			
+			Toast.makeText(getActivity(), cadena.substring(0, cadena.length() - 1), Toast.LENGTH_SHORT).show();
+		}
+		return state;
 	}
 	
 	private void onCancelPressed() {
