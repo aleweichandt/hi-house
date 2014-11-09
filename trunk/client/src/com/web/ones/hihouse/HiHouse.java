@@ -37,6 +37,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class HiHouse extends Activity implements OnVoiceCommand{
+	public static HiHouse s_activity = null;
+	
 	private static final int DRAWER_MENU_INDEX_MY_DEVICES = 0;
 	private static final int DRAWER_MENU_INDEX_ADD_USER = 1;
 	private static final int DRAWER_MENU_INDEX_USERS = 2;
@@ -178,6 +180,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	
 	@Override
 	protected void onResume(){
+		s_activity = this;
 		// Message handling - from service:
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(HiHouseTask.NEW_RESPONSE));
 		super.onResume();
@@ -185,6 +188,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
 	
 	@Override
 	protected void onPause(){
+		s_activity = null;
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
 		super.onPause();
 	}
