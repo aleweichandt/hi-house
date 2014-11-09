@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+<!-- Arduino Serial Port -->
+  <Environment name="ARDUINO_PORT_NAME" value="COM6"
+         type="java.lang.String" override="false"/>
+  <Environment name="ARDUINO_PORT_READ" value="9600"
+         type="java.lang.Integer" override="false"/>
+         
+<!-- MySQL Database -->
+  <Environment name="DATABASE_LOCATION" value="localhost:3306/hihouse"
+         type="java.lang.String" override="false"/>
+  <Environment name="DATABASE_USER" value="hihouse"
+         type="java.lang.String" override="false"/>
+  <Environment name="DATABASE_PASSWORD" value="hihouse"
+         type="java.lang.String" override="false"/>
+         
+<!-- Ambient Management -->
+  <Environment name="AMBIENT_UPDATE_TIME" value="45000"
+         type="java.lang.Integer" override="false"/>
+  <Environment name="AMBIENT_MAX_DIFF_DEGREES" value="5.0"
+         type="java.lang.Float" override="false"/>
+         
+<!-- Security Management -->
+  <Environment name="SECURITY_UPDATE_TIME" value="10000"
+         type="java.lang.Integer" override="false"/>
+  <Environment name="SECURITY_SN_LIGHT_LIMIT" value="100"
+         type="java.lang.Float" override="false"/>
+  <Environment name="SECURITY_SN_TERMAL_LIMIT" value="40"
+         type="java.lang.Float" override="false"/>
+  <Environment name="SECURITY_ALERT_TIME_OFFSET" value="120000"
+         type="java.lang.Integer" override="false"/>
+  <Environment name="SECURITY_ALERT_MSG_TITLE" value="Alerta de Seguridad!"
+         type="java.lang.String" override="false"/>
+  <Environment name="SECURITY_ALERT_MSG_CONTENT" value="Algo está pasando en su hogar!"
+         type="java.lang.String" override="false"/>
+         
+<!-- Simulation Management -->
+  <Environment name="SIMULATION_MIN_UPDATE_TIME" value="1000"
+         type="java.lang.Integer" override="false"/>
+  <Environment name="SIMULATION_MAX_UPDATE_TIME" value="10000"
+         type="java.lang.Integer" override="false"/>
+</Context>
