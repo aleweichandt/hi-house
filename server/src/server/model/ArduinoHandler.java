@@ -44,8 +44,6 @@ public class ArduinoHandler {
 					//Read data, if 2 bytes available 
 				    byte lenMsg[] = mSerial.readBytes(2);
 				    mReadLen = (lenMsg[1] << 8) + lenMsg[0];
-					Integer l = new Integer(mReadLen);
-					System.out.println("llego serial, len:".concat(l.toString()));
 			        while(mSerial.getInputBufferBytesCount() < mReadLen) {
 			        	Thread.yield(); 
 			        }
@@ -116,11 +114,6 @@ public class ArduinoHandler {
 	}
 	
 	void execResponse(byte[] msg) {
-		if(msg.length<1) {
-			return;
-		}
-		Integer l = new Integer(msg.length);
-		System.out.println("llego respuesta, len:".concat(l.toString()));
 		byte header = msg[0];
 		int pins = (int)((header>>2) & 0x03);
 		int values[] = new int[pins];
