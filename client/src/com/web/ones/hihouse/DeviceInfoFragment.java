@@ -192,7 +192,7 @@ OnPickerDialogListener{
 		JSONObject builder = new JSONObject();
 		JSONArray devArray = new JSONArray();
 		
-		Boolean validate = validateData(deviceName);
+		Boolean validate = validateData(deviceName, deviceVoiceCommand);
 		if(validate)
 		{
 			return;
@@ -213,12 +213,17 @@ OnPickerDialogListener{
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 	}
 	
-	private Boolean validateData(String deviceName) {
+	private Boolean validateData(String deviceName, String deviceVoiceCommand) {
 		ArrayList<String> errors = new ArrayList<String>();
 		Boolean state = false;
 		if(deviceName.isEmpty())
 		{
 			errors.add("Ingrese un nombre");
+			state = true;
+		}
+		if(deviceVoiceCommand.isEmpty())
+		{
+			errors.add("Ingrese un comando de voz");
 			state = true;
 		}
 		
