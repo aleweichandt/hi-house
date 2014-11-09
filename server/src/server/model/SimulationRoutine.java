@@ -117,9 +117,10 @@ public class SimulationRoutine {
 		if(values.containsKey("devices")) {
 			stop();
 			List<JsonValue> newlist = values.getJsonArray("devices");
-			for(Iterator<String> it = mDevices.iterator();it.hasNext();) {
-				String id = it.next();
-				if(!newlist.contains(id)) {
+			for(Iterator<JsonValue> it = newlist.iterator();it.hasNext();) {
+				JsonNumber value = (JsonNumber) it.next();
+				String id = value.toString();
+				if(!mDevices.contains(id)) {
 					mDevices.remove(id);
 				}
 			}
