@@ -14,12 +14,14 @@
     <string name="userinfo_pwd_confirm">Confirmacion</string>
     <string name="userinfo_profiles">Perfiles</string>
     <string name="deviceinfo_name">Nombre</string>
+    <string name="deviceinfo_voice_command">Comando de Voz</string>
     <string name="deviceinfo_type">Tipo</string>
     <string name="deviceinfo_subtype">subtipo</string>
     <string name="deviceinfo_pin1">pin 1</string>
     <string name="deviceinfo_pin2">pin 2</string>
     <string name="deviceinfo_pin3">pin 3</string>
     <string name="profileinfo_name">Nombre</string>
+    <string name="profileinfo_desc">Descripción de Voz</string>
     <string name="profileinfo_devices">Dispositivos</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>

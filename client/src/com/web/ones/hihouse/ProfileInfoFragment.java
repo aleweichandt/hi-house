@@ -30,16 +30,17 @@ import android.widget.Toast;
 public class ProfileInfoFragment extends Fragment implements OnClickListener, OnItemClickListener{
 	final static String ARG_PROFILE_NAME = "name";
 	final static String ARG_PROFILE_ID = "id";
+	final static String ARG_PROFILE_DESC = "desc";
 	final static String ARG_IS_ADD = "isAddOperation";
 	private boolean mIsAddOperation = false;
 	private boolean mState = false;
-	private String mName;
+	private String mName, mDesc;
 	private int id;
 	private View mMainView;
 	private HiHouse hiHouseAct;
 	ListView lv;
 	private ArrayList<Device> devices;
-	private EditText prof_name;
+	private EditText prof_name, prof_desc;
 
 	public ProfileInfoFragment() {
 
@@ -55,6 +56,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		if (args != null){
 			mName = args.getString(ARG_PROFILE_NAME, "Nuevo");
 			id = args.getInt(ARG_PROFILE_ID, -1);
+			mDesc = args.getString(ARG_PROFILE_DESC, "");
 			mIsAddOperation = args.getBoolean(ARG_IS_ADD);
 			mState = mIsAddOperation;
 		}
@@ -67,6 +69,8 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		lv = (ListView) mMainView.findViewById(R.id.profileinfo_devices);
 		prof_name = (EditText)mMainView.findViewById(R.id.profileinfo_name);
 		prof_name.setText(mName);
+		prof_desc = (EditText)mMainView.findViewById(R.id.profileinfo_desc);
+		prof_desc.setText(mDesc);
 		
 		setEditMode(mIsAddOperation || mState);
 		
@@ -169,17 +173,18 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	
 	private void onConfirmPressed() {
 		String profName = prof_name.getText().toString();
+		String profDesc = prof_desc.getText().toString();
 		JSONObject builder = new JSONObject();
 		JSONArray devArray = new JSONArray();
 		
-		Boolean validate = validateData(profName);
+		Boolean validate = validateData(profName, profDesc);
 		if(validate)
 		{
 			return;
 		}
 		try{
 			builder.put("name", profName);
-			builder.put("description", "blabla");//TODO desc de donde? agregar campo?
+			builder.put("description", profDesc);
 			for(Device d : devices){
 				if(d.getState())
 					devArray.put(d.getId());
@@ -195,12 +200,17 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
 	}
 	
-	private Boolean validateData(String profName) {
+	private Boolean validateData(String profName, String profDesc) {
 		ArrayList<String> errors = new ArrayList<String>();
 		Boolean state = false;
 		if(profName.isEmpty())
 		{
 			errors.add("Ingrese un nombre");
+			state = true;
+		}
+		if(profDesc.isEmpty())
+		{
+			errors.add("Ingrese una descripción de voz");
 			state = true;
 		}
 		
@@ -231,6 +241,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	
 	private void setEditMode(boolean on) {
 		mMainView.findViewById(R.id.profileinfo_name).setEnabled(on);
+		mMainView.findViewById(R.id.profileinfo_desc).setEnabled(on);
 		mMainView.findViewById(R.id.profileinfo_edit).setVisibility(on?View.GONE:View.VISIBLE);
 		mMainView.findViewById(R.id.profileinfo_delete).setVisibility(on?View.GONE:View.VISIBLE);
 		mMainView.findViewById(R.id.profileinfo_confirm).setVisibility(on?View.VISIBLE:View.GONE);

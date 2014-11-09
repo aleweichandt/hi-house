@@ -34,6 +34,32 @@
 		       android:layout_marginRight="6dp"
 	       android:layout_marginBottom="20dp" />
     </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:gravity="start"
+    	android:layout_below="@id/top_layout"
+    	android:id="@+id/top2_layout" >
+    	<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="20sp"
+	        android:textColor="#008A12"
+	        android:text="@string/profileinfo_desc" />
+    	<EditText
+	       android:id="@+id/profileinfo_desc"
+	       android:gravity="center"
+	       android:inputType="text"
+	       android:lines="1"
+	       android:layout_width="fill_parent"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"
+	       android:background="#FFFFFF"
+	       android:layout_marginLeft="6dp"
+	       android:layout_marginRight="6dp"
+	       android:layout_marginBottom="20dp" />
+    </LinearLayout>
     
     <TextView
 	        android:layout_width="match_parent"
@@ -44,7 +70,7 @@
 	        android:textStyle="bold"
 	        android:text="@string/profileinfo_devices"
 	        android:id="@+id/devices_title"
-	        android:layout_below="@id/top_layout" />
+	        android:layout_below="@id/top2_layout" />
     
     <ListView
 		 android:id="@+id/profileinfo_devices"

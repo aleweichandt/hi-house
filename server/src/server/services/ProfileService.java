@@ -43,7 +43,8 @@ public class ProfileService {
 		for(Iterator<String> it = profiles.iterator();it.hasNext();) {
 			Profile prf = Profile.getFromDB(it.next());
 			JsonObject jo = Json.createObjectBuilder().add("id", prf.getId())
-								.add("name", prf.getName()).build();
+								.add("name", prf.getName())
+								.add("desc", prf.getDescription()).build();
 			builder.add(jo);
 		}
 		return Response.status(200).entity(builder.build().toString()).build();

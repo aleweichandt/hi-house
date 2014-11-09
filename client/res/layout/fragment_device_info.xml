@@ -44,6 +44,30 @@
 		        android:layout_height="wrap_content"
 		        android:textSize="20sp"
 		        android:textColor="#008A12"
+		        android:text="@string/deviceinfo_voice_command" />
+	    	<EditText
+		       android:id="@+id/deviceinfo_voice_command"
+		       android:gravity="center"
+		       android:inputType="text"
+		       android:lines="1"
+		       android:layout_width="fill_parent"
+		       android:layout_height="wrap_content"
+		       android:textSize="20sp"
+		       android:background="#FFFFFF"
+		       android:layout_marginLeft="6dp"
+		       android:layout_marginRight="6dp"
+		       android:layout_marginBottom="20dp" />
+	    </LinearLayout>
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="horizontal"
+	    	android:gravity="start" >
+	    	<TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="20sp"
+		        android:textColor="#008A12"
 		        android:text="@string/deviceinfo_type" />
 	    	<Spinner
 	    	   android:id="@+id/deviceinfo_type"
