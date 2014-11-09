@@ -19,27 +19,27 @@ public final class C {
 //Configuration
 	public final static class Config {
 	//Arduino serial port
-		public static final String ARDUINO_PORT_NAME = "COM6";
-		public static final int ARDUINO_PORT_READ = 9600;
+		public static String ARDUINO_PORT_NAME = "COM6";
+		public static int ARDUINO_PORT_READ = 9600;
 		
 	//MySQL Database
-		public static final String DATABASE_LOCATION ="localhost:3306/hihouse";
-		public static final String DATABASE_USER = "hihouse";
-		public static final String DATABASE_PASSWORD = "hihouse";
+		public static String DATABASE_LOCATION ="localhost:3306/hihouse";
+		public static String DATABASE_USER = "hihouse";
+		public static String DATABASE_PASSWORD = "hihouse";
 		
 	//Ambient Manager
-		public static final int 	AMBIENT_UPDATE_TIME = 45000;
-		public static final float 	AMBIENT_MAX_DIFF_DEGREES = (float) 5.0;
+		public static int 	AMBIENT_UPDATE_TIME = 45000;
+		public static float 	AMBIENT_MAX_DIFF_DEGREES = (float) 5.0;
 	//Security Manager
-		public static final int SECURITY_UPDATE_TIME = 10000;
-		public static final float SECURITY_SN_LIGHT_LIMIT = 100;
-		public static final float SECURITY_SN_TERMAL_LIMIT = 40;
-		public static final int SECURITY_ALERT_TIME_OFFSET = 120000;
-		public static final String SECURITY_ALERT_MSG_TITLE = "HiHouse Alert!";
-		public static final String SECURITY_ALERT_MSG_CONTENT = "Something is happening in your home, please check it out!";
+		public static int SECURITY_UPDATE_TIME = 10000;
+		public static float SECURITY_SN_LIGHT_LIMIT = 100;
+		public static float SECURITY_SN_TERMAL_LIMIT = 40;
+		public static int SECURITY_ALERT_TIME_OFFSET = 120000;
+		public static String SECURITY_ALERT_MSG_TITLE = "HiHouse Alert!";
+		public static String SECURITY_ALERT_MSG_CONTENT = "Something is happening in your home, please check it out!";
 	//Simulation Manager
-		public static final int SIMULATION_MIN_UPDATE_TIME = 1000;
-		public static final int SIMULATION_MAX_UPDATE_TIME = 10000;
+		public static int SIMULATION_MIN_UPDATE_TIME = 1000;
+		public static int SIMULATION_MAX_UPDATE_TIME = 10000;
 	}
 
 	//MySQL Queries

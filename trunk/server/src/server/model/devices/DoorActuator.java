@@ -21,7 +21,7 @@ public class DoorActuator extends Actuator {
 
 	@Override
 	public boolean setState(boolean state) {
-		int values[] = {state?0:180};
+		int values[] = {state?0:75};
 		ArduinoHandler.getInstance().addOperation(this, false, values);
 		waitLock();
 		mState = state;

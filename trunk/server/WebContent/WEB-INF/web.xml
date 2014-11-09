@@ -11,7 +11,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet>
-  	<servlet-name>Backgroudn Service</servlet-name>
+  	<servlet-name>Background Service</servlet-name>
   	<servlet-class>server.model.BackgroundServlet</servlet-class>
   	<load-on-startup>1</load-on-startup>
   </servlet>
