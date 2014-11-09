@@ -47,7 +47,7 @@ OnPickerDialogListener{
 	private HiHouse hiHouseAct;
 	private int type, subtype;
 	private ArrayList<Integer> pinList;
-	private EditText device_name;
+	private EditText device_name, device_voice_command;
 	private Spinner typeSpinner, subtypeSpinner;
 	private int actualPin;
 
@@ -84,6 +84,7 @@ OnPickerDialogListener{
 		device_name.setText(mName);
 		typeSpinner = (Spinner) mMainView.findViewById(R.id.deviceinfo_type);
 		subtypeSpinner = (Spinner) mMainView.findViewById(R.id.deviceinfo_subtype);
+		device_voice_command = (EditText)mMainView.findViewById(R.id.deviceinfo_voice_command);
 		
 		loadDeviceInfo();
 		setEditMode(mIsAddOperation || mState);
@@ -111,6 +112,7 @@ OnPickerDialogListener{
 		try{
 			deviceInfo = new JSONObject(str);
 			type = deviceInfo.getInt("type");
+			device_voice_command.setText(deviceInfo.getString("voice_id"));
 			for(int i=1; i<=3; i++){
 				pinList.set(i-1, deviceInfo.getInt("pin"+i));
 			}
@@ -186,6 +188,7 @@ OnPickerDialogListener{
 	
 	private void onConfirmPressed() {
 		String deviceName = device_name.getText().toString();
+		String deviceVoiceCommand = device_voice_command.getText().toString();
 		JSONObject builder = new JSONObject();
 		JSONArray devArray = new JSONArray();
 		
@@ -197,7 +200,7 @@ OnPickerDialogListener{
 		try{
 			builder.put("name", deviceName);
 			builder.put("type", type);
-			builder.put("voice_id", deviceName);//TODO voice id el nombre??
+			builder.put("voice_id", deviceVoiceCommand.toLowerCase());
 			for(int i=1; i<=3; i++){
 				builder.put("pin"+i, pinList.get(i-1));
 			}
@@ -285,6 +288,7 @@ OnPickerDialogListener{
 	
 	private void setEditMode(boolean on) {
 		mMainView.findViewById(R.id.deviceinfo_name).setEnabled(on);
+		mMainView.findViewById(R.id.deviceinfo_voice_command).setEnabled(on);
 		mMainView.findViewById(R.id.deviceinfo_type).setEnabled(on);
 		mMainView.findViewById(R.id.deviceinfo_subtype).setEnabled(on);
 		mMainView.findViewById(R.id.deviceinfo_pin1_enable).setEnabled(on);

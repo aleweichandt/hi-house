@@ -65,7 +65,7 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 			profArray = new JSONArray(str);
 			for(int i=0; i<profArray.length(); i++){
     			profInfo = profArray.getJSONObject(i);
-    			Profile p = new Profile(profInfo.getInt("id"), profInfo.getString("name"));
+    			Profile p = new Profile(profInfo.getInt("id"), profInfo.getString("name"), profInfo.getString("desc"));
     			profiles.add(p);
     		}
 		}
@@ -93,6 +93,7 @@ public class ProfileAdminFragment extends ListFragment implements OnItemClickLis
 		args.putBoolean(ProfileInfoFragment.ARG_IS_ADD, false);
 		args.putString(ProfileInfoFragment.ARG_PROFILE_NAME, profiles.get(pos).getName());
 		args.putInt(ProfileInfoFragment.ARG_PROFILE_ID, profiles.get(pos).getId());
+		args.putString(ProfileInfoFragment.ARG_PROFILE_DESC, profiles.get(pos).getDesc());
 		mProfileFragment.setArguments(args);
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		ft.add(R.id.userinfo_container, mProfileFragment, ProfileInfoFragment.class.getName());

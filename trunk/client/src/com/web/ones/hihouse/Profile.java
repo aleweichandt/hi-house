@@ -5,6 +5,15 @@ import java.util.ArrayList;
 public class Profile {
 	private int id;
 	private String name;
+	private String desc;
+	
+	public String getDesc() {
+		return desc;
+	}
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
 	private ArrayList<Device> devices;
 	
 	public Profile(String name) {
@@ -14,6 +23,12 @@ public class Profile {
 	public Profile(int id, String name){
 		this.id = id;
 		this.name = name;
+		devices = new ArrayList<Device>();
+	}
+	public Profile(int id, String name, String desc){
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
 		devices = new ArrayList<Device>();
 	}
 
