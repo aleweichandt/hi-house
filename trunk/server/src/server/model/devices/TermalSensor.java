@@ -11,7 +11,7 @@ public class TermalSensor extends Sensor {
 
 	@Override
 	public float getValue() {
-		return (float) (super.getValue() * 0.48828125);
+		return (float) (super.getValue() * 4 * 0.48828125);
 		//return (float) (((super.getValue() * 0.004882814)  - 0.5) * 100.0);
 	}
 
