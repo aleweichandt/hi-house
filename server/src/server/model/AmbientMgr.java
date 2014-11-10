@@ -24,10 +24,12 @@ public class AmbientMgr {
 	private int mTime;
 	private float mRealTemp;
 	private float mDesiredTemp;
+	private boolean mUpdate;
 	public AmbientMgr() {
 		mTime = 0;
 		mRealTemp = -1;
 		mDesiredTemp = -1;
+		mUpdate = false;
 	}
 	
 	public void update(int dt) {
@@ -42,6 +44,7 @@ public class AmbientMgr {
 	}
 	
 	private boolean shouldWork() {
+		if(mUpdate) {mUpdate=false;return true;}
 		return mDesiredTemp >= 0  && mRealTemp >=0;
 	}
 	
@@ -74,7 +77,8 @@ public class AmbientMgr {
 				String deviceid = it.next().toString();
 				TermalActuator act = (TermalActuator) Device.getFromDB(deviceid);
 				if(act.getState()) {
-					if(diff > C.Config.AMBIENT_MAX_DIFF_DEGREES && act.canHeat()){
+					if(mDesiredTemp==-1) act.none();
+					else if(diff > C.Config.AMBIENT_MAX_DIFF_DEGREES && act.canHeat()){
 						act.heat();
 					}else if (diff < (-C.Config.AMBIENT_MAX_DIFF_DEGREES) && act.canCool()){
 						act.cool();
@@ -89,6 +93,7 @@ public class AmbientMgr {
 	
 	public void setTemperature(float desired) {
 		mDesiredTemp = desired;
+		if(desired==-1) mUpdate = true; //let update when we set desired temp "off"
 		mTime = C.Config.AMBIENT_UPDATE_TIME; //force update
 	}
 	
