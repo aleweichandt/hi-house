@@ -12,7 +12,9 @@ import com.web.ones.hihouse.MultiChoiceDialog.OnMultiChoiceDialogListener;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +71,9 @@ OnMultiChoiceDialogListener{
 			mState = mIsAddOperation;
 			mHasSubType = false;
 		}
+		
+		selectedProfiles = new ArrayList<Profile>();
+		profiles = new String[0];
 	}
 
 	@Override
@@ -190,7 +195,6 @@ OnMultiChoiceDialogListener{
 		else
 			hiHouseAct.mHiHouseService.sendCommand(new Command(Request.UPDATE_USER, false, "users/"+id+"/update?token="+hiHouseAct.getUser().getToken(), builder.toString()));
 		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
-		setEditMode(false);
 	}
 
 	private Boolean validateData(String userName, String mail, String pwd,
@@ -217,7 +221,19 @@ OnMultiChoiceDialogListener{
 			}
 		}
 		
-		if(mIsAddOperation && (pwd.isEmpty() || pwdConfirm.isEmpty()))
+		if(!mIsAddOperation){
+			if(!pwd.isEmpty() || !pwdConfirm.isEmpty()){
+				if(pwd.length() != 4){
+					errors.add("La clave debe ser de 4 dígitos");
+					state = true;
+				}
+				if (pwd.compareTo(pwdConfirm) != 0){
+					errors.add("Las claves deben ser iguales");
+					state = true;
+				}
+			}
+		}
+		else if(mIsAddOperation && (pwd.isEmpty() || pwdConfirm.isEmpty()))
 		{
 			errors.add("Ingrese una clave y la confimación");
 			state = true;
@@ -250,14 +266,27 @@ OnMultiChoiceDialogListener{
 		return state;
 	}
 	
-	public void loadNewUserInfo(String str)
-	{
-		
+	public void addNewUserResult(boolean added){
+		if(!added) {
+			Toast.makeText(getActivity(), "Un Usuario con ese nombre ya existe.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if(mIsAddOperation) {
+			Toast.makeText(getActivity(), "Usuario agregado exitosamente.", Toast.LENGTH_SHORT).show();
+			getActivity().getFragmentManager().popBackStack();
+			return;
+		}
+		setEditMode(false);
 	}
 	
-	public void loadUpdateUserInfo(String str)
-	{
-		
+	public void updateUserResult(boolean updated){
+		if(!updated) {
+			Toast.makeText(getActivity(), "El usuario no pudo ser actualizado.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		Toast.makeText(getActivity(), "Usuario actualizado exitosamente.", Toast.LENGTH_LONG).show();
+		getActivity().getFragmentManager().popBackStack();
+		return;
 	}
 	
 	private void onCancelPressed() {
@@ -270,9 +299,7 @@ OnMultiChoiceDialogListener{
 	}
 	
 	private void onDeletePressed() {
-		//TODO ask before
-		//TODO remove user
-		getActivity().getFragmentManager().popBackStack();
+		confirmDelete();
 	}
 	
 	private void onProfilesPressed() {	
@@ -371,5 +398,40 @@ OnMultiChoiceDialogListener{
 		} catch (java.security.NoSuchAlgorithmException e) {
 		}
 		return null;
+	}
+	
+	public void confirmDelete() {
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				 switch (which) {
+				 case DialogInterface.BUTTON_POSITIVE:
+					 	hiHouseAct.mHiHouseService.sendCommand(new Command(Request.DELETE_USER, false, "users/"+id+"/delete?token="+hiHouseAct.getUser().getToken(), ""));
+					 	hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+				        break;
+				
+				 case DialogInterface.BUTTON_NEGATIVE:
+				        // No button clicked do nothing
+					 	//Toast.makeText(getActivity(), "No Clicked",Toast.LENGTH_LONG).show();
+				        break;
+				 }
+			}
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("¿Está seguro que desea eliminar el usuario \""+user_name.getText().toString()+"\"?")
+                     .setPositiveButton("Si", dialogClickListener)
+                     .setNegativeButton("No", dialogClickListener).show();
+	}
+	
+	public void deleteUserResult(boolean deleted) {
+		if(deleted){
+			Toast.makeText(getActivity(), "Usuario eliminado exitosamente.", Toast.LENGTH_LONG).show();
+			getActivity().getFragmentManager().popBackStack();
+		}
+		else {
+			Toast.makeText(getActivity(), "El Usuario no pudo ser eliminado.", Toast.LENGTH_LONG).show();
+			hiHouseAct.setLoadingBarVisibility(View.GONE);
+		}
+		
 	}
 }

@@ -30,4 +30,5 @@ public class Request {
 	public static final int VOICE_SET_DESIRED_TEMP = 29;
 	public static final int ADD_USER = 30;
 	public static final int UPDATE_USER = 31;
+	public static final int DELETE_USER = 32;
 }
