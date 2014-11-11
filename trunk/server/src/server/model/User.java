@@ -48,7 +48,7 @@ public class User {
 		
 		public static User getFromJson(JsonObject params) {
 			if(params.containsKey("name") && params.containsKey("pwd") && 
-			   params.containsKey("admin") && params.containsKey("alert_receptor")) {
+			   params.containsKey("admin") /*&& params.containsKey("alert_receptor")*/) {
 				
 				String mail = null;
 				if(params.containsKey("email"))
@@ -61,7 +61,7 @@ public class User {
 								params.getString("pwd"),
 								mail,
 								params.getBoolean("admin"),
-								params.getBoolean("alert_receptor"),
+								/*params.getBoolean("alert_receptor")*/false,
 								notifid);
 				if(params.containsKey("profiles")) {
 					List<JsonValue> prfparam = params.getJsonArray("profiles");
