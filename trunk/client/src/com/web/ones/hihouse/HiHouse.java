@@ -333,8 +333,8 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     	if(fragment != null) {
 	    	fragment.setArguments(args);
 	        FragmentManager fragmentManager = getFragmentManager();
+	        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	        if(addToBackStack) {
-	        	fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		        fragmentManager.beginTransaction()
 		        			   .replace(R.id.content_frame, fragment, fragmentTag)
 		        			   .addToBackStack(backStackTag)
