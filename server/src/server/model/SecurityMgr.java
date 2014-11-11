@@ -12,7 +12,7 @@ import server.model.devices.Sensor;
 public class SecurityMgr {
 	// Singleton begin
 	private static SecurityMgr sInstance = null;
-	private static int[] sSensorTypes = {Device.DEVICE_TYPE_SN_TERMAL, Device.DEVICE_TYPE_SN_LIGHT};
+	private static int[] sSensorTypes = {Device.DEVICE_TYPE_SN_TERMAL, Device.DEVICE_TYPE_SN_LIGHT, Device.DEVICE_TYPE_SN_DOOR};
 	
 	public static SecurityMgr getInstance() {
 		if(sInstance == null) {

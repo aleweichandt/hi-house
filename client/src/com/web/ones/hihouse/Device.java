@@ -7,6 +7,7 @@ public class Device {
 	public static final int DEVICE_TYPE_AC_LIGHT = 2;
 	public static final int DEVICE_TYPE_AC_TERMAL = 3;
 	public static final int DEVICE_TYPE_AC_DOOR = 4;
+	public static final int DEVICE_TYPE_SN_DOOR = 5;
 	
 	private int id;
 	private String name;
