@@ -139,4 +139,10 @@ public class UserAdminFragment extends ListFragment implements
 			return users.size();
 		}
 	}
+	
+	public void refreshUsers() {
+		users = new ArrayList<User>();
+		hiHouseAct.mHiHouseService.sendCommand(new Command(Request.GET_LIST_USERS, true, "users/all?token="+user.getToken(), ""));
+		hiHouseAct.setLoadingBarVisibility(View.VISIBLE);
+	}
 }

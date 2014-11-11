@@ -275,7 +275,6 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     	case DRAWER_MENU_INDEX_ADD_USER:
     		fragment = new UserInfoFragment();
     		if(this.user.isAdmin()){
-	    		
 	    		args.putBoolean(UserInfoFragment.ARG_IS_ADD, true);
     		} else {
     			args.putString(UserInfoFragment.ARG_USER_NAME, user.getUser());
@@ -289,7 +288,6 @@ public class HiHouse extends Activity implements OnVoiceCommand{
     		if(this.user.isAdmin()) {
     			fragment = new UserAdminFragment();
     			fragmentTag = UserAdminFragment.class.getName();
-        		fragmentTag = UserAdminFragment.class.getName();
         		addToBackStack = true;
         		backStackTag = UserAdminFragment.class.toString();
     		} 
@@ -567,26 +565,24 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		}
         		break;
         	case Request.ADD_USER:
-        		if(rc==200){
-	        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
-	        		if(frag!=null){
-	        			try{((UserInfoFragment)frag).loadNewUserInfo(intent.getStringExtra("data"));}catch(ClassCastException e){}
-	        		}
-        		}
-        		else{
-        			Toast.makeText(context, "Error al cargar el usuario", Toast.LENGTH_SHORT).show();
+        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{
+        				((UserInfoFragment)frag).addNewUserResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(UserAdminFragment.class.getName());
+        				if(frag!=null)((UserAdminFragment)frag).refreshUsers();
+        				}catch(ClassCastException e){}
         		}
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.UPDATE_USER:
-        		if(rc==200){
-	        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
-	        		if(frag!=null){
-	        			try{((UserInfoFragment)frag).loadUpdateUserInfo(intent.getStringExtra("data"));}catch(ClassCastException e){}
-	        		}
-        		}
-        		else{
-        			Toast.makeText(context, "Error al cargar el usuario", Toast.LENGTH_SHORT).show();
+        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{
+        				((UserInfoFragment)frag).updateUserResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(UserAdminFragment.class.getName());
+        				if(frag!=null)((UserAdminFragment)frag).refreshUsers();
+        				}catch(ClassCastException e){}
         		}
         		mainLoadingBar.setVisibility(View.GONE);
         		break;
@@ -779,6 +775,16 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		break;
         	case Request.VOICE_SET_DESIRED_TEMP:
         		if(rc==200)mHiHouseService.sendCommand(new Command(Request.GET_DESIRED_TEMP, true, "temperature", "token="+user.getToken()));
+        		break;
+        	case Request.DELETE_USER:
+        		frag = getFragmentManager().findFragmentByTag(UserInfoFragment.class.getName());
+        		if(frag!=null){
+        			try{
+        				((UserInfoFragment)frag).deleteUserResult(rc==200?true:false);
+        				frag = getFragmentManager().findFragmentByTag(UserAdminFragment.class.getName());
+        				if(frag!=null)((UserAdminFragment)frag).refreshUsers();
+        			}catch(ClassCastException e){}
+        		}
         		break;
         	}
         }
