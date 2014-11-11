@@ -65,6 +65,11 @@ public class AmbientMgr {
 			if(count>0) {
 				mRealTemp = sum/(float)count;
 			}
+			else if(mRealTemp!=-1){
+				//si no hay sensores activos, actualizamos para que no caliente ni enfrie. 
+				mRealTemp = -1;
+				mUpdate = true;
+			}
 		}
 	}
 	
@@ -77,7 +82,7 @@ public class AmbientMgr {
 				String deviceid = it.next().toString();
 				TermalActuator act = (TermalActuator) Device.getFromDB(deviceid);
 				if(act.getState()) {
-					if(mDesiredTemp==-1) act.none();
+					if(mDesiredTemp==-1 || mRealTemp==-1) act.none();
 					else if(diff > C.Config.AMBIENT_MAX_DIFF_DEGREES && act.canHeat()){
 						act.heat();
 					}else if (diff < (-C.Config.AMBIENT_MAX_DIFF_DEGREES) && act.canCool()){
