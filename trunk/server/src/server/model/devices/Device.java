@@ -17,6 +17,7 @@ public abstract class Device {
 	public static final int DEVICE_TYPE_AC_LIGHT = 2;
 	public static final int DEVICE_TYPE_AC_TERMAL = 3;
 	public static final int DEVICE_TYPE_AC_DOOR = 4;
+	public static final int DEVICE_TYPE_SN_DOOR = 5;
 	
 	public static Device createFromType(String id, String name, int type, String voiceid,
 				 						boolean state, int pin1, int pin2, int pin3,
@@ -31,6 +32,8 @@ public abstract class Device {
 		case DEVICE_TYPE_SN_TERMAL:
 			return new TermalSensor(id, name, voiceid, state, pin1, pin2, pin3);
 		case DEVICE_TYPE_SN_LIGHT:
+			return new LightSensor(id, name, voiceid, state, pin1, pin2, pin3);
+		case DEVICE_TYPE_SN_DOOR:
 			return new LightSensor(id, name, voiceid, state, pin1, pin2, pin3);
 		default:
 			return null;
