@@ -216,40 +216,44 @@ OnPickerDialogListener{
 	private Boolean validateData(String deviceName, String deviceVoiceCommand) {
 		ArrayList<String> errors = new ArrayList<String>();
 		Boolean state = false;
-		if(deviceName.isEmpty())
-		{
+		
+		if(deviceName.isEmpty()){
 			errors.add("Ingrese un nombre");
 			state = true;
 		}
-		if(deviceVoiceCommand.isEmpty())
-		{
+		if(deviceName.length()>20){
+			errors.add("El nombre supera los 20 caracteres");
+			state = true;
+		}
+		
+		if(deviceVoiceCommand.isEmpty()){
 			errors.add("Ingrese un comando de voz");
+			state = true;
+		}
+		if(deviceVoiceCommand.length()>50){
+			errors.add("El comando de voz supera los 50 caracteres");
 			state = true;
 		}
 		
 		Boolean validatePin = false;
+		
 		for(int i=1; i<=3; i++){	
-			if(pinList.get(i-1) != -1)
-			{
+			if(pinList.get(i-1) != -1){
 				validatePin = true;
 			}
 		}
 		
-		if(!validatePin)
-		{
+		if(!validatePin){
 			errors.add("Ingrese al menos un pin");
 			state = true;
 		}
 		
 		String cadena = "";
-		if(state)
-		{
-			for (String a : errors)
-			{
+		if(state){
+			for (String a : errors){
 				cadena += a + '\n';
 			}
-			
-			Toast.makeText(getActivity(), cadena.substring(0, cadena.length() - 1), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), cadena.substring(0, cadena.length() - 1), Toast.LENGTH_LONG).show();
 		}
 		return state;
 	}

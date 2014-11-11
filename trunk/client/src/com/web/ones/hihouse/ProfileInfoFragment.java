@@ -203,14 +203,22 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	private Boolean validateData(String profName, String profDesc) {
 		ArrayList<String> errors = new ArrayList<String>();
 		Boolean state = false;
-		if(profName.isEmpty())
-		{
+		
+		if(profName.isEmpty()){
 			errors.add("Ingrese un nombre");
 			state = true;
 		}
-		if(profDesc.isEmpty())
-		{
+		if(profName.length()>20){
+			errors.add("El nombre supera los 20 caracteres");
+			state = true;
+		}
+		
+		if(profDesc.isEmpty()){
 			errors.add("Ingrese una descripción de voz");
+			state = true;
+		}
+		if(profDesc.length()>50){
+			errors.add("La descripción supera los 50 caracteres");
 			state = true;
 		}
 		
