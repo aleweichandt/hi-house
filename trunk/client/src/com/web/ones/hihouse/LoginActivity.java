@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -53,13 +54,31 @@ public class LoginActivity extends Activity {
 		pass = (EditText) findViewById(R.id.pass);
 		Button login_btn = (Button) findViewById(R.id.login);
 		
-		//TODO Autocompleto user y pass. Luego borrar
-		user.setText("administrador");
-		pass.setText("1234");
+		//Autocompleto user y pass si estan seteadas
+		SharedPreferences sharedPrefs = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+		boolean checked = sharedPrefs.getBoolean("recordar", false);
+		recordar.setChecked(checked);
+		if(checked){
+			user.setText(sharedPrefs.getString("user", ""));
+			pass.setText(sharedPrefs.getString("pass", ""));
+		}
 		
 		login_btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
+				SharedPreferences sharedPrefs = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+				SharedPreferences.Editor editor = sharedPrefs.edit();
+				if(recordar.isChecked()){
+					editor.putString("user", ""+user.getText());
+					editor.putString("pass", ""+ pass.getText().toString());
+					editor.putBoolean("recordar", true);
+				}
+				else{
+					editor.putString("user", "");
+					editor.putString("pass", "");
+					editor.putBoolean("recordar", false);
+				}
+				editor.commit();
 				String params = "name=" + user.getText() + "&pwd=" + getMD5(pass.getText().toString());
 				SocketOperator so = new SocketOperator(v.getContext());
 				so.sendRequest(Request.LOGIN_USER, true, Command.getServerUrl()+"users/login", params);
