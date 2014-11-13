@@ -1,5 +1,8 @@
 package com.web.ones.hihouse;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
@@ -32,7 +35,13 @@ public class GCMIntentService extends IntentService {
            if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 //TODO get data inside message
         	   String title = intent.getExtras().getString(GCM_DATA_MSG_TITLE,"");
-        	   String content = intent.getExtras().getString(GCM_DATA_MSG_CONTENT,"");
+        	   String content = "";
+			try {
+				content = URLDecoder.decode(intent.getExtras().getString(GCM_DATA_MSG_CONTENT,""),"UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         	   sendNotification(title, content);
             }
         }

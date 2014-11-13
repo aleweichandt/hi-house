@@ -1,5 +1,7 @@
 package server.model;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 
@@ -69,10 +71,16 @@ public class SecurityMgr {
 				String notificationId = dest.getNotificationID();
 				if(notificationId != null && !notificationId.isEmpty()) {
 					//send alert to dest
-					JsonObject data = Json.createObjectBuilder()
-										  .add("title", C.Config.SECURITY_ALERT_MSG_TITLE)
-										  .add("content", C.Config.SECURITY_ALERT_MSG_CONTENT)
-										  .build();
+					JsonObject data = null;
+					try {
+						data = Json.createObjectBuilder()
+											  .add("title", C.Config.SECURITY_ALERT_MSG_TITLE)
+											  .add("content", URLEncoder.encode(C.Config.SECURITY_ALERT_MSG_CONTENT, "UTF-8"))
+											  .build();
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					AndroidNotification an = new AndroidNotification();
 					if(an.send(notificationId, data)){
 						mTimeToSendAlert += C.Config.SECURITY_ALERT_TIME_OFFSET;
