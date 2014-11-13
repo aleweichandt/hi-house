@@ -210,9 +210,9 @@ public class MyDevicesFragment extends Fragment implements OnAlarmDestListener {
 	
 	public void updateSimulatorState(String str){
 		loading_bar_simu.setVisibility(View.GONE);
+
 		if(str.equals("")){
-			txt_select.setText("Seleccione nuevamente un perfil");
-			Toast.makeText(getActivity(), "No se pudo obtener el estado del Simulador.", Toast.LENGTH_SHORT).show();
+			txt_select.setText("El perfil no tiene simulador");
 			return;
 		}
 		try{
