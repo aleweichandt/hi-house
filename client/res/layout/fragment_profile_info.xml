@@ -5,15 +5,18 @@
     android:layout_height="wrap_content"
     tools:context="com.web.ones.hihouse.ProfileInfoFragment"
     android:orientation="vertical"
-    android:gravity="center_horizontal" >
-	
+    android:gravity="center_horizontal">
+
     <LinearLayout 
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:orientation="horizontal"
     	android:gravity="start"
     	android:layout_alignParentTop="true"
-    	android:id="@+id/top_layout" >
+    	android:id="@+id/top_layout"
+    	android:layout_marginTop="10dp"
+    	android:layout_marginRight="10dp"
+    	android:layout_marginLeft="10dp" >
     	<TextView
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -40,7 +43,9 @@
     	android:orientation="horizontal"
     	android:gravity="start"
     	android:layout_below="@id/top_layout"
-    	android:id="@+id/top2_layout" >
+    	android:id="@+id/top2_layout"
+    	android:layout_marginRight="10dp"
+    	android:layout_marginLeft="10dp" >
     	<TextView
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -70,14 +75,18 @@
 	        android:textStyle="bold"
 	        android:text="@string/profileinfo_devices"
 	        android:id="@+id/devices_title"
-	        android:layout_below="@id/top2_layout" />
+	        android:layout_below="@id/top2_layout"
+	        android:layout_marginRight="10dp"
+    		android:layout_marginLeft="10dp" />
     
     <ListView
 		 android:id="@+id/profileinfo_devices"
          android:layout_width="wrap_content"
 	     android:layout_height="fill_parent"
 	     android:layout_below="@id/devices_title"
-	     android:layout_above="@+id/bot_layout" />
+	     android:layout_above="@+id/bot_layout"
+	     android:layout_marginRight="10dp"
+    	 android:layout_marginLeft="10dp" />
     
     <LinearLayout 
         android:layout_width="match_parent"
@@ -85,7 +94,9 @@
     	android:orientation="vertical"
     	android:gravity="center_horizontal"
     	android:layout_alignParentBottom="true"
-    	android:id="@id/bot_layout" >
+    	android:id="@id/bot_layout"
+    	android:layout_marginRight="10dp"
+    	android:layout_marginLeft="10dp" >
 	    <Button
 		    android:id="@+id/profileinfo_edit"
 		    android:layout_width="match_parent"
@@ -130,4 +141,5 @@
 		    android:layout_margin="0dp"
 		    android:visibility="gone" />
     </LinearLayout>
+    
 </RelativeLayout>
