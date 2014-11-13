@@ -758,6 +758,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		if(frag!=null){
         			try{((MyDevicesFragment)frag).updateSimulatorState(rc==200?intent.getCharSequenceExtra("data").toString():"");}catch(ClassCastException e){}
         		}
+        		mainLoadingBar.setVisibility(View.GONE);
         		break;
         	case Request.ALARM_STATE:
         		frag = getFragmentManager().findFragmentByTag(MyDevicesFragment.class.getName());

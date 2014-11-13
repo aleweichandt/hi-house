@@ -52,6 +52,7 @@ public class CommandBuilder {
 						break;
 					case Device.DEVICE_TYPE_SN_LIGHT: // activar/desactivar
 					case Device.DEVICE_TYPE_SN_TERMAL:
+					case Device.DEVICE_TYPE_SN_DOOR:
 						if(command.equals("activar")) return setDeviceStateCommand(device, true);
 						else if(command.equals("desactivar")) return setDeviceStateCommand(device, false);
 					}
@@ -59,8 +60,8 @@ public class CommandBuilder {
 				else if(command.equals("subir") || command.equals("bajar")) return tempCommand(tokens, i);
 				else if(command.equals("temperatura")) return tempCommand(tokens, --i);
 				else if(command.equals("apagar")) return tempOffCommand(tokens, i);
-				else if(command.equals("activar")) return alarmCommand(tokens, i, true);
-				else if(command.equals("desactivar")) return alarmCommand(tokens, i, false);
+				else if(command.equals("activar")) return alarmSimuCommand(tokens, i, true, matches);
+				else if(command.equals("desactivar")) return alarmSimuCommand(tokens, i, false, matches);
 				else{
 					Toast.makeText(hiHouse, "Comando no reconocido", Toast.LENGTH_LONG).show();
 					return null;
@@ -76,11 +77,20 @@ public class CommandBuilder {
 		return new Command(Request.SET_DEVICE_STATE,false, "devices/"+d.getId()+"/state?enabled="+b+"&token="+hiHouse.getUser().getToken(), "");
 	}
 
-	private Command alarmCommand(String[] tokens, int i, boolean b) {
+	private Command alarmSimuCommand(String[] tokens, int i, boolean b, ArrayList<String> matches) {
 		i = skipIrrelevantWord(tokens[i], i);
 		String command = tokens[i];
 		if(command.equals("alarma") || command.equals("seguridad")){
 			return new Command(Request.ALARM_STATE, false, "security/state?token="+hiHouse.getUser().getToken(), ""+b);
+		}
+		else if(command.equals("simulador")){
+			for (String s : matches){
+				String[] toks = s.split("[ ]+");
+				String profName = toks[i+1];
+				int profId = hiHouse.getUser().getProfileByName(profName);
+				if(profId>00)
+					return new Command(Request.SIMULATOR_STATE, false, "simulation/"+profId+"/state?token="+hiHouse.getUser().getToken()+"&enabled="+b, "");
+			}
 		}
 		Toast.makeText(hiHouse, "Comando no reconocido", Toast.LENGTH_LONG).show();
 		return null;

@@ -1,5 +1,6 @@
 package com.web.ones.hihouse;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -147,5 +148,14 @@ public class User {
 	
 	public boolean canReceiveNotifications() {
 		return allowNotifications;
+	}
+
+	public int getProfileByName(String profName) {
+		profName = Normalizer.normalize(profName, Normalizer.Form.NFD);
+		profName = profName.replaceAll("[^\\p{ASCII}]", "");
+		for(Profile p : profiles){
+			if(p.getName().toLowerCase().equals(profName)) return p.getId();
+		}
+		return 0;
 	}
 }
