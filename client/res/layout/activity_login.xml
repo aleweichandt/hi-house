@@ -34,7 +34,7 @@
         android:shadowRadius="25"
         android:shadowDx="0"
         android:shadowDy="0"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <EditText
         android:id="@+id/user"
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/checkbox_remember"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="@string/login"
         android:textColor="#00FF00"

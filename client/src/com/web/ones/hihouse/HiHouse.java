@@ -616,6 +616,7 @@ public class HiHouse extends Activity implements OnVoiceCommand{
         		}
         		break;
         	case Request.GET_ALL_PROFILES:
+        		if(rc==403) break;
         		if(rc==200){
 	        		frag = getFragmentManager().findFragmentByTag(ProfileAdminFragment.class.getName());
 	        		if(frag!=null){

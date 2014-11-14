@@ -21,7 +21,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:textSize="20sp"
-	        android:textColor="#008A12"
+	        android:textColor="@color/verde_texto"
 	        android:text="@string/profileinfo_name" />
     	<EditText
 	       android:id="@+id/profileinfo_name"
@@ -50,7 +50,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:textSize="20sp"
-	        android:textColor="#008A12"
+	        android:textColor="@color/verde_texto"
 	        android:text="@string/profileinfo_desc" />
     	<EditText
 	       android:id="@+id/profileinfo_desc"
@@ -71,7 +71,7 @@
 	        android:layout_height="wrap_content"
 	        android:gravity="center"
 	        android:textSize="25sp"
-	        android:textColor="#008A12"
+	        android:textColor="@color/verde_texto"
 	        android:textStyle="bold"
 	        android:text="@string/profileinfo_devices"
 	        android:id="@+id/devices_title"
@@ -104,7 +104,7 @@
 		    android:text="@string/edit"
 		    android:onClick="onEditPressed"
 		    android:textSize="20sp"
-		    android:textColor="#008A12"
+		    android:textColor="@color/verde_texto"
 		    android:gravity="center"
 		    android:layout_margin="0dp" />
 	    <Button
@@ -114,7 +114,7 @@
 		    android:text="@string/delete"
 		    android:onClick="onDeletePressed"
 		    android:textSize="20sp"
-		    android:textColor="#008A12"
+		    android:textColor="@color/verde_texto"
 		    android:gravity="center"
 		    android:layout_margin="0dp" />
 	    <Button
@@ -124,7 +124,7 @@
 		    android:text="@string/confirm"
 		    android:onClick="onConfirmEdition"
 		    android:textSize="20sp"
-		    android:textColor="#008A12"
+		    android:textColor="@color/verde_texto"
 		    android:gravity="center"
 		    android:layout_margin="0dp"
 		    android:visibility="gone" />
@@ -136,7 +136,7 @@
 		    android:text="@string/cancel"
 		    android:onClick="onCancelEdition"
 		    android:textSize="20sp"
-		    android:textColor="#008A12"
+		    android:textColor="@color/verde_texto"
 		    android:gravity="center"
 		    android:layout_margin="0dp"
 		    android:visibility="gone" />
