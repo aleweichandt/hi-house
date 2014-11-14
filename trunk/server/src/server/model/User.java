@@ -142,7 +142,7 @@ public class User {
 			return builder.build();
 		}
 		
-		public void updateWithParams(JsonObject values, boolean commit) {
+		public boolean updateWithParams(JsonObject values, boolean commit) {
 			if(values.containsKey("name")) {
 				mName = values.getString("name");
 			}
@@ -166,8 +166,9 @@ public class User {
 				setProfiles(profiles);
 			}
 			if(commit) {
-				commitToDB();
+				return commitToDB();
 			}
+			return true;
 		}
 		
 		public boolean setAsReceptor() {

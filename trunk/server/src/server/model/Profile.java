@@ -103,7 +103,7 @@ public class Profile {
 		return builder.build();
 	}
 	
-	public void updateWithParams(JsonObject values, boolean commit) {
+	public boolean updateWithParams(JsonObject values, boolean commit) {
 		if(values.containsKey("name")) {
 			mName = values.getString("name");
 		}
@@ -121,8 +121,9 @@ public class Profile {
 			setDevices(devices);
 		}
 		if(commit) {
-			commitToDB();
+			return commitToDB();
 		}
+		return true;
 	}
 	
 	public Device getDevice(String deviceid) {

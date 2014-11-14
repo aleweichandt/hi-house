@@ -167,7 +167,7 @@ public abstract class Device {
 		return builder.build();
 	}
 	
-	public void updateWithParams(JsonObject values, boolean commit) {
+	public boolean updateWithParams(JsonObject values, boolean commit) {
 		if(values.containsKey("name")) {
 			mName = values.getString("name");
 		}
@@ -184,8 +184,9 @@ public abstract class Device {
 			}
 		}
 		if(commit) {
-			commitToDB();
+			return commitToDB();
 		}
+		return true;
 	}
 	
 	public int getPin(int id) {

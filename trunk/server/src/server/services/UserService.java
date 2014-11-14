@@ -206,7 +206,9 @@ public class UserService {
 			}
 		}
 		JsonObject params = C.getJsonFromString(body);
-		user.updateWithParams(params, true);
+		if(!user.updateWithParams(params, true)) {
+			return Response.status(500).entity("server error").build();
+		}
 		return Response.status(200).entity(userid + " updated").build();
 	}
 	
