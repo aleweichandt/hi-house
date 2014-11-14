@@ -62,10 +62,10 @@ public class CommandBuilder {
 				else if(command.equals("apagar")) return tempOffCommand(tokens, i);
 				else if(command.equals("activar")) return alarmSimuCommand(tokens, i, true, matches);
 				else if(command.equals("desactivar")) return alarmSimuCommand(tokens, i, false, matches);
-				else{
+				/*else{
 					Toast.makeText(hiHouse, "Comando no reconocido", Toast.LENGTH_LONG).show();
 					return null;
-				}
+				}*/
 			}
 			catch(ArrayIndexOutOfBoundsException e){Toast.makeText(hiHouse, "Comando no reconocido", Toast.LENGTH_LONG).show();return null;}
 		}
@@ -114,8 +114,8 @@ public class CommandBuilder {
 			i = skipIrrelevantWord(tokens[i], i);
 			int temp;
 			try{temp = Integer.parseInt(tokens[i++]);}catch(NumberFormatException e){Toast.makeText(hiHouse, "Comando no reconocido", Toast.LENGTH_LONG).show();return null;}
-			if(temp<15 || temp>30){
-				Toast.makeText(hiHouse, "La temperatura debe estar entre 15 y 30°", Toast.LENGTH_SHORT).show();
+			if(temp<15 || temp>50){
+				Toast.makeText(hiHouse, "La temperatura debe estar entre 15 y 50°", Toast.LENGTH_SHORT).show();
 				return null;
 			}
 			return new Command(Request.VOICE_SET_DESIRED_TEMP, false, "temperature?token="+hiHouse.getUser().getToken(), ""+temp);

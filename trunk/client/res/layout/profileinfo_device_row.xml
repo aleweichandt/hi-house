@@ -11,7 +11,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center_vertical"
-		android:textColor="#008A12"
+		android:textColor="@color/verde_texto"
 		android:textSize="18sp"/>
     <CheckBox
         android:id="@+id/dev_row_check"
