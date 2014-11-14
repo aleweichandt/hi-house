@@ -62,12 +62,13 @@ public class Profile {
 			if(!description.isEmpty()) mDescription = description;
 		}
 		mDevices = new ArrayList<String>();
-		
-		DBRequestHandler request = new DBRequestHandler();
-		List<Object> ids = request.getProfileDeviceIds(id);
-		if(!ids.isEmpty()) {
-			for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-				mDevices.add(it.next().toString());
+		if(!id.isEmpty()) {
+			DBRequestHandler request = new DBRequestHandler();
+			List<Object> ids = request.getProfileDeviceIds(id);
+			if(!ids.isEmpty()) {
+				for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
+					mDevices.add(it.next().toString());
+				}
 			}
 		}
 	}
