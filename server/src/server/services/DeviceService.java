@@ -133,7 +133,9 @@ public class DeviceService {
 			return Response.status(500).entity("not found").build();
 		}
 		JsonObject params = C.getJsonFromString(body);
-		dv.updateWithParams(params, true);
+		if(!dv.updateWithParams(params, true)) {
+			return Response.status(500).entity("server error").build();
+		}
 		return Response.status(200).entity(deviceid + " updated").build();
 	}
 	

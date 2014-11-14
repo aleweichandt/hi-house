@@ -136,7 +136,9 @@ public class ProfileService {
 			return Response.status(500).entity("not found").build();
 		}
 		JsonObject params = C.getJsonFromString(body);
-		prf.updateWithParams(params, true);
+		if(!prf.updateWithParams(params, true)) {
+			return Response.status(500).entity("server error").build();
+		}
 
 		SimulationRoutine sr = newSession.getAdmin().getSimulator(profileid);
 		if(sr != null) {
