@@ -303,7 +303,7 @@ public class ProfileInfoFragment extends Fragment implements OnClickListener, On
 	
 	public void updateProfileResult(boolean updated) {
 		if(!updated) {
-			Toast.makeText(getActivity(), "El perfil no pudo ser actualizado.", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), "Un perfil con ese nombre ya existe.", Toast.LENGTH_LONG).show();
 			return;
 		}
 		Toast.makeText(getActivity(), "Perfil actualizado exitosamente.", Toast.LENGTH_LONG).show();

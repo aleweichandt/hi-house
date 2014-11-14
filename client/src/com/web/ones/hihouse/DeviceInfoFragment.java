@@ -351,7 +351,7 @@ OnPickerDialogListener{
 	
 	public void updateDeviceResult(boolean updated) {
 		if(!updated) {
-			Toast.makeText(getActivity(), "El dispositivo no pudo ser actualizado.", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), "Un dispositivo con ese nombre ya existe.", Toast.LENGTH_LONG).show();
 			return;
 		}
 		Toast.makeText(getActivity(), "Dispositivo actualizado exitosamente.", Toast.LENGTH_SHORT).show();

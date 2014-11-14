@@ -281,7 +281,7 @@ OnMultiChoiceDialogListener{
 	
 	public void updateUserResult(boolean updated){
 		if(!updated) {
-			Toast.makeText(getActivity(), "El usuario no pudo ser actualizado.", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), "Un Usuario con ese nombre ya existe.", Toast.LENGTH_LONG).show();
 			return;
 		}
 		Toast.makeText(getActivity(), "Usuario actualizado exitosamente.", Toast.LENGTH_LONG).show();
