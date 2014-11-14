@@ -98,11 +98,13 @@ public class User {
 			mNotificationId = (notifid!=null)?notifid:"";
 			mProfiles = new ArrayList<String>();
 			
-			DBRequestHandler request = new DBRequestHandler();
-			List<Object> ids = request.getUserProfileIds(id);
-			if(!ids.isEmpty()) {
-				for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
-					mProfiles.add(it.next().toString());
+			if(!id.isEmpty()) {
+				DBRequestHandler request = new DBRequestHandler();
+				List<Object> ids = request.getUserProfileIds(id);
+				if(!ids.isEmpty()) {
+					for(Iterator<Object> it = ids.iterator(); it.hasNext();) {
+						mProfiles.add(it.next().toString());
+					}
 				}
 			}
 		}
